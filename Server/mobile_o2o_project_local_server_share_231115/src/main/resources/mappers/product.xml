@@ -8,12 +8,15 @@
 		(name,
 		type,
 		price,
-		img)
+		img,
+		origin_img_name
+		)
 		VALUES
 		(#{name},
 		#{type},
 		#{price},
-		#{img})
+		#{img},
+		#{originImgName})
 	</insert>
 
 	<update id="update" parameterType="Product">
@@ -22,7 +25,8 @@
 		name = #{name},
 		type = #{type},
 		price = #{price},
-		img = #{img}
+		img = #{img},
+		origin_img_name = #{originImgName},
 		WHERE id = #{id}
 	</update>
 	<delete id="delete" parameterType="int">

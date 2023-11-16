@@ -29,5 +29,11 @@ public class ProductServiceImpl implements ProductService{
     public List<Map<String, Object>> selectWithComment(Integer productId) {
         return pDao.selectWithComment(productId);
     }
+
+	@Override
+	public void add(Product product) {
+		pDao.insert(product);
+		
+	}
     
 }
