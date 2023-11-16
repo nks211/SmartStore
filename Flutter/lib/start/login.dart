@@ -99,7 +99,7 @@ class _Login extends State<Login> {
                                   Navigator.push(context, MaterialPageRoute(builder: (context) => PageRouter(info)));
                                 });
                               }
-                            });
+                            }).catchError((e) => showToast("아이디나 비밀번호를 확인해주세요."));
                           }
                         },
                         style: ElevatedButton.styleFrom(

@@ -3,7 +3,10 @@ import 'dart:collection';
 import 'package:flutter/material.dart';
 import 'package:smart_store_flutter_starter/menuorder/map.dart';
 import 'package:smart_store_flutter_starter/menuorder/shopping_cart.dart';
+import 'package:smart_store_flutter_starter/service/ProductService.dart';
 import 'package:smart_store_flutter_starter/util/common.dart';
+
+import '../dto/Product.dart';
 
 class Menu extends StatefulWidget {
   const Menu({super.key});
@@ -14,9 +17,24 @@ class Menu extends StatefulWidget {
 
 class _MenuState extends State<Menu> {
 
+  List<Product> menulist = [];
+  var productservice = ProductService();
+
+  @override
+  void initState() {
+    super.initState();
+    productservice.getproductmenu().then((value) { menulist.addAll(value); });
+
+    for (var menu in menulist) {
+      print(menu.toString());
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
 
+    setState(() {});
+    // 로컬 데이터 생성
     List menuboard = List.generate(11, (index) => menuImageButton("assets/coffee${index+1}.png", context)).toList();
 
     return Scaffold(
@@ -56,8 +74,8 @@ class _MenuState extends State<Menu> {
                   mainAxisSpacing: 10,
                   crossAxisSpacing: 10,
                   childAspectRatio: 1,
-                  children: List.generate(menuboard.length,
-                          (int index) => menuboard[index]),
+                  children: List.generate(menulist.length,
+                          (int index) => menuImageButton("assets/${menulist[index].img}", context)).toList(),
                 ),
             ),
           ],
