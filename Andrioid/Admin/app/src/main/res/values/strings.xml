@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Smartstore</string>
+    <string name="name">벼락부자핫도그</string>
+    <string name="dialog">매장 내 이용 시 테이블의\n NFC를 태그하면 해당 테이블로\n 음료를 가져다드립니다.</string>
+</resources>

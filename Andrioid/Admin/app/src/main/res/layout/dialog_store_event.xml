@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical">
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_margin="10dp">
+                        <ImageView
+                            android:id="@+id/iv_dialog_store_event_img"
+                            android:layout_width="match_parent"
+                            android:layout_height="200dp"
+                            tools:src="@drawable/logo"
+                            android:layout_marginBottom="30dp"/>
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="20dp"
+                            android:layout_marginBottom="20dp"
+                            android:text="이용 알림"
+                            android:textSize="30sp"
+                            style="@style/Text.Title"/>
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="10dp"
+                            android:text="1. 매장내 이용시 테이블의 NFC를 태그하면 해당 테이블로 음료를 가져다드립니다."
+                            android:textSize="20sp"
+                            style="@style/Text.light"/>
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="20dp"
+                            android:layout_marginBottom="20dp"
+                            android:text="주문하신 음료"
+                            android:textSize="30sp"
+                            style="@style/Text.Title"/>
+
+                        <TextView
+                            android:id="@+id/tv_dialog_store_event_order_empty"
+                            android:layout_width="match_parent"
+                            android:layout_height="120dp"
+                            android:gravity="center"
+                            android:text="주문하신 음료가 없습니다"
+                            android:textSize="30sp"
+                            android:background="@drawable/button_non_color"
+                            style="@style/Text.Title"
+                            android:layout_marginBottom="20dp"
+                            tools:visibility="gone"
+                            />
+
+                        <LinearLayout
+                            android:id="@+id/linear_layout_dialog_store_event_order"
+                            android:layout_width="match_parent"
+                            android:layout_height="120dp"
+                            android:layout_margin="10dp"
+                            android:orientation="horizontal"
+                            android:weightSum="10">
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:layout_weight="7">
+                                        <androidx.cardview.widget.CardView
+                                            android:layout_width="match_parent"
+                                            android:layout_height="100dp"
+                                            android:layout_gravity="center"
+                                            app:cardCornerRadius="20dp"
+                                            app:cardElevation="0dp"
+                                            android:backgroundTint="@color/coffee_menu_back"
+                                            app:layout_constraintStart_toStartOf="parent"
+                                            app:layout_constraintTop_toTopOf="parent">
+                                                <ImageView
+                                                    android:id="@+id/iv_dialog_store_event_order_img"
+                                                    android:layout_gravity="center"
+                                                    android:layout_width="match_parent"
+                                                    android:layout_height="match_parent"
+                                                    android:adjustViewBounds="true"
+                                                    tools:src="@drawable/coffee1" />
+                                        </androidx.cardview.widget.CardView>
+                                </LinearLayout>
+                                <LinearLayout
+                                    android:layout_width="300dp"
+                                    android:layout_height="match_parent"
+                                    android:orientation="vertical"
+                                    android:layout_weight="3"
+                                    android:gravity="center">
+                                        <TextView
+                                            android:id="@+id/tv_dialog_store_event_order_name"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:gravity="center"
+                                            tools:text="아메리카노 외 2잔"
+                                            android:textSize="20sp"
+                                            android:layout_weight="1"
+                                            style="@style/Text.Regular"/>
+                                        <TextView
+                                            android:id="@+id/tv_dialog_store_event_total_price"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:gravity="center"
+                                            tools:text="8000원"
+                                            android:textSize="20sp"
+                                            android:layout_weight="1"
+                                            style="@style/Text.Regular"/>
+                                </LinearLayout>
+                        </LinearLayout>
+                </LinearLayout>
+        </ScrollView>
+</LinearLayout>
