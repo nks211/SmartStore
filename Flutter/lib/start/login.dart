@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:smart_store_flutter_starter/dto/Orderitem.dart';
+import 'package:smart_store_flutter_starter/service/UserService.dart';
 import 'package:smart_store_flutter_starter/start/page_router.dart';
 import 'package:smart_store_flutter_starter/util/common.dart';
 
+import '../dto/Grade.dart';
+import '../dto/User.dart';
 import 'join.dart';
 import 'package:smart_store_flutter_starter/menuorder/menu.dart';
 
@@ -12,7 +16,9 @@ class Login extends StatefulWidget {
 
 class _Login extends State<Login> {
 
-
+  var userService = UserService();
+  var idcontroller = TextEditingController();
+  var passcontroller = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -44,6 +50,7 @@ class _Login extends State<Login> {
               Container(
                 padding: EdgeInsets.symmetric(horizontal: 30, vertical: 10),
                 child: TextField(
+                  controller: idcontroller,
                   decoration: InputDecoration(
                     hintText: 'ID',
                     border: OutlineInputBorder(
@@ -56,6 +63,7 @@ class _Login extends State<Login> {
               Container(
                 padding: EdgeInsets.symmetric(horizontal: 30, vertical: 10),
                 child: TextField(
+                  controller: passcontroller,
                   decoration: InputDecoration(
                     hintText: 'PW',
                     border: OutlineInputBorder(
@@ -72,7 +80,27 @@ class _Login extends State<Login> {
                   children: [
                     ElevatedButton(
                         onPressed: (){
-                          Navigator.push(context, MaterialPageRoute(builder: (context) => PageRouter()));
+                          if (idcontroller.text != '' && passcontroller.text != '') {
+                            var id = idcontroller.text;
+                            var pass = passcontroller.text;
+                            var loginuser = User(id, pass, "");
+                            userService.loginUser(loginuser).then((value) {
+                              print('login : $value');
+                              if (id == value.id && pass == value.pass) {
+                                showToast("로그인되었습니다");
+                                userService.userInfo(loginuser).then((value) {
+                                  var grade = Grade.fromJson(value['grade']);
+                                  List<Orderitem> orders = [];
+                                  for (var data in value['order'] as List) {
+                                    orders.add(Orderitem.fromJson(data));
+                                  }
+                                  var name = User.fromJson(value['user']).name;
+                                  List info = [name, orders, grade];
+                                  Navigator.push(context, MaterialPageRoute(builder: (context) => PageRouter(info)));
+                                });
+                              }
+                            });
+                          }
                         },
                         style: ElevatedButton.styleFrom(
                           shape: RoundedRectangleBorder(

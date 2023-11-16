@@ -5,8 +5,11 @@ import 'package:smart_store_flutter_starter/util/common.dart';
 import 'package:smart_store_flutter_starter/home/main.dart';
 import 'package:smart_store_flutter_starter/menuorder/menu.dart';
 
+import '../dto/Grade.dart';
+
 class PageRouter extends StatefulWidget {
-  const PageRouter({super.key});
+  List userdata = [];
+  PageRouter(this.userdata, {Key? key}) : super(key: key);
 
   @override
   State<PageRouter> createState() => _PageRouterState();
@@ -19,6 +22,7 @@ class _PageRouterState extends State<PageRouter> {
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       body: SafeArea(
         child: pages[_selected],

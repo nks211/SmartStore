@@ -65,7 +65,7 @@ class _UserInfo extends State<UserInfo> {
                       ),
                     ),
                     IconButton(
-                        onPressed: (){},
+                        onPressed: (){ Navigator.pop(context); },
                         iconSize: 50,
                         icon: Image.asset('assets/logout.png'))
                   ],

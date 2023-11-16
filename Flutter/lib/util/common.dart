@@ -36,7 +36,7 @@ List<OrderDetail> testDetails =[
 List comment = ['nice', 'cool', 'happy', 'happy'];
 
 //http통신 주소값
-const BaseUrl = "http:192.168.33.119/";
+const BaseUrl = "http://192.168.33.119:9987/";
 
 // toast message
 void showToast(String msg){
