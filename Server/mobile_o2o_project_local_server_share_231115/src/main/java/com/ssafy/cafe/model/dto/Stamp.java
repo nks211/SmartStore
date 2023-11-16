@@ -1,6 +1,8 @@
 package com.ssafy.cafe.model.dto;
 
 public class Stamp {
+	//test
+	
     private Integer id;
     private String userId;
     private Integer orderId;
