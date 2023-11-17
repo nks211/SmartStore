@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:smart_store_flutter_starter/dto/OrderDetailitem.dart';
 
 class Orderitem {
@@ -20,7 +22,7 @@ class Orderitem {
       this._completed);
 
 
-  set details(List<OrderDetailitem> value) {
+  void setDetails(List<OrderDetailitem> value) {
     _details = value;
   }
 
@@ -38,7 +40,11 @@ class Orderitem {
     'orderTable' : _orderTable,
     'orderTime' : _orderTime,
     'completed' : _completed,
-    'details' : null,
+    'details' : _details.map((e) => jsonEncode(e.toJson())).toList(),
   };
 
+  @override
+  String toString() {
+    return 'Orderitem{_id: $_id, _userId: $_userId, _orderTable: $_orderTable, _orderTime: $_orderTime, _completed: $_completed, _details: $_details}';
+  }
 }

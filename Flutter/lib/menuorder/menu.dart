@@ -6,6 +6,7 @@ import 'package:smart_store_flutter_starter/menuorder/shopping_cart.dart';
 import 'package:smart_store_flutter_starter/service/ProductService.dart';
 import 'package:smart_store_flutter_starter/util/common.dart';
 
+import '../dto/OrderDetailitem.dart';
 import '../dto/Product.dart';
 
 class Menu extends StatefulWidget {
@@ -23,6 +24,14 @@ class _MenuState extends State<Menu> {
   // 초기 메뉴판 위젯 구성
   Widget board = Container();
 
+  List<OrderDetailitem> shoppingOrder = [];
+
+  void addOrder(OrderDetailitem orderdetail) {
+    setState(() {
+      shoppingOrder.add(orderdetail);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
 
@@ -36,7 +45,7 @@ class _MenuState extends State<Menu> {
           crossAxisSpacing: 10,
           childAspectRatio: 1,
           children: List.generate(menulist.length,
-                  (int index) => menuImageButton(menulist[index], context)),
+                  (int index) => menuImageButton(menulist[index], context, addOrder)),
         );
       });
     }).catchError((e) {
@@ -88,8 +97,18 @@ class _MenuState extends State<Menu> {
         ),
       ),
       floatingActionButton: ElevatedButton(
-        onPressed: (){
-          Navigator.push(context, MaterialPageRoute(builder: (context)=> ShoppingCart()));
+        onPressed: () async {
+          // var answer = await Navigator.push(context, MaterialPageRoute(
+          //     builder: (context)=> ShoppingCart(neworder: shoppingOrder,)));
+          // if (answer == 'OK') {
+          //   setState(() {
+          //     shoppingOrder.clear();
+          //   });
+          // }
+          WidgetsBinding.instance!.addPostFrameCallback((_) {
+            Navigator.push(context, MaterialPageRoute(
+                builder: (context)=> ShoppingCart(neworder: shoppingOrder,)));
+          });
         },
         style: ElevatedButton.styleFrom(
           shape: CircleBorder(),

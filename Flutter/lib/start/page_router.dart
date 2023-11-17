@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:smart_store_flutter_starter/mypage/user_info.dart';
 import 'package:smart_store_flutter_starter/util/common.dart';
 
@@ -18,10 +19,15 @@ class PageRouter extends StatefulWidget {
 class _PageRouterState extends State<PageRouter> {
 
   int _selected = 0;
-  List pages = [Main(), Menu(), UserInfo()];
 
   @override
   Widget build(BuildContext context) {
+
+    List pages = [
+      Main(user: widget.userdata[0], orderdata: widget.userdata[1],),
+      Menu(),
+      UserInfo(user: widget.userdata[0], orderdata: widget.userdata[1], usergrade: widget.userdata[2],)
+    ];
 
     return Scaffold(
       body: SafeArea(

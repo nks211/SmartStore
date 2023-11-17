@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:smart_store_flutter_starter/dto/OrderDetailitem.dart';
 import 'package:smart_store_flutter_starter/util/common.dart';
 
 import '../dto/Product.dart';
@@ -266,9 +267,15 @@ class _MenuDetailState extends State<MenuDetail> {
             ),
           ),
           ElevatedButton(
-              onPressed: (){
+              onPressed: () {
                 showToast("상품이 장바구니에 담겼습니다.");
-                Navigator.pop(context);
+                var img = widget.menuitem.img;
+                var id = widget.menuitem.id;
+                var name = widget.menuitem.name;
+                var price = widget.menuitem.price;
+                var quantity = count;
+                OrderDetailitem detailitem = OrderDetailitem(img, id, name, price, quantity, price * quantity);
+                Navigator.pop(context, detailitem);
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: coffeePointRed,

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:smart_store_flutter_starter/dto/Orderitem.dart';
 import 'package:smart_store_flutter_starter/service/UserService.dart';
 import 'package:smart_store_flutter_starter/start/page_router.dart';
@@ -20,8 +21,23 @@ class _Login extends State<Login> {
   var idcontroller = TextEditingController();
   var passcontroller = TextEditingController();
 
+  void passpage(User user) {
+    userService.userInfo(user).then((value) {
+      var grade = Grade.fromJson(value['grade']);
+      List<Orderitem> orders = [];
+      for (var data in value['order'] as List) {
+        orders.add(Orderitem.fromJson(data));
+      }
+      var name = User.fromJson(value['user']);
+      List info = [name, orders, grade];
+      Navigator.push(context, MaterialPageRoute(builder: (context) => PageRouter(info)));
+    });
+  }
+
+
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       body: SingleChildScrollView(
         child: Container(
@@ -85,19 +101,10 @@ class _Login extends State<Login> {
                             var pass = passcontroller.text;
                             var loginuser = User(id, pass, "");
                             userService.loginUser(loginuser).then((value) {
-                              print('login : $value');
                               if (id == value.id && pass == value.pass) {
                                 showToast("로그인되었습니다");
-                                userService.userInfo(loginuser).then((value) {
-                                  var grade = Grade.fromJson(value['grade']);
-                                  List<Orderitem> orders = [];
-                                  for (var data in value['order'] as List) {
-                                    orders.add(Orderitem.fromJson(data));
-                                  }
-                                  var name = User.fromJson(value['user']).name;
-                                  List info = [name, orders, grade];
-                                  Navigator.push(context, MaterialPageRoute(builder: (context) => PageRouter(info)));
-                                });
+
+                                passpage(loginuser);
                               }
                             }).catchError((e) => showToast("아이디나 비밀번호를 확인해주세요."));
                           }

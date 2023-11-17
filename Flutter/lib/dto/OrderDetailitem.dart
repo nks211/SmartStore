@@ -35,4 +35,8 @@ class OrderDetailitem {
     'unitprice' : _unitprice,
   };
 
+  @override
+  String toString() {
+    return 'OrderDetailitem{_img: $_img, _product_id: $_product_id, _name: $_name, _unitprice: $_unitprice, _quantity: $_quantity, _totalprice: $_totalprice}';
+  }
 }

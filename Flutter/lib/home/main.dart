@@ -1,11 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:smart_store_flutter_starter/dto/OrderDetailitem.dart';
 import 'package:smart_store_flutter_starter/menuorder/shopping_cart.dart';
+import 'package:smart_store_flutter_starter/service/OrderService.dart';
 import 'package:smart_store_flutter_starter/util/common.dart';
 import 'package:smart_store_flutter_starter/dto/Order.dart';
 
+import '../dto/Orderitem.dart';
+import '../dto/User.dart';
+
 
 class Main extends StatefulWidget {
-  const Main({super.key});
+  final User user;
+  final List<Orderitem> orderdata;
+  Main({required this.user, required this.orderdata});
   @override
   State<Main> createState() => _MainState();
 }
@@ -16,12 +23,29 @@ class _MainState extends State<Main> {
   var items = List.generate(5, (_) => Order('assets/coffee1.png', '아메리카노 외 3잔', 25000, '2023.11.15')).toList();
   var noticeItem = List.generate(3, (i) => "알림$i");
 
-  void myOnTap(){
-    Navigator.push(context, MaterialPageRoute(builder: (context)=> ShoppingCart()));
+  var orderservice = OrderService();
+  Widget orderlist = Container(); //주문 내역 위젯 초기화
+
+  void reorder(Orderitem item) {
+    Navigator.push(context, MaterialPageRoute(builder: (context)=> ShoppingCart(neworder: item.details,)));
   }
 
   @override
   Widget build(BuildContext context) {
+
+    // 주문 id별 상세내역 추가한 후 리스트로 반환
+    for (var order in widget.orderdata) {
+      orderservice.getOrderDetails(order.id).then((value) {
+        order.setDetails(value);
+        setState(() {
+          orderlist = orderListRow(widget.orderdata, SizedBox(
+              height: 25,
+              child: Image.asset('assets/shopping_cart.png')),
+              reorder, height: 310);
+        });
+      });
+    }
+
     return Scaffold(
       body: SafeArea(
         child: Center(
@@ -36,7 +60,7 @@ class _MainState extends State<Main> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text("김싸피님", style: textStyle30.apply(color: coffeeDarkBrown)),
+                          Text("${widget.user.name}님", style: textStyle30.apply(color: coffeeDarkBrown)),
                           Row(
                             children: [
                               Text("좋은 하루 보내세요.", style: textStyle20.apply(color: coffeeBrown)),
@@ -78,10 +102,7 @@ class _MainState extends State<Main> {
                       ],
                     )
                 ),
-                orderListRow(items, SizedBox(
-                  height: 25,
-                  child: Image.asset('assets/shopping_cart.png')
-                ), myOnTap, height: 310)
+                orderlist,
               ],
             ),
           ),
