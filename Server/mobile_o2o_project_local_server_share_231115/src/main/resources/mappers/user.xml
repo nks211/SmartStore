@@ -7,11 +7,14 @@
 INSERT INTO t_user
     (id, 
     name, 
-    pass)
+    pass
+    is_admin
+    )
 VALUES
     (#{id}, 
     #{name}, 
-    #{pass})
+    #{pass},
+    #{isAdmin})
 	</insert>
 	
 	<update id="update" parameterType="User">

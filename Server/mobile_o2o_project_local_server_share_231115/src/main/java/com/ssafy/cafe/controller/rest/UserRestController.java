@@ -67,6 +67,7 @@ public class UserRestController {
     @ApiOperation(value = "로그인 처리 후 성공적으로 로그인 되었다면 loginId라는 쿠키를 내려보낸다.", response = User.class)
     public User login(@RequestBody User user, HttpServletResponse response) throws UnsupportedEncodingException {
         User selected = uService.login(user.getId(), user.getPass());
+        logger.info(selected.toString());
         if (selected != null) {
             Cookie cookie = new Cookie("loginId", URLEncoder.encode(selected.getId(), "utf-8"));
             cookie.setMaxAge(1000 * 1000);
