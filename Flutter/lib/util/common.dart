@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import '../dto/Order.dart';
+import '../dto/Product.dart';
 import '../dto/order_detail.dart';
 import '../menuorder/menudetail.dart';
 import '../menuorder/shopping_cart.dart';
@@ -85,12 +86,12 @@ Widget roundImage(String src, {double height = 150, double width = 150}){
 }
 
 //메뉴판 이미지 위젯 (roundImage 활용)
-Widget menuImageButton(String src, BuildContext context) {
+Widget menuImageButton(Product item, BuildContext context) {
   return InkWell(
       onTap: (){
-        Navigator.push(context, MaterialPageRoute(builder: (context) => MenuDetail(path: src,)));
+        Navigator.push(context, MaterialPageRoute(builder: (context) => MenuDetail(menuitem: item,)));
       },
-      child: roundImage(src),
+      child: roundImage('assets/${item.img}'),
   );
 }
 

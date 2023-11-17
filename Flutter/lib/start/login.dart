@@ -101,6 +101,9 @@ class _Login extends State<Login> {
                               }
                             }).catchError((e) => showToast("아이디나 비밀번호를 확인해주세요."));
                           }
+                          else {
+                            showToast("아이디와 비밀번호를 입력해주세요.");
+                          }
                         },
                         style: ElevatedButton.styleFrom(
                           shape: RoundedRectangleBorder(

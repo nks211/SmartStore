@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:smart_store_flutter_starter/util/common.dart';
 
-class MenuDetail extends StatefulWidget {
-  final String path;
+import '../dto/Product.dart';
 
-  const MenuDetail({required this.path});
+class MenuDetail extends StatefulWidget {
+  final Product menuitem;
+
+  MenuDetail({required this.menuitem});
 
   @override
   State<MenuDetail> createState() => _MenuDetailState();
@@ -33,11 +35,11 @@ class _MenuDetailState extends State<MenuDetail> {
             padding: EdgeInsets.symmetric(vertical: 10),
             height: 200,
             color: menuBackground,
-            child: Image.asset(widget.path, width: double.maxFinite,),
+            child: Image.asset('assets/${widget.menuitem.img}', width: double.maxFinite,),
           ),
           Container(
               margin: EdgeInsets.all(20),
-              child: Text('아메리카노', style: textStyle30,)
+              child: Text('${widget.menuitem.name}', style: textStyle30,)
           ),
           Container(
             height: 100,
@@ -49,7 +51,7 @@ class _MenuDetailState extends State<MenuDetail> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text('가격', style: textStyle20B,),
-                    Text('4100원', style: textStyle20,)
+                    Text('${widget.menuitem.price}원', style: textStyle20,)
                   ],
                 ),
                 Row(

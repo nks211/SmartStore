@@ -20,22 +20,35 @@ class _MenuState extends State<Menu> {
   List<Product> menulist = [];
   var productservice = ProductService();
 
-  @override
-  void initState() {
-    super.initState();
-    productservice.getproductmenu().then((value) { menulist.addAll(value); });
-
-    for (var menu in menulist) {
-      print(menu.toString());
-    }
-  }
+  // 초기 메뉴판 위젯 구성
+  Widget board = Container();
 
   @override
   Widget build(BuildContext context) {
 
-    setState(() {});
-    // 로컬 데이터 생성
-    List menuboard = List.generate(11, (index) => menuImageButton("assets/coffee${index+1}.png", context)).toList();
+    // 서버에서 메뉴 정보 가져와서 다시 이미지 구성함
+    productservice.getproductmenu().then((value) {
+      menulist = value;
+      setState(() {
+        board = GridView.count(
+          crossAxisCount: 3,
+          mainAxisSpacing: 10,
+          crossAxisSpacing: 10,
+          childAspectRatio: 1,
+          children: List.generate(menulist.length,
+                  (int index) => menuImageButton(menulist[index], context)),
+        );
+      });
+    }).catchError((e) {
+      board = GridView.count(
+        crossAxisCount: 3,
+        mainAxisSpacing: 10,
+        crossAxisSpacing: 10,
+        childAspectRatio: 1,
+        children: List.generate(12,
+                (int index) => roundImage("assets/logo.png")),
+      );
+    });
 
     return Scaffold(
       body: Container(
@@ -69,14 +82,7 @@ class _MenuState extends State<Menu> {
               ),
             ),
             Expanded(
-                child: GridView.count(
-                  crossAxisCount: 3,
-                  mainAxisSpacing: 10,
-                  crossAxisSpacing: 10,
-                  childAspectRatio: 1,
-                  children: List.generate(menulist.length,
-                          (int index) => menuImageButton("assets/${menulist[index].img}", context)).toList(),
-                ),
+                child: board,
             ),
           ],
         ),
