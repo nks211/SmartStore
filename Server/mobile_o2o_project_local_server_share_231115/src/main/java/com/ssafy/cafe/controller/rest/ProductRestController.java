@@ -50,7 +50,7 @@ public class ProductRestController {
     		@RequestPart("price") String price
     		) {
     	try {
-			UploadFile ufile = new FileConverter().storeFile(file, "\\menu");
+			UploadFile ufile = FileConverter.storeFile(file, "/menu/");
 			Product tmp = new Product(name, type, Integer.parseInt(price));
 			tmp.setImg(ufile.getStoreImgName());
 			tmp.setOriginImgName(ufile.getOriginImgName());
