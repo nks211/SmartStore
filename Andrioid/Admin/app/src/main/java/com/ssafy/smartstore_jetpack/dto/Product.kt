@@ -9,4 +9,5 @@ data class Product (
     val comment: ArrayList<Comment> = ArrayList()
 ) {
     constructor(): this(0, "","",0,"")
+    constructor(name: String, type: String, price: Int): this(0, name, type, price, "")
 }

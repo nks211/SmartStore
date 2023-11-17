@@ -16,6 +16,7 @@ class SharedPreferencesUtil (context: Context) {
         val editor = preferences.edit()
         editor.putString("id", user.id)
         editor.putString("name", user.name)
+        editor.putBoolean("isAdmin", user.isAdmin)
         editor.apply()
     }
 
@@ -23,7 +24,8 @@ class SharedPreferencesUtil (context: Context) {
         val id = preferences.getString("id", "")
         if (id != ""){
             val name = preferences.getString("name", "")
-            return User(id!!, name!!, "",0)
+            val isAdmin = preferences.getBoolean("isAdmin", false)
+            return User(id!!, "", name!!, isAdmin)
         }else{
             return User()
         }

@@ -20,7 +20,6 @@ public class ProductServiceImpl implements ProductService{
     private ProductDao pDao;
 
     @Override
-    @Cacheable(value="getProductList")
     public List<Product> getProductList() {
         return pDao.selectAll();
     }

@@ -1,5 +1,6 @@
 package com.ssafy.smartstore_jetpack.src.main.login
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -7,6 +8,8 @@ import androidx.lifecycle.viewModelScope
 import com.ssafy.smartstore_jetpack.dto.User
 import com.ssafy.smartstore_jetpack.util.RetrofitUtil
 import kotlinx.coroutines.launch
+
+private const val TAG = "LoginViewModel_싸피"
 
 class LoginViewModel : ViewModel() {
 

@@ -17,7 +17,7 @@ interface UserService {
     suspend fun getInfo(@Body user: User): HashMap<String, Any>
 
     @GET("rest/user/info")
-    suspend fun getInfowithstamp(id: String) : HashMap<String, Any>
+    suspend fun getInfowithstamp(@Query("id") id: String) : HashMap<String, Any>
 
     // request parameter로 전달된 id가 이미 사용중인지 반환한다.
     @GET("rest/user/isUsed")

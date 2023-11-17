@@ -14,7 +14,7 @@ import com.ssafy.cafe.model.dto.User;
  * @since 2021. 6. 23.
  */
 class UserServiceTest extends AbstractServiceTest {
-    private User testUser = new User("test", "test", "test", 0);
+    private User testUser = new User("test", "test", "test", 0, false);
 
     @Test
     @Order(1)

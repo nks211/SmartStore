@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,10 +27,17 @@ import com.ssafy.cafe.model.service.ProductService;
 
 import io.swagger.annotations.ApiOperation;
 
+
+
 @RestController
 @RequestMapping("/rest/product")
 @CrossOrigin("*")
 public class ProductRestController {
+	
+	
+	private static final Logger log = LoggerFactory.getLogger(ProductRestController.class);
+
+	
     @Autowired
     ProductService pService;
     
@@ -36,14 +45,13 @@ public class ProductRestController {
     @ApiOperation(value = "상품을 추가한다")
     public boolean addProduct(
     		@RequestPart("file") MultipartFile file, 
-    		@ModelAttribute("product") Product product) {
+    		@RequestPart("name") String name,
+    		@RequestPart("type") String type,
+    		@RequestPart("price") String price
+    		) {
     	try {
-			UploadFile ufile = new FileConverter().storeFile(file, "\\menu");
-			Product tmp = new Product(
-					product.getName(),
-					product.getType(),
-					product.getPrice()
-					);
+			UploadFile ufile = FileConverter.storeFile(file, "/menu/");
+			Product tmp = new Product(name, type, Integer.parseInt(price));
 			tmp.setImg(ufile.getStoreImgName());
 			tmp.setOriginImgName(ufile.getOriginImgName());
 			pService.add(tmp);

@@ -44,10 +44,6 @@ class MenuFragment : BaseFragment<FragmentOrderBinding>(FragmentOrderBinding::bi
             //장바구니 이동
             mainActivity.openFragment(1)
         }
-
-        binding.btnMap.setOnClickListener{
-            mainActivity.openFragment(4)
-        }
     }
 
     private fun initData(){
