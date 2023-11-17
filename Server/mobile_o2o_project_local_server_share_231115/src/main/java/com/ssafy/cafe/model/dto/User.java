@@ -9,12 +9,22 @@ public class User {
     private String pass;
     private Integer stamps;
     private List<Stamp> stampList = new ArrayList<>();
+    private boolean isAdmin;
 
-    public User(String id, String name, String pass, Integer stamps) {
+    public boolean getIsAdmin() {
+		return isAdmin;
+	}
+
+	public void setIsAdmin(boolean isAdmin) {
+		this.isAdmin = isAdmin;
+	}
+
+	public User(String id, String name, String pass, Integer stamps, boolean isAdmin) {
         this.id = id;
         this.name = name;
         this.pass = pass;
         this.stamps = stamps;
+        this.isAdmin = isAdmin;
     }
     
     public User() {}
@@ -62,7 +72,7 @@ public class User {
 	@Override
 	public String toString() {
 		return "User [id=" + id + ", name=" + name + ", pass=" + pass + ", stamps=" + stamps + ", stampList="
-				+ stampList + "]";
+				+ stampList + ", isAdmin =" + isAdmin + " ]";
 	}
     
     
