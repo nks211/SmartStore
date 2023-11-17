@@ -1,5 +1,6 @@
 package com.ssafy.cafe.controller.rest;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.ssafy.cafe.model.dto.Order;
+import com.ssafy.cafe.model.service.FCMService;
 import com.ssafy.cafe.model.service.OrderService;
 import io.swagger.annotations.ApiOperation;
 
@@ -21,6 +23,9 @@ import io.swagger.annotations.ApiOperation;
 public class OrderRestController {
     @Autowired
     private OrderService oService;
+    
+    @Autowired
+    private FCMService fService;
     
     @PostMapping
     @ApiOperation(value="order 객체를 저장하고 추가된 Order의 id를 반환한다.", 
@@ -38,8 +43,10 @@ public class OrderRestController {
     				+ "  \"userId\": \"id 02\"\r\n"
     				+ "} "
     				+ "</pre>", response = Integer.class )
-    public Integer makeOrder(@RequestBody Order order) {
+    public Integer makeOrder(@RequestBody Order order) throws IOException {
         oService.makeOrder(order);
+        String token = "fv2kNDQxQ6CagVDq3_jeLG:APA91bGtwSFP4XLnb_kzQsYY1Uld8Y2wTk_zD-n2Hxu7XQyNXFgcx_1HeLkcJGjyz-2ePrLfISvCMMJ9lYOZ0zdIVde-cTcHx-KMzylwbd5pu7stAnXk_cY1RjF08XbkeRrbMRejQyUA";
+        fService.sendMessageTo(token, "makeOrder", "body");
         return order.getId();
     }
     
@@ -65,5 +72,11 @@ public class OrderRestController {
             notes = "6단계에서 사용됨.", response = List.class)
     public List<Map<String, Object>> getLast6MonthOrder(String id) {
         return oService.getLast6MonthOrder(id);
-    }    
+    }   
+    
+    @GetMapping("/allOrdersByResult")
+    @ApiOperation(value="{result}가 Y이면 완료된 주문을, N이면 완료되지 않은 주문들을 반환한다.", response = List.class)
+    public List<Map<String, Object>> getAllCompletedOrder(String result){
+    	return oService.getAllCompletedOrder(result);
+    }
 }

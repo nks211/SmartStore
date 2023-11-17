@@ -1,4 +1,4 @@
-package com.ssafy.smartstore_jetpack.src.main.my
+package com.ssafy.smartstore_jetpack.src.main.my.adapter
 
 import android.content.Context
 import android.util.Log
@@ -14,8 +14,10 @@ import com.ssafy.smartstore_jetpack.config.ApplicationClass
 import com.ssafy.smartstore_jetpack.src.main.my.models.LatestOrderResponse
 import com.ssafy.smartstore_jetpack.util.CommonUtils
 
-private const val TAG = "OrderAdapter_싸피"
-class OrderListAdapter(val context: Context, val list:List<LatestOrderResponse>) :RecyclerView.Adapter<OrderListAdapter.OrderHolder>(){
+private const val TAG = "OrderListAdapter_싸피"
+
+class OrderListAdapter(val context: Context, val list:List<LatestOrderResponse>) :
+    RecyclerView.Adapter<OrderListAdapter.OrderHolder>(){
 
     inner class OrderHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
         val menuImage = itemView.findViewById<ImageView>(R.id.menuImage)
@@ -24,7 +26,7 @@ class OrderListAdapter(val context: Context, val list:List<LatestOrderResponse>)
         val textMenuDate = itemView.findViewById<TextView>(R.id.textMenuDate)
         val textCompleted = itemView.findViewById<TextView>(R.id.textCompleted)
 
-        fun bindInfo(data:LatestOrderResponse){
+        fun bindInfo(data: LatestOrderResponse){
             Log.d(TAG, "bindInfo: ${data}")
 
             Glide.with(itemView)
@@ -49,7 +51,8 @@ class OrderListAdapter(val context: Context, val list:List<LatestOrderResponse>)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): OrderHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.list_item_order, parent, false)
+        val view = LayoutInflater.from(parent.context)
+            .inflate(R.layout.list_item_order, parent, false)
         return OrderHolder(view)
     }
 
@@ -63,7 +66,7 @@ class OrderListAdapter(val context: Context, val list:List<LatestOrderResponse>)
 
     //클릭 인터페이스 정의 사용하는 곳에서 만들어준다.
     interface ItemClickListener {
-        fun onClick(view: View,  position: Int, orderid:Int)
+        fun onClick(view: View, position: Int, orderid:Int)
     }
     //클릭리스너 선언
     private lateinit var itemClickListner: ItemClickListener
@@ -72,4 +75,3 @@ class OrderListAdapter(val context: Context, val list:List<LatestOrderResponse>)
         this.itemClickListner = itemClickListener
     }
 }
-

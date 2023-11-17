@@ -40,6 +40,15 @@
 		o_id desc
 		limit 10
 	</select>
+	
+	
+	 <select id="getAllCompletedOrder" parameterType="string" resultType="map">
+    select o.o_id, o.user_id, o.order_time, d.quantity, p.name, p.type, p.price, p.img, o.completed
+        from t_order o join t_order_detail d on d.order_id=o.o_id
+               join t_product p on d.product_id = p.id
+        where completed = #{result}
+        order by o.o_id desc, d.d_id desc
+    </select>
 
 	<select id="selectByUser" resultMap="OrderBasic"
 		parameterType="string">

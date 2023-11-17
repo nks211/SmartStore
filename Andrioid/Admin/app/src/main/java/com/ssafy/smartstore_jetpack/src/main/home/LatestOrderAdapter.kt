@@ -15,7 +15,7 @@ import com.ssafy.smartstore_jetpack.src.main.my.models.LatestOrderResponse
 import com.ssafy.smartstore_jetpack.util.CommonUtils
 
 private const val TAG = "LatestOrderAdapter_싸피"
-class LatestOrderAdapter(val context: Context, val list:List<LatestOrderResponse>) :RecyclerView.Adapter<LatestOrderAdapter.LatestOrderHolder>(){
+class LatestOrderAdapter(val context: Context, var list:List<LatestOrderResponse>) :RecyclerView.Adapter<LatestOrderAdapter.LatestOrderHolder>(){
 
     inner class LatestOrderHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
         val menuImage = itemView.findViewById<ImageView>(R.id.menuImage)
@@ -73,4 +73,5 @@ class LatestOrderAdapter(val context: Context, val list:List<LatestOrderResponse
     }
 
 }
+
 

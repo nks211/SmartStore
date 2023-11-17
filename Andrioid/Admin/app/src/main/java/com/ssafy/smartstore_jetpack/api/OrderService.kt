@@ -19,4 +19,7 @@ interface OrderService {
     // 반환 정보는 1차 주문번호 내림차순, 2차 주문 상세 내림차순으로 정렬된다.
     @GET("rest/order/byUser")
     suspend fun getLastMonthOrder(@Query("id") id: String): List<LatestOrderResponse>
+
+    @GET("rest/order/allOrdersByResult")
+    suspend fun getAllOrdersByResults(@Query("result") result: String): List<LatestOrderResponse>
 }

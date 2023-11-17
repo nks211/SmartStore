@@ -1,4 +1,4 @@
-package com.ssafy.smartstore_jetpack.src.main.my
+package com.ssafy.smartstore_jetpack.src.main.my.adapter
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -13,7 +13,7 @@ import com.ssafy.smartstore_jetpack.config.ApplicationClass
 import com.ssafy.smartstore_jetpack.src.main.my.models.OrderDetailResponse
 import com.ssafy.smartstore_jetpack.util.CommonUtils
 
-
+private const val TAG = "OrderAdapter_싸피"
 class OrderDetailListAdapter(val context: Context, val orderDetail:List<OrderDetailResponse>) :RecyclerView.Adapter<OrderDetailListAdapter.OrderDetailListHolder>(){
 
     inner class OrderDetailListHolder(itemView: View) : RecyclerView.ViewHolder(itemView){

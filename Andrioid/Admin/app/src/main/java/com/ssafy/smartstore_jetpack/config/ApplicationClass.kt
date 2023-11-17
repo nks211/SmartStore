@@ -2,6 +2,13 @@ package com.ssafy.smartstore_jetpack.config
 
 import android.Manifest
 import android.app.Application
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.content.Context
+import android.os.Build
+import android.util.Log
+import androidx.annotation.RequiresApi
+import com.google.firebase.messaging.FirebaseMessaging
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.ssafy.smartstore_jetpack.util.SharedPreferencesUtil
@@ -30,9 +37,12 @@ class ApplicationClass : Application() {
         // 주문 준비 완료 확인 시간 1분
         const val ORDER_COMPLETED_TIME = 60*1000
 
+        const val channel_id = "ssafy_channel"
+
     }
 
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate() {
         super.onCreate()
 
@@ -56,9 +66,29 @@ class ApplicationClass : Application() {
             .addConverterFactory(GsonConverterFactory.create(gson))
             .client(okHttpClient)
             .build()
+
+        FirebaseMessaging.getInstance().token.addOnCompleteListener{
+            if(!it.isSuccessful){
+                Log.d(TAG, "onCreate: 실패, ${it.exception}")
+                return@addOnCompleteListener
+            }
+            Log.d(TAG, "onCreate: 성공, ${it.result}")
+        }
+        createNotificationChannel(channel_id, "ssafy")
+
+
     }
     //GSon은 엄격한 json type을 요구하는데, 느슨하게 하기 위한 설정. success, fail이 json이 아니라 단순 문자열로 리턴될 경우 처리..
     val gson : Gson = GsonBuilder()
         .setLenient()
         .create()
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun createNotificationChannel(id: String, name: String){
+        val importance = NotificationManager.IMPORTANCE_DEFAULT
+        val channel = NotificationChannel(id, name, importance)
+        val notificationManager: NotificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        notificationManager.createNotificationChannel(channel)
+    }
+
 }

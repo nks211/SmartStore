@@ -57,7 +57,7 @@ object CommonUtils {
                 hm[order.orderId] = order
             }
         }
-        val list = ArrayList<LatestOrderResponse>(hm.values)
+        val list = ArrayList(hm.values)
         list.sortWith { o1, o2 -> o2.orderDate.compareTo(o1.orderDate) }
         return list
     }

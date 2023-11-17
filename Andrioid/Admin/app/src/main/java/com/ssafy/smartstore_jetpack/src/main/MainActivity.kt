@@ -37,9 +37,6 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
     lateinit var filters: Array<IntentFilter>
     var tablenumber = -1
 
-    var a = -1
-
-
     override fun onResume() {
         super.onResume()
         nfcAdapter.enableForegroundDispatch(this, pendingIntent, filters, null)

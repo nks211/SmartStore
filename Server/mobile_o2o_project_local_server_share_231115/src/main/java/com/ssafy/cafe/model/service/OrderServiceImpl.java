@@ -85,4 +85,9 @@ public class OrderServiceImpl implements OrderService {
     public List<Map<String, Object>> getLast6MonthOrder(String id) {
         return oDao.getLast6MonthOrder(id);
     }
+
+	@Override
+	public List<Map<String, Object>> getAllCompletedOrder(String result) {
+		return oDao.getAllCompletedOrder(result);
+	}
 }

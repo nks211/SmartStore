@@ -13,6 +13,7 @@ import com.ssafy.smartstore_jetpack.config.BaseFragment
 import com.ssafy.smartstore_jetpack.databinding.FragmentOrderDetailBinding
 import com.ssafy.smartstore_jetpack.src.main.MainActivity
 import com.ssafy.smartstore_jetpack.src.main.MainActivityViewModel
+import com.ssafy.smartstore_jetpack.src.main.my.adapter.OrderDetailListAdapter
 import com.ssafy.smartstore_jetpack.src.main.my.models.OrderDetailResponse
 import com.ssafy.smartstore_jetpack.util.CommonUtils
 import com.ssafy.smartstore_jetpack.util.RetrofitUtil

@@ -1,11 +1,11 @@
 package com.ssafy.smartstore_jetpack.src.main.my
 
 import android.content.Context
-import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.widget.LinearLayout
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -17,20 +17,19 @@ import com.ssafy.smartstore_jetpack.config.ApplicationClass
 import com.ssafy.smartstore_jetpack.config.BaseFragment
 import com.ssafy.smartstore_jetpack.databinding.FragmentMypageBinding
 import com.ssafy.smartstore_jetpack.dto.Grade
-import com.ssafy.smartstore_jetpack.dto.User
 import com.ssafy.smartstore_jetpack.src.main.MainActivity
 import com.ssafy.smartstore_jetpack.src.main.MainActivityViewModel
+import com.ssafy.smartstore_jetpack.src.main.my.adapter.CompletedListAdapter
+import com.ssafy.smartstore_jetpack.src.main.my.adapter.OrderListAdapter
 import com.ssafy.smartstore_jetpack.util.CommonUtils
 import com.ssafy.smartstore_jetpack.util.RetrofitUtil
 import kotlinx.coroutines.launch
-import okhttp3.Interceptor
-import okhttp3.Response
-import java.io.File
 
 // MyPage 탭
 private const val TAG = "MypageFragment_싸피"
 class MyPageFragment : BaseFragment<FragmentMypageBinding>(FragmentMypageBinding::bind, R.layout.fragment_mypage) {
     private lateinit var orderAdapter : OrderListAdapter
+    private lateinit var completedOrderAdapter: CompletedListAdapter
     private lateinit var mainActivity: MainActivity
     private var isAdmin = false
 
@@ -82,36 +81,44 @@ class MyPageFragment : BaseFragment<FragmentMypageBinding>(FragmentMypageBinding
                 "나무" -> {  }
             }
             binding.textUserNextLevel.text = state
-
-
         }
     }
 
     private fun initData(id:String){
         // 최근 한달간 주문내역
-        lifecycleScope.launch {
-            val userLastOrderData = RetrofitUtil.orderService.getLastMonthOrder(id)
 
-            orderAdapter = OrderListAdapter(mainActivity, CommonUtils.makeLatestOrderList(userLastOrderData))
-            orderAdapter.setItemClickListener(object : OrderListAdapter.ItemClickListener {
-                override fun onClick(view: View, position: Int, orderid: Int) {
-                    activityViewModel.setOrderId(orderid)
-                    mainActivity.openFragment(2)
+        if(!isAdmin){
+            lifecycleScope.launch {
+                val userLastOrderData = RetrofitUtil.orderService.getLastMonthOrder(id)
+
+                orderAdapter = OrderListAdapter(mainActivity, CommonUtils.makeLatestOrderList(userLastOrderData))
+                orderAdapter.setItemClickListener(object : OrderListAdapter.ItemClickListener {
+                    override fun onClick(view: View, position: Int, orderid: Int) {
+                        activityViewModel.setOrderId(orderid)
+                        mainActivity.openFragment(2)
+                    }
+                })
+
+                binding.recyclerViewOrder.apply {
+                    layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+                    adapter = orderAdapter
                 }
-            })
-
-            binding.recyclerViewOrder.apply {
-                layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-                adapter = orderAdapter
+                Log.d(TAG, "onViewCreated: $userLastOrderData")
             }
-            binding.logout.setOnClickListener {
-                mainActivity.openFragment(5)
+        }else{
+            lifecycleScope.launch{
+                val completedOrderData = RetrofitUtil.orderService.getAllOrdersByResults("Y")
+                completedOrderAdapter = CompletedListAdapter()
+                completedOrderAdapter.submitList(CommonUtils.makeLatestOrderList(completedOrderData))
+                binding.recyclerViewOrder.apply {
+                    layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+                    adapter = completedOrderAdapter
+                }
             }
-
-            Log.d(TAG, "onViewCreated: $userLastOrderData")
-
         }
-
+        binding.logout.setOnClickListener {
+            mainActivity.openFragment(5)
+        }
     }
 
 }

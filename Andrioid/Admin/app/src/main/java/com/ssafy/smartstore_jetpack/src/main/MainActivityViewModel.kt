@@ -9,6 +9,7 @@ import com.ssafy.smartstore_jetpack.dto.Order
 import com.ssafy.smartstore_jetpack.dto.OrderDetail
 import com.ssafy.smartstore_jetpack.dto.ShoppingCart
 import com.ssafy.smartstore_jetpack.src.main.menu.models.MenuDetailWithCommentResponse
+import com.ssafy.smartstore_jetpack.src.main.my.models.LatestOrderResponse
 import com.ssafy.smartstore_jetpack.src.main.my.models.OrderDetailResponse
 import com.ssafy.smartstore_jetpack.util.CommonUtils
 import com.ssafy.smartstore_jetpack.util.RetrofitUtil
@@ -34,7 +35,6 @@ class MainActivityViewModel : ViewModel() {
     fun setProductId(productId:Int){
         _productId.value = productId
     }
-
 
     private val _productInfo = MutableLiveData<List<MenuDetailWithCommentResponse>>()
     val productInfo: LiveData<List<MenuDetailWithCommentResponse>>
@@ -63,6 +63,10 @@ class MainActivityViewModel : ViewModel() {
         return true
     }
 
+    private val _waitingOrders = MutableLiveData<List<LatestOrderResponse>>()
+    val waitingOrders : LiveData<List<LatestOrderResponse>>
+        get() = _waitingOrders
+
     private val _tablenumber = MutableLiveData<Int>()
     val tablenumber : LiveData<Int>
         get() = _tablenumber
@@ -70,7 +74,6 @@ class MainActivityViewModel : ViewModel() {
     fun setTableNumber(number: Int) {
         _tablenumber.value = number
     }
-
 
     private val _shoppingList = MutableLiveData<List<OrderDetail>>()
     val shoppingList: LiveData<List<OrderDetail>>
@@ -102,6 +105,8 @@ class MainActivityViewModel : ViewModel() {
     fun setOrderCompleted(state: Boolean){
         _isOrderCompleted.value = state
     }
+
+
 
 
 }
