@@ -2,6 +2,7 @@ package com.ssafy.smartstore_jetpack.src.main.login
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -28,6 +29,8 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(FragmentLoginBinding::b
         super.onAttach(context)
         loginActivity = context as LoginActivity
     }
+    
+    
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -38,6 +41,7 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(FragmentLoginBinding::b
                 loginActivity.openFragment(1)
             }
             else {
+                Log.d(TAG, "onViewCreated: aaa")
                 showToast("ID, Password를 확인하세요.")
             }
         }

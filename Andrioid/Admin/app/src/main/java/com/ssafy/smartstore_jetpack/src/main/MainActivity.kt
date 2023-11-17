@@ -1,15 +1,11 @@
 package com.ssafy.smartstore_jetpack.src.main
 
-import android.Manifest
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
-import android.bluetooth.BluetoothAdapter
-import android.bluetooth.BluetoothManager
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
-import android.content.pm.PackageManager
 import android.nfc.NdefMessage
 import android.nfc.NdefRecord
 import android.nfc.NfcAdapter
@@ -18,30 +14,18 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.Toast
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
-import androidx.appcompat.app.AlertDialog
-import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.ActivityCompat
-import androidx.core.content.PermissionChecker
 import com.ssafy.smartstore_jetpack.R
 import com.ssafy.smartstore_jetpack.config.ApplicationClass
 import com.ssafy.smartstore_jetpack.config.BaseActivity
 import com.ssafy.smartstore_jetpack.databinding.ActivityMainBinding
 import com.ssafy.smartstore_jetpack.src.main.home.HomeFragment
-import com.ssafy.smartstore_jetpack.src.main.menu.MapFragment
+import com.ssafy.smartstore_jetpack.src.main.menu.MenuAddFragment
 import com.ssafy.smartstore_jetpack.src.main.menu.MenuDetailFragment
 import com.ssafy.smartstore_jetpack.src.main.menu.MenuFragment
-import com.ssafy.smartstore_jetpack.src.main.menu.ShoppingListFragment
 import com.ssafy.smartstore_jetpack.src.main.my.MyPageFragment
 import com.ssafy.smartstore_jetpack.src.main.my.OrderDetailFragment
 import com.ssafy.smartstore_jetpack.util.BeaconSettingUtil
-import org.altbeacon.beacon.Beacon
-import org.altbeacon.beacon.BeaconManager
-import org.altbeacon.beacon.BeaconParser
-import org.altbeacon.beacon.Identifier
-import org.altbeacon.beacon.RangeNotifier
-import org.altbeacon.beacon.Region
 
 private const val TAG = "MainActivity_싸피"
 class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::inflate) {
@@ -52,6 +36,9 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
     lateinit var pendingIntent: PendingIntent
     lateinit var filters: Array<IntentFilter>
     var tablenumber = -1
+
+    var a = -1
+
 
     override fun onResume() {
         super.onResume()
@@ -128,10 +115,10 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
     private fun moveFragment(index:Int, key:String, value:Int){
         val transaction = supportFragmentManager.beginTransaction()
         when(index){
-            //장바구니
+            //상품 추가
             1 -> {
                 Log.d(TAG, "moveFragment: $value")
-                transaction.replace(R.id.frame_layout_main, ShoppingListFragment(value))
+                transaction.replace(R.id.frame_layout_main, MenuAddFragment())
                 .addToBackStack(null)
             }
             //주문 상세 보기
@@ -139,9 +126,6 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
                 .addToBackStack(null)
             //메뉴 상세 보기
             3 -> transaction.replace(R.id.frame_layout_main, MenuDetailFragment())
-                .addToBackStack(null)
-            //map으로 가기
-            4 -> transaction.replace(R.id.frame_layout_main, MapFragment())
                 .addToBackStack(null)
             //logout
             5 -> {

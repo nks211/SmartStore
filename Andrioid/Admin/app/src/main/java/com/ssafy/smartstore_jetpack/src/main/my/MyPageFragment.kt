@@ -32,6 +32,7 @@ private const val TAG = "MypageFragment_싸피"
 class MyPageFragment : BaseFragment<FragmentMypageBinding>(FragmentMypageBinding::bind, R.layout.fragment_mypage) {
     private lateinit var orderAdapter : OrderListAdapter
     private lateinit var mainActivity: MainActivity
+    private var isAdmin = false
 
     private val activityViewModel : MainActivityViewModel by activityViewModels()
 
@@ -43,22 +44,29 @@ class MyPageFragment : BaseFragment<FragmentMypageBinding>(FragmentMypageBinding
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val id = getUserData()
-        initData(id)
-        getGradeData()
+        val id = getUserData().also {
+            initData(it)
+        }
+        if(!isAdmin) {
+            binding.levelLayout.visibility = View.VISIBLE
+            binding.textLevelRest.visibility = View.VISIBLE
+            getGradeData(id)
+        }
     }
 
     private fun getUserData():String{
         val user = ApplicationClass.sharedPreferencesUtil.getUser()
         binding.textUserName.text = user.name + " 님"
+        isAdmin = user.isAdmin
+        Log.d(TAG, "getUserData: ${user.isAdmin}")
 
         return user.id
     }
 
-    private fun getGradeData() {
-        var user = ApplicationClass.sharedPreferencesUtil.getUser()
+    private fun getGradeData(id: String) {
         lifecycleScope.launch { 
-            var userinfo = RetrofitUtil.userService.getInfowithstamp(user.id)
+            var userinfo = RetrofitUtil.userService.getInfowithstamp(id)
+            Log.d(TAG, "getGradeData: $userinfo")
             var gradeinfo = Gson().fromJson<Grade>(userinfo["grade"].toString(), object: TypeToken<Grade>(){}.type)
             binding.imageLevel.setImageURI(Uri.parse(
                 "android.resource://" + BuildConfig.APPLICATION_ID
@@ -74,6 +82,7 @@ class MyPageFragment : BaseFragment<FragmentMypageBinding>(FragmentMypageBinding
                 "나무" -> {  }
             }
             binding.textUserNextLevel.text = state
+
 
         }
     }
