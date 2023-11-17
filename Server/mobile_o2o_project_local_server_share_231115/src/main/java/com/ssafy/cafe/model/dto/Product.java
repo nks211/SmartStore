@@ -1,13 +1,27 @@
 package com.ssafy.cafe.model.dto;
 
+import org.springframework.web.multipart.MultipartFile;
+
 public class Product {
     private Integer id;
     private String name;
     private String type;
     private Integer price;
     private String img;
+   
+	private String originImgName;
+	
+   
     
-    public Product(Integer id, String name, String type, Integer price, String img) {
+    public String getOriginImgName() {
+		return originImgName;
+	}
+
+	public void setOriginImgName(String originImgName) {
+		this.originImgName = originImgName;
+	}
+
+	public Product(Integer id, String name, String type, Integer price, String img) {
         this.id = id;
         this.name = name;
         this.type = type;
@@ -21,6 +35,13 @@ public class Product {
         this.price = price;
         this.img = img;
     }
+    
+    public Product(String name, String type, Integer price) {
+        this.name = name;
+        this.type = type;
+        this.price = price;
+    }
+    
     public Product() {}
     
 	public Integer getId() {

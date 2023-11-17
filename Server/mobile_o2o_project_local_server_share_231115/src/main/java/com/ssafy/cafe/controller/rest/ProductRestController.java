@@ -1,5 +1,6 @@
 package com.ssafy.cafe.controller.rest;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
@@ -8,11 +9,18 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
+import com.ssafy.cafe.model.dto.FileConverter;
 import com.ssafy.cafe.model.dto.Product;
+import com.ssafy.cafe.model.dto.UploadFile;
 import com.ssafy.cafe.model.service.ProductService;
 
 import io.swagger.annotations.ApiOperation;
@@ -23,6 +31,31 @@ import io.swagger.annotations.ApiOperation;
 public class ProductRestController {
     @Autowired
     ProductService pService;
+    
+    @PostMapping
+    @ApiOperation(value = "상품을 추가한다")
+    public boolean addProduct(
+    		@RequestPart("file") MultipartFile file, 
+    		@ModelAttribute("product") Product product) {
+    	try {
+			UploadFile ufile = new FileConverter().storeFile(file, "\\menu");
+			Product tmp = new Product(
+					product.getName(),
+					product.getType(),
+					product.getPrice()
+					);
+			tmp.setImg(ufile.getStoreImgName());
+			tmp.setOriginImgName(ufile.getOriginImgName());
+			pService.add(tmp);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    	
+    	return true;
+    	
+    }
+    
     
     @GetMapping()
     @ApiOperation(value="전체 상품의 목록을 반환한다.", response = List.class)

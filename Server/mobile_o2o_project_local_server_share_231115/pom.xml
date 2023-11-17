@@ -64,7 +64,13 @@
 		    <groupId>org.springframework.boot</groupId>
 		    <artifactId>spring-boot-starter-cache</artifactId>
 		</dependency>
-
+		
+		<!-- 파일 업로드 라이브러리 -->
+		<dependency>
+    		<groupId>commons-fileupload</groupId>
+    		<artifactId>commons-fileupload</artifactId>
+    		<version>1.4</version>
+		</dependency>
 
 
 	</dependencies>

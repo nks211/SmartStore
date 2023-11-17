@@ -8,6 +8,9 @@ import org.springframework.cache.annotation.Cacheable;
 import com.ssafy.cafe.model.dto.Product;
 
 public interface ProductService {
+	
+	public void add(Product product);
+	
     /**
      * 모든 상품 정보를 반환한다.
      * @return
