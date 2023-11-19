@@ -83,7 +83,7 @@ public class OrderRestController {
     }
     
     @PutMapping
-    @ApiOperation(value="주문을 완료한다. completed = Y가 된다", response = Integer.class)
+    @ApiOperation(value="주문을 완료한다. completed = Y가 된다", response = Boolean.class)
     public Boolean completeOrder(@RequestBody Order order) {
     	oService.updateOrder(order);
     	return true;

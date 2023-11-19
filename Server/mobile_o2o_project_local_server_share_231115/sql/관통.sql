@@ -129,4 +129,6 @@ INSERT INTO t_stamp (user_id, order_id, quantity) VALUES ('id 10', 10, 10);
 
 select * from t_order;
 
+alter table t_product add isSalable boolean not null default true;
+
 commit;

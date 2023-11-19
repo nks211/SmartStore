@@ -8,11 +8,13 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import com.ssafy.smartstore_jetpack.R
+import com.ssafy.smartstore_jetpack.config.ApplicationClass
 import com.ssafy.smartstore_jetpack.config.BaseFragment
 import com.ssafy.smartstore_jetpack.databinding.FragmentOrderBinding
 import com.ssafy.smartstore_jetpack.dto.Product
 import com.ssafy.smartstore_jetpack.src.main.MainActivity
 import com.ssafy.smartstore_jetpack.src.main.MainActivityViewModel
+import com.ssafy.smartstore_jetpack.src.main.menu.adapter.MenuAdapter
 import com.ssafy.smartstore_jetpack.util.RetrofitUtil
 import kotlinx.coroutines.launch
 
@@ -21,7 +23,8 @@ private const val TAG = "OrderFragment_싸피"
 class MenuFragment : BaseFragment<FragmentOrderBinding>(FragmentOrderBinding::bind, R.layout.fragment_order){
     private var menuAdapter: MenuAdapter = MenuAdapter(arrayListOf())
     private lateinit var mainActivity: MainActivity
-    private lateinit var prodList:List<Product>
+
+    private var isAdmin = -1
 
     private val activityViewModel:MainActivityViewModel by activityViewModels()
 
@@ -41,7 +44,7 @@ class MenuFragment : BaseFragment<FragmentOrderBinding>(FragmentOrderBinding::bi
         }
 
         binding.floatingBtn.setOnClickListener{
-            //장바구니 이동
+            activityViewModel.setProductId(-1)
             mainActivity.openFragment(1)
         }
     }
@@ -55,7 +58,8 @@ class MenuFragment : BaseFragment<FragmentOrderBinding>(FragmentOrderBinding::bi
                 menuAdapter.setItemClickListener(object : MenuAdapter.ItemClickListener{
                     override fun onClick(view: View, position: Int, productId:Int) {
                         activityViewModel.setProductId(productId)
-                        mainActivity.openFragment(3)
+                        val salable = if(it[position].isSalable) 1 else 0
+                        mainActivity.openFragment(3, "", salable)
                     }
                 })
             }

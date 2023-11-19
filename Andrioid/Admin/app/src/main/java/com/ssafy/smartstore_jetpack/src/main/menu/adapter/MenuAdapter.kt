@@ -1,4 +1,4 @@
-package com.ssafy.smartstore_jetpack.src.main.menu
+package com.ssafy.smartstore_jetpack.src.main.menu.adapter
 
 import android.view.LayoutInflater
 import android.view.View
@@ -11,8 +11,7 @@ import com.ssafy.smartstore_jetpack.R
 import com.ssafy.smartstore_jetpack.config.ApplicationClass
 import com.ssafy.smartstore_jetpack.dto.Product
 
-private const val TAG = "MenuAdapter_싸피"
-class MenuAdapter(var productList:List<Product>) :RecyclerView.Adapter<MenuAdapter.MenuHolder>(){
+class MenuAdapter(var productList:List<Product>) : RecyclerView.Adapter<MenuAdapter.MenuHolder>(){
 
     inner class MenuHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
         val menuName = itemView.findViewById<TextView>(R.id.textMenuNames)
@@ -31,7 +30,8 @@ class MenuAdapter(var productList:List<Product>) :RecyclerView.Adapter<MenuAdapt
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MenuHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.list_item_menu, parent, false)
+        val view = LayoutInflater.from(parent.context)
+            .inflate(R.layout.list_item_menu, parent, false)
         return MenuHolder(view)
     }
 
@@ -47,7 +47,7 @@ class MenuAdapter(var productList:List<Product>) :RecyclerView.Adapter<MenuAdapt
 
     //클릭 인터페이스 정의 사용하는 곳에서 만들어준다.
     interface ItemClickListener {
-        fun onClick(view: View,  position: Int, productId:Int)
+        fun onClick(view: View, position: Int, productId:Int)
     }
     //클릭리스너 선언
     private lateinit var itemClickListner: ItemClickListener
@@ -56,4 +56,3 @@ class MenuAdapter(var productList:List<Product>) :RecyclerView.Adapter<MenuAdapt
         this.itemClickListner = itemClickListener
     }
 }
-

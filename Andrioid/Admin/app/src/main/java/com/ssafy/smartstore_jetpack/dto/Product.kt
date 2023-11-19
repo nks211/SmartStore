@@ -6,7 +6,8 @@ data class Product (
     val type: String,
     val price: Int,
     val img: String,
-    val comment: ArrayList<Comment> = ArrayList()
+    val comment: ArrayList<Comment> = ArrayList(),
+    var isSalable: Boolean = true
 ) {
     constructor(): this(0, "","",0,"")
     constructor(name: String, type: String, price: Int): this(0, name, type, price, "")

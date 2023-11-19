@@ -27,6 +27,7 @@
 		price = #{price},
 		img = #{img},
 		origin_img_name = #{originImgName},
+		is_salable = #{isSalable}
 		WHERE id = #{id}
 	</update>
 	<delete id="delete" parameterType="int">

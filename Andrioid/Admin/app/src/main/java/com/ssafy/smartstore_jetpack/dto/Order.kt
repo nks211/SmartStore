@@ -13,6 +13,7 @@ data class Order (
     var totalQnanty:Int = 0
     var totalPrice:Int = 0
     var topProductName:String = ""
+
     var topImg:String = ""
 
     var stamp = Stamp()

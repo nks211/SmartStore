@@ -10,10 +10,19 @@ public class Product {
     private String img;
    
 	private String originImgName;
+	private boolean isSalable;
 	
    
     
-    public String getOriginImgName() {
+    public boolean getIsSalable() {
+		return isSalable;
+	}
+
+	public void setIsSalable(boolean isSalable) {
+		this.isSalable = isSalable;
+	}
+
+	public String getOriginImgName() {
 		return originImgName;
 	}
 
@@ -40,6 +49,14 @@ public class Product {
         this.name = name;
         this.type = type;
         this.price = price;
+    }
+    
+    public Product(Integer id, String name, String type, Integer price, boolean isSalable) {
+    	this.id = id;
+    	this.name = name;
+    	this.type = type;
+    	this.price = price;
+    	this.isSalable = isSalable;
     }
     
     public Product() {}

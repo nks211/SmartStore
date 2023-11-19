@@ -1,4 +1,4 @@
-package com.ssafy.smartstore_jetpack.src.main.home
+package com.ssafy.smartstore_jetpack.src.main.home.adapter
 
 import android.content.Context
 import android.util.Log
@@ -15,7 +15,9 @@ import com.ssafy.smartstore_jetpack.src.main.my.models.LatestOrderResponse
 import com.ssafy.smartstore_jetpack.util.CommonUtils
 
 private const val TAG = "LatestOrderAdapter_싸피"
-class LatestOrderAdapter(val context: Context, var list:List<LatestOrderResponse>) :RecyclerView.Adapter<LatestOrderAdapter.LatestOrderHolder>(){
+
+class LatestOrderAdapter(val context: Context, var list:List<LatestOrderResponse>) :
+    RecyclerView.Adapter<LatestOrderAdapter.LatestOrderHolder>(){
 
     inner class LatestOrderHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
         val menuImage = itemView.findViewById<ImageView>(R.id.menuImage)
@@ -42,7 +44,8 @@ class LatestOrderAdapter(val context: Context, var list:List<LatestOrderResponse
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): LatestOrderHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.list_item_latest_order, parent, false)
+        val view = LayoutInflater.from(parent.context)
+            .inflate(R.layout.list_item_latest_order, parent, false)
         return LatestOrderHolder(view)
     }
 
@@ -63,7 +66,7 @@ class LatestOrderAdapter(val context: Context, var list:List<LatestOrderResponse
 
     //클릭 인터페이스 정의 사용하는 곳에서 만들어준다.
     interface ItemClickListener {
-        fun onClick(view: View,  position: Int)
+        fun onClick(view: View, position: Int)
     }
     //클릭리스너 선언
     private lateinit var itemClickListner: ItemClickListener
@@ -73,5 +76,3 @@ class LatestOrderAdapter(val context: Context, var list:List<LatestOrderResponse
     }
 
 }
-
-

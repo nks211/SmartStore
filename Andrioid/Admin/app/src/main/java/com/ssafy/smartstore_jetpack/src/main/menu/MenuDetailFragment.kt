@@ -17,24 +17,24 @@ import com.ssafy.smartstore_jetpack.databinding.DialogMenuCommentBinding
 import com.ssafy.smartstore_jetpack.databinding.FragmentMenuDetailBinding
 import com.ssafy.smartstore_jetpack.dto.Comment
 import com.ssafy.smartstore_jetpack.dto.OrderDetail
-import com.ssafy.smartstore_jetpack.dto.ShoppingCart
 import com.ssafy.smartstore_jetpack.src.main.MainActivity
 import com.ssafy.smartstore_jetpack.src.main.MainActivityViewModel
+import com.ssafy.smartstore_jetpack.src.main.menu.adapter.CommentAdapter
 import com.ssafy.smartstore_jetpack.src.main.menu.models.MenuDetailWithCommentResponse
 import com.ssafy.smartstore_jetpack.util.CommonUtils
 import com.ssafy.smartstore_jetpack.util.RetrofitUtil
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlin.math.round
 
 //메뉴 상세 화면 . Order탭 - 특정 메뉴 선택시 열림
 private const val TAG = "MenuDetailFragment_싸피"
-class MenuDetailFragment : BaseFragment<FragmentMenuDetailBinding>(FragmentMenuDetailBinding::bind, R.layout.fragment_menu_detail){
+class MenuDetailFragment(var isSalable: Int = 1) : BaseFragment<FragmentMenuDetailBinding>(FragmentMenuDetailBinding::bind, R.layout.fragment_menu_detail){
     private lateinit var mainActivity: MainActivity
     private var commentAdapter = CommentAdapter(emptyList())
 
     private val activityViewModel:MainActivityViewModel by activityViewModels()
     private var rating = 0f
+    private var isAdmin = false
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -48,16 +48,17 @@ class MenuDetailFragment : BaseFragment<FragmentMenuDetailBinding>(FragmentMenuD
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        isAdmin = ApplicationClass.sharedPreferencesUtil.getUser().isAdmin
 
         binding.btnAddCount.setOnClickListener {
             var count = binding.textMenuCount.text.toString().toInt()
-            binding.textMenuCount.setText((count + 1).toString())
+            binding.textMenuCount.text = (count + 1).toString()
         }
 
         binding.btnMinusCount.setOnClickListener {
             var count = binding.textMenuCount.text.toString().toInt()
             if (count > 0) {
-                binding.textMenuCount.setText((count - 1).toString())
+                binding.textMenuCount.text = (count - 1).toString()
             }
         }
 
@@ -92,6 +93,11 @@ class MenuDetailFragment : BaseFragment<FragmentMenuDetailBinding>(FragmentMenuD
             .load("${ApplicationClass.MENU_IMGS_URL}${menu.productImg}")
             .into(binding.menuImage)
 
+        if(isAdmin){
+            binding.btnAddList.text = "상품 정보 수정"
+            binding.orderQuantityInfo.visibility = View.GONE
+            binding.addCommentLayout.visibility = View.GONE
+        }
         binding.txtMenuName.text = menu.productName
         binding.txtMenuPrice.text = "${CommonUtils.makeComma(menu.productPrice)}"
         binding.txtRating.text = "${(round(menu.productRatingAvg*10) /10)}점"
@@ -100,17 +106,23 @@ class MenuDetailFragment : BaseFragment<FragmentMenuDetailBinding>(FragmentMenuD
 
     private fun initListener(){
         binding.btnAddList.setOnClickListener {
-            val curItem = activityViewModel.productInfo.value!![0]
+            if(!isAdmin){
+                val curItem = activityViewModel.productInfo.value!![0]
 
-            val orderDetail = OrderDetail(activityViewModel.productId.value!!, binding.textMenuCount.text.toString().toInt()).also {
-                it.img = curItem.productImg
-                it.unitPrice = curItem.productPrice
-                it.productName = curItem.productName
-                it.productType = curItem.type
+                val orderDetail = OrderDetail(activityViewModel.productId.value!!, binding.textMenuCount.text.toString().toInt()).also {
+                    it.img = curItem.productImg
+                    it.unitPrice = curItem.productPrice
+                    it.productName = curItem.productName
+                    it.productType = curItem.type
+                }
+                activityViewModel.addToShoppingList(orderDetail)
+                Toast.makeText(context,"상품이 장바구니에 담겼습니다.",Toast.LENGTH_SHORT).show()
+                parentFragmentManager.popBackStack()
+            }else{
+                mainActivity.openFragment(1, "", isSalable)
+
             }
-            activityViewModel.addToShoppingList(orderDetail)
-            Toast.makeText(context,"상품이 장바구니에 담겼습니다.",Toast.LENGTH_SHORT).show()
-            parentFragmentManager.popBackStack()
+
         }
         binding.btnCreateComment.setOnClickListener {
             if(binding.etComment.text.isNotEmpty())

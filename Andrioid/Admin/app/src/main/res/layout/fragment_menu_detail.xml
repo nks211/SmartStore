@@ -49,6 +49,7 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/order_quantity_info"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
             <TextView
@@ -117,6 +118,7 @@
             tools:rating="4.4" />
     </LinearLayout>
     <LinearLayout
+        android:id="@+id/add_comment_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="5dp">

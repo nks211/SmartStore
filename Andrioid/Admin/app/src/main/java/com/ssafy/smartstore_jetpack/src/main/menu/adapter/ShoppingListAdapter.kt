@@ -1,6 +1,5 @@
-package com.ssafy.smartstore_jetpack.src.main.menu
+package com.ssafy.smartstore_jetpack.src.main.menu.adapter
 
-import android.opengl.Visibility
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -9,14 +8,12 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.ssafy.smartstore_jetpack.R
 import com.ssafy.smartstore_jetpack.config.ApplicationClass
 import com.ssafy.smartstore_jetpack.databinding.ListItemShoppingListBinding
 import com.ssafy.smartstore_jetpack.dto.OrderDetail
-import com.ssafy.smartstore_jetpack.src.main.menu.models.MenuDetailWithCommentResponse
-import com.ssafy.smartstore_jetpack.src.main.my.models.OrderDetailResponse
 
 private const val TAG = "ShoppingListAdapter_싸피"
+
 class ShoppingListAdapter(val isAdmin: Boolean = false): ListAdapter<OrderDetail, ShoppingListAdapter.ShoppingListHolder>(OrderDetailComparator){
 
     companion object OrderDetailComparator: DiffUtil.ItemCallback<OrderDetail>(){
@@ -49,7 +46,8 @@ class ShoppingListAdapter(val isAdmin: Boolean = false): ListAdapter<OrderDetail
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ShoppingListHolder {
-        val binding = ListItemShoppingListBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        val binding =
+            ListItemShoppingListBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return ShoppingListHolder(binding).apply{
             binding.cancelButton.setOnClickListener {
                 buttonClickListener.onClick(layoutPosition)
@@ -67,4 +65,3 @@ class ShoppingListAdapter(val isAdmin: Boolean = false): ListAdapter<OrderDetail
 
     lateinit var buttonClickListener: ButtonClickListener
 }
-

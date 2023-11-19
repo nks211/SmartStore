@@ -1,4 +1,4 @@
-package com.ssafy.smartstore_jetpack.src.main.menu
+package com.ssafy.smartstore_jetpack.src.main.menu.adapter
 
 import android.view.LayoutInflater
 import android.view.View
@@ -67,7 +67,7 @@ class CommentAdapter(var list:List<MenuDetailWithCommentResponse> ) :RecyclerVie
         }
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CommentAdapter.CommentHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CommentHolder {
         val binding = ListItemCommentBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return CommentHolder(binding)
     }

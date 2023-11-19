@@ -10,10 +10,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
@@ -21,6 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.ssafy.cafe.model.dto.FileConverter;
+import com.ssafy.cafe.model.dto.Order;
 import com.ssafy.cafe.model.dto.Product;
 import com.ssafy.cafe.model.dto.UploadFile;
 import com.ssafy.cafe.model.service.ProductService;
@@ -64,6 +68,44 @@ public class ProductRestController {
     	
     }
     
+    @PutMapping("/includeImg")
+    @ApiOperation(value="이미지를 포함한 상품 정보를 업데이트 한다.", response = Boolean.class)
+    public Boolean updateProduct(
+    		@RequestPart("file") MultipartFile file, 
+    		@RequestPart("id") String id,
+    		@RequestPart("name") String name,
+    		@RequestPart("type") String type,
+    		@RequestPart("price") String price,
+    		@RequestPart("isSalable") String isSalable
+    		) {
+    	
+    	try {
+			UploadFile ufile = FileConverter.storeFile(file, "/menu/");
+			boolean boolSalable = true;
+			if(isSalable.equals("0")) {
+				boolSalable = false;
+			}
+			Product tmp = new Product(Integer.parseInt(id), name, type, Integer.parseInt(price), boolSalable);
+			tmp.setImg(ufile.getStoreImgName());
+			tmp.setOriginImgName(ufile.getOriginImgName());
+			pService.updateProduct(tmp);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    	
+    	
+    	return true;
+    }
+    
+    
+    @PutMapping
+    @ApiOperation(value="이미지를 제외한 상품 정보를 업데이트한다.", response = Boolean.class)
+    public Boolean updateProduct(@RequestBody Product product) {
+    	pService.updateProduct(product);
+    	return true;
+    }
+    
     
     @GetMapping()
     @ApiOperation(value="전체 상품의 목록을 반환한다.", response = List.class)
@@ -77,4 +119,7 @@ public class ProductRestController {
     public List<Map<String, Object>> getProductWithComments(@PathVariable Integer productId){
         return pService.selectWithComment(productId);
     }
+    
+    
+    
 }

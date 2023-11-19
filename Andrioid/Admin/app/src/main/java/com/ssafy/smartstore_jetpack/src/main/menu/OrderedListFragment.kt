@@ -15,6 +15,7 @@ import com.ssafy.smartstore_jetpack.dto.Order
 import com.ssafy.smartstore_jetpack.dto.OrderDetail
 import com.ssafy.smartstore_jetpack.src.main.MainActivity
 import com.ssafy.smartstore_jetpack.src.main.MainActivityViewModel
+import com.ssafy.smartstore_jetpack.src.main.menu.adapter.ShoppingListAdapter
 
 private const val TAG = "OrderedListFragment"
 

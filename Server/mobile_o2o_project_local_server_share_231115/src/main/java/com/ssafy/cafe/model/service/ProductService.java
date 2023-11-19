@@ -11,6 +11,10 @@ public interface ProductService {
 	
 	public void add(Product product);
 	
+	void deleteProduct(Integer id);
+	
+	void updateProduct(Product product);
+	
     /**
      * 모든 상품 정보를 반환한다.
      * @return

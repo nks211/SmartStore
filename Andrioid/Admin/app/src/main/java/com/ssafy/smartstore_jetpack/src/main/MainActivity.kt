@@ -117,21 +117,22 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
             //상품 추가
             1 -> {
                 Log.d(TAG, "moveFragment: $value")
-                transaction.replace(R.id.frame_layout_main, MenuAddFragment())
+                transaction.replace(R.id.frame_layout_main, MenuAddFragment(value))
                 .addToBackStack(null)
             }
             //주문 상세 보기
             2 -> transaction.replace(R.id.frame_layout_main, OrderDetailFragment())
                 .addToBackStack(null)
             //메뉴 상세 보기
-            3 -> transaction.replace(R.id.frame_layout_main, MenuDetailFragment())
-                .addToBackStack(null)
+            3 -> {
+                transaction.replace(R.id.frame_layout_main, MenuDetailFragment(value))
+                    .addToBackStack(null)
+            }
 
             4-> {
                 Log.d(TAG, "moveFragment: $value")
                 transaction.replace(R.id.frame_layout_main, OrderedListFragment(value))
                     .addToBackStack(null)
-
             }
             //logout
             5 -> {

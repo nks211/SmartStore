@@ -18,6 +18,7 @@ import com.ssafy.smartstore_jetpack.dto.Order
 import com.ssafy.smartstore_jetpack.dto.OrderDetail
 import com.ssafy.smartstore_jetpack.src.main.MainActivity
 import com.ssafy.smartstore_jetpack.src.main.MainActivityViewModel
+import com.ssafy.smartstore_jetpack.src.main.menu.adapter.ShoppingListAdapter
 import com.ssafy.smartstore_jetpack.util.BeaconSettingUtil
 import com.ssafy.smartstore_jetpack.util.RetrofitUtil
 import kotlinx.coroutines.CoroutineScope
