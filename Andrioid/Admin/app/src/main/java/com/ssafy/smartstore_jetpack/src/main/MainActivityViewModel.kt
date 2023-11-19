@@ -4,11 +4,14 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.viewModelScope
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.ssafy.smartstore_jetpack.dto.Order
 import com.ssafy.smartstore_jetpack.dto.OrderDetail
 import com.ssafy.smartstore_jetpack.dto.ShoppingCart
 import com.ssafy.smartstore_jetpack.src.main.menu.models.MenuDetailWithCommentResponse
+import com.ssafy.smartstore_jetpack.src.main.my.adapter.CompletedListAdapter
 import com.ssafy.smartstore_jetpack.src.main.my.models.LatestOrderResponse
 import com.ssafy.smartstore_jetpack.src.main.my.models.OrderDetailResponse
 import com.ssafy.smartstore_jetpack.util.CommonUtils
@@ -67,12 +70,32 @@ class MainActivityViewModel : ViewModel() {
     val waitingOrders : LiveData<List<LatestOrderResponse>>
         get() = _waitingOrders
 
-    private val _tablenumber = MutableLiveData<Int>()
-    val tablenumber : LiveData<Int>
-        get() = _tablenumber
+    fun getNewOrder(){
+        viewModelScope.launch{
+            try{
+                _waitingOrders.value = RetrofitUtil.orderService.getAllOrdersByResults("N")
+            }catch(e: Exception){
+                _waitingOrders.value = arrayListOf()
+            }
+        }
+    }
+
+    fun completeOrder(order: Order){
+        viewModelScope.launch {
+            try{
+                RetrofitUtil.orderService.completeOrder(order)
+            }catch (e: Exception){
+                Log.d(TAG, "completeOrder: $e")
+            }
+        }
+    }
+
+    private val _tableNumber = MutableLiveData<Int>()
+    val tableNumber : LiveData<Int>
+        get() = _tableNumber
 
     fun setTableNumber(number: Int) {
-        _tablenumber.value = number
+        _tableNumber.value = number
     }
 
     private val _shoppingList = MutableLiveData<List<OrderDetail>>()
@@ -105,7 +128,6 @@ class MainActivityViewModel : ViewModel() {
     fun setOrderCompleted(state: Boolean){
         _isOrderCompleted.value = state
     }
-
 
 
 

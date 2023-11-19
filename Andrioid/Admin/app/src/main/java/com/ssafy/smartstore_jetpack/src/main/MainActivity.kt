@@ -23,6 +23,8 @@ import com.ssafy.smartstore_jetpack.src.main.home.HomeFragment
 import com.ssafy.smartstore_jetpack.src.main.menu.MenuAddFragment
 import com.ssafy.smartstore_jetpack.src.main.menu.MenuDetailFragment
 import com.ssafy.smartstore_jetpack.src.main.menu.MenuFragment
+import com.ssafy.smartstore_jetpack.src.main.menu.OrderedListFragment
+import com.ssafy.smartstore_jetpack.src.main.menu.ShoppingListFragment
 import com.ssafy.smartstore_jetpack.src.main.my.MyPageFragment
 import com.ssafy.smartstore_jetpack.src.main.my.OrderDetailFragment
 import com.ssafy.smartstore_jetpack.util.BeaconSettingUtil
@@ -124,6 +126,13 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
             //메뉴 상세 보기
             3 -> transaction.replace(R.id.frame_layout_main, MenuDetailFragment())
                 .addToBackStack(null)
+
+            4-> {
+                Log.d(TAG, "moveFragment: $value")
+                transaction.replace(R.id.frame_layout_main, OrderedListFragment(value))
+                    .addToBackStack(null)
+
+            }
             //logout
             5 -> {
                 logout()

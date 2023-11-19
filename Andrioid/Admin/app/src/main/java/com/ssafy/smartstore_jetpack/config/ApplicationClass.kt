@@ -22,7 +22,8 @@ class ApplicationClass : Application() {
     companion object{
         // ipconfig를 통해 ip확인하기
         // 핸드폰으로 접속은 같은 인터넷으로 연결 되어있어야함 (유,무선)
-        const val SERVER_URL = "http://192.168.33.120:9987/"
+        const val SERVER_URL = "http://192.168.240.230:9987/"
+//        const val SERVER_URL = "http://192.168.33.120:9987/"
         const val MENU_IMGS_URL = "${SERVER_URL}imgs/menu/"
         const val IMGS_URL = "${SERVER_URL}imgs/"
 

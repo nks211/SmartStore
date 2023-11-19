@@ -1,44 +1,34 @@
 package com.ssafy.smartstore_jetpack.src.main.menu
 
 import android.app.AlertDialog
-import android.app.Dialog
 import android.content.Context
 import android.os.Bundle
 import android.util.Log
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
-import android.widget.Button
 import android.widget.Toast
 import androidx.core.content.ContextCompat
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.ssafy.smartstore_jetpack.R
 import com.ssafy.smartstore_jetpack.config.ApplicationClass
 import com.ssafy.smartstore_jetpack.config.BaseFragment
-import com.ssafy.smartstore_jetpack.databinding.FragmentOrderBinding
 import com.ssafy.smartstore_jetpack.databinding.FragmentShoppingListBinding
 import com.ssafy.smartstore_jetpack.dto.Order
 import com.ssafy.smartstore_jetpack.dto.OrderDetail
 import com.ssafy.smartstore_jetpack.src.main.MainActivity
 import com.ssafy.smartstore_jetpack.src.main.MainActivityViewModel
-import com.ssafy.smartstore_jetpack.util.CommonUtils
 import com.ssafy.smartstore_jetpack.util.BeaconSettingUtil
 import com.ssafy.smartstore_jetpack.util.RetrofitUtil
-import com.ssafy.smartstore_jetpack.util.SharedPreferencesUtil
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 //장바구니 Fragment
 private const val TAG = "ShoppingListFragment_싸피"
 class ShoppingListFragment(val orderId: Int = -1) : BaseFragment<FragmentShoppingListBinding>(FragmentShoppingListBinding::bind, R.layout.fragment_shopping_list){
-    private var shoppingListAdapter : ShoppingListAdapter = ShoppingListAdapter(arrayListOf())
+    private var shoppingListAdapter : ShoppingListAdapter = ShoppingListAdapter()
     private lateinit var mainActivity: MainActivity
     private var isShop : Boolean = true
     private lateinit var beaconsetting : BeaconSettingUtil
@@ -129,7 +119,7 @@ class ShoppingListFragment(val orderId: Int = -1) : BaseFragment<FragmentShoppin
 
     private fun totalAmount(): Int{
         var totalAmount = 0
-        for(detail: OrderDetail in shoppingListAdapter.list){
+        for(detail: OrderDetail in viewModel.shoppingList.value!!){
             totalAmount += detail.unitPrice * detail.quantity
         }
         return totalAmount
@@ -138,8 +128,7 @@ class ShoppingListFragment(val orderId: Int = -1) : BaseFragment<FragmentShoppin
 
     private fun registerObserver(){
         viewModel.shoppingList.observe(viewLifecycleOwner){
-            shoppingListAdapter.list = ArrayList(it)
-            shoppingListAdapter.notifyDataSetChanged()
+            shoppingListAdapter.submitList(it)
             binding.textShoppingCount.text = "총 ${shoppingListAdapter.itemCount}개"
             binding.textShoppingMoney.text = "${totalAmount()} 원"
         }
@@ -192,11 +181,11 @@ class ShoppingListFragment(val orderId: Int = -1) : BaseFragment<FragmentShoppin
                     Order().apply {
                         userId = ApplicationClass.sharedPreferencesUtil.getUser().id
                         details.addAll(ArrayList(viewModel.shoppingList.value!!))
-                        complited = "N"
-                        topImg = shoppingListAdapter.list[0].img
+                        completed = "N"
+                        topImg = viewModel.shoppingList.value!![0].img
                         totalQnanty = shoppingListAdapter.itemCount
                         totalPrice = totalAmount()
-                        topProductName = shoppingListAdapter.list[0].productName
+                        topProductName = viewModel.shoppingList.value!![0].productName
                     }
                 )
                 true

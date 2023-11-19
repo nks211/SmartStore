@@ -22,4 +22,8 @@ interface OrderService {
 
     @GET("rest/order/allOrdersByResult")
     suspend fun getAllOrdersByResults(@Query("result") result: String): List<LatestOrderResponse>
+
+    @PUT("rest/order")
+    suspend fun completeOrder(@Body body: Order):Boolean
+
 }

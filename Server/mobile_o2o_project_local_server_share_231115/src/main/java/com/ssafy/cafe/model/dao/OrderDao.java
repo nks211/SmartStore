@@ -29,5 +29,5 @@ public interface OrderDao {
      */
     List<Map<String, Object>> getLastMonthOrder(String id);    
     List<Map<String, Object>> getLast6MonthOrder(String id);    
-    List<Map<String, Object>> getAllCompletedOrder(String result);
+    List<Map<String, Object>> getAllCompletedOrder(String result);    
 }

@@ -49,7 +49,7 @@
         where completed = #{result}
         order by o.o_id desc, d.d_id desc
     </select>
-
+    
 	<select id="selectByUser" resultMap="OrderBasic"
 		parameterType="string">
 		SELECT * FROM t_order where user_id=#{userId} order by

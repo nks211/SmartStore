@@ -50,7 +50,7 @@ class FirebaseMessagingService : FirebaseMessagingService() {
 //                PendingIntent.FLAG_IMMUTABLE
 //            )
 
-            if(title == "makeorder"){
+            if(title == "makeorder" || title == "makeOrder"){
                 if(messageReceivedListener!=null){
                     Log.d(TAG, "onMessageReceived: here")
                     messageReceivedListener.onMessageReceived()

@@ -1,9 +1,12 @@
 package com.ssafy.smartstore_jetpack.src.main.menu
 
+import android.opengl.Visibility
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.ssafy.smartstore_jetpack.R
@@ -14,12 +17,27 @@ import com.ssafy.smartstore_jetpack.src.main.menu.models.MenuDetailWithCommentRe
 import com.ssafy.smartstore_jetpack.src.main.my.models.OrderDetailResponse
 
 private const val TAG = "ShoppingListAdapter_싸피"
-class ShoppingListAdapter(var list: ArrayList<OrderDetail>) :RecyclerView.Adapter<ShoppingListAdapter.ShoppingListHolder>(){
+class ShoppingListAdapter(val isAdmin: Boolean = false): ListAdapter<OrderDetail, ShoppingListAdapter.ShoppingListHolder>(OrderDetailComparator){
+
+    companion object OrderDetailComparator: DiffUtil.ItemCallback<OrderDetail>(){
+        override fun areItemsTheSame(oldItem: OrderDetail, newItem: OrderDetail): Boolean {
+            return System.identityHashCode(oldItem) == System.identityHashCode(newItem)
+        }
+
+        override fun areContentsTheSame(oldItem: OrderDetail, newItem: OrderDetail): Boolean {
+            return oldItem == newItem
+        }
+
+    }
 
     inner class ShoppingListHolder(private val binding: ListItemShoppingListBinding) : RecyclerView.ViewHolder(binding.root){
 
         fun bindInfo(data: OrderDetail){
             Log.d(TAG, "bindInfo: $data")
+
+            if(isAdmin)
+                binding.cancelButton.visibility = View.GONE
+
             Glide.with(binding.root)
                 .load("${ApplicationClass.MENU_IMGS_URL}${data.img}")
                 .into(binding.menuImage)
@@ -40,11 +58,7 @@ class ShoppingListAdapter(var list: ArrayList<OrderDetail>) :RecyclerView.Adapte
     }
 
     override fun onBindViewHolder(holder: ShoppingListHolder, position: Int) {
-        holder.bindInfo(list[position])
-    }
-
-    override fun getItemCount(): Int {
-        return list.size
+        holder.bindInfo(getItem(position))
     }
 
     interface ButtonClickListener{
