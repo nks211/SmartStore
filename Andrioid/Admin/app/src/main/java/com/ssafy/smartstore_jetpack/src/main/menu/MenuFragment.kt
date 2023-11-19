@@ -4,6 +4,8 @@ import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
@@ -21,7 +23,7 @@ import kotlinx.coroutines.launch
 // 하단 주문 탭
 private const val TAG = "OrderFragment_싸피"
 class MenuFragment : BaseFragment<FragmentOrderBinding>(FragmentOrderBinding::bind, R.layout.fragment_order){
-    private var menuAdapter: MenuAdapter = MenuAdapter(arrayListOf())
+    private var menuAdapter: MenuAdapter = MenuAdapter()
     private lateinit var mainActivity: MainActivity
 
     private var isAdmin = -1
@@ -35,6 +37,39 @@ class MenuFragment : BaseFragment<FragmentOrderBinding>(FragmentOrderBinding::bi
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        Log.d(TAG, "onViewCreated: aa")
+
+        val items = resources.getStringArray(R.array.menu_state)
+        val spinnerAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_dropdown_item_1line, items)
+        binding.stateSelect.adapter = spinnerAdapter
+        binding.stateSelect.onItemSelectedListener =
+            object: AdapterView.OnItemSelectedListener{
+                override fun onItemSelected(p0: AdapterView<*>?, p1: View?, pos: Int, p3: Long) {
+                    when(pos){
+                        0->{
+                            menuAdapter.submitList(activityViewModel.menus.value)
+                        }
+                        1->{
+                            val filteredList = activityViewModel.menus.value!!.filter {
+                                it.isSalable
+                            }
+                            menuAdapter.submitList(filteredList)
+                        }
+                        else->{
+                            val filteredList = activityViewModel.menus.value!!.filter {
+                                !it.isSalable
+                            }
+                            menuAdapter.submitList(filteredList)
+                        }
+                    }
+                }
+
+                override fun onNothingSelected(p0: AdapterView<*>?) {
+
+                }
+
+            }
 
         initData()
 
@@ -53,8 +88,8 @@ class MenuFragment : BaseFragment<FragmentOrderBinding>(FragmentOrderBinding::bi
         lifecycleScope.launch{
             RetrofitUtil.productService.getProductList().let {
                 Log.d(TAG, "onSuccess: ${it}")
-                menuAdapter.productList = it
-                menuAdapter.notifyDataSetChanged()
+                activityViewModel.setMenus(it)
+                menuAdapter.submitList(it)
                 menuAdapter.setItemClickListener(object : MenuAdapter.ItemClickListener{
                     override fun onClick(view: View, position: Int, productId:Int) {
                         activityViewModel.setProductId(productId)

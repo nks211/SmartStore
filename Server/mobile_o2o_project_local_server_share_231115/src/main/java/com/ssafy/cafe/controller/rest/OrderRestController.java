@@ -84,8 +84,10 @@ public class OrderRestController {
     
     @PutMapping
     @ApiOperation(value="주문을 완료한다. completed = Y가 된다", response = Boolean.class)
-    public Boolean completeOrder(@RequestBody Order order) {
+    public Boolean completeOrder(@RequestBody Order order) throws IOException {
     	oService.updateOrder(order);
+    	String token = "d7lriZ0fRVyR2hvSqYK-XV:APA91bH-auF2EhcIaiGEZaAcx9X4SPN-vjMeFpO33qs-QiwSJnb8OSvRdseaPtIlL2F3J7bO8I9zC_9QdSw9RGQGDhjBKyQwA-7ZJm1vZwLutzpL06Dwja5M3AGkH2QJwU87i7E7J-Au";
+        fService.sendMessageTo(token, "makeOrder", "body");
     	return true;
     }
 }

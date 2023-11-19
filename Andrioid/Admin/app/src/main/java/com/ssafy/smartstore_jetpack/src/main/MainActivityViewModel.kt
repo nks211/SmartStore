@@ -9,6 +9,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.ssafy.smartstore_jetpack.dto.Order
 import com.ssafy.smartstore_jetpack.dto.OrderDetail
+import com.ssafy.smartstore_jetpack.dto.Product
 import com.ssafy.smartstore_jetpack.dto.ShoppingCart
 import com.ssafy.smartstore_jetpack.src.main.menu.models.MenuDetailWithCommentResponse
 import com.ssafy.smartstore_jetpack.src.main.my.adapter.CompletedListAdapter
@@ -21,6 +22,14 @@ import retrofit2.http.Path
 
 private const val TAG = "MainActivityVM_싸피"
 class MainActivityViewModel : ViewModel() {
+
+    private val _menus = MutableLiveData<List<Product>>()
+    val menus : LiveData<List<Product>>
+        get() = _menus
+
+    fun setMenus(menu: List<Product>){
+        _menus.value = menu
+    }
 
     private val _orderId = MutableLiveData<Int>()
     val orderId: LiveData<Int>

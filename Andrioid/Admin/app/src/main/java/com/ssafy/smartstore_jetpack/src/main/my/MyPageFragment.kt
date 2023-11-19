@@ -109,6 +109,13 @@ class MyPageFragment : BaseFragment<FragmentMypageBinding>(FragmentMypageBinding
             lifecycleScope.launch{
                 val completedOrderData = RetrofitUtil.orderService.getAllOrdersByResults("Y")
                 completedOrderAdapter = CompletedListAdapter()
+                completedOrderAdapter.setItemClickListener(object : CompletedListAdapter.ItemClickListener{
+                    override fun onClick(view: View, position: Int, orderid: Int) {
+                        activityViewModel.setOrderId(orderid)
+                        mainActivity.openFragment(2)
+                    }
+
+                })
                 completedOrderAdapter.submitList(CommonUtils.makeLatestOrderList(completedOrderData))
                 binding.recyclerViewOrder.apply {
                     layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
