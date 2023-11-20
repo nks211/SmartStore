@@ -23,13 +23,12 @@ class OrderDetailitem {
     this._name = jsondata['name'];
     this._unitprice = jsondata['unitprice'];
     this._quantity = jsondata['quantity'];
-    this._totalprice = jsondata['totalprice'];
+    this._totalprice = jsondata['unitprice'] * jsondata['quantity'];
   }
 
   Map<String, dynamic> toJson() => {
     'img' : _img,
     'quantity' : _quantity,
-    'totalprice' : _totalprice,
     'product_id' : _product_id,
     'name' : _name,
     'unitprice' : _unitprice,

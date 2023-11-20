@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:smart_store_flutter_starter/mypage/order_detail_page.dart';
 import 'package:smart_store_flutter_starter/dto/Order.dart';
 import 'package:smart_store_flutter_starter/util/common.dart';
@@ -8,6 +9,7 @@ import '../dto/OrderDetailitem.dart';
 import '../dto/Orderitem.dart';
 import '../dto/User.dart';
 import '../service/OrderService.dart';
+import '../start/login.dart';
 
 class UserInfo extends StatefulWidget {
   final User user;
@@ -73,7 +75,7 @@ class _UserInfo extends State<UserInfo> {
                   padding: EdgeInsets.all(10),
                   child: Text("픽업 완료", style: textStyle20)
               )
-          ), myOrderDetails, height: 320);
+          ), myOrderDetails, height: 340);
         });
       });
     }
@@ -103,9 +105,15 @@ class _UserInfo extends State<UserInfo> {
                       ),
                     ),
                     IconButton(
-                        onPressed: (){ Navigator.pop(context); },
+                        onPressed: () async {
+                          Future<SharedPreferences> preferences = SharedPreferences.getInstance();
+                          preferences.then((value) {
+                            value.remove('id'); value.remove('pass');
+                          });
+                          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => Login()));
+                          },
                         iconSize: 50,
-                        icon: Image.asset('assets/logout.png'))
+                        icon: Image.asset('assets/logout.png', width: 50,))
                   ],
                 ),
                 Padding(

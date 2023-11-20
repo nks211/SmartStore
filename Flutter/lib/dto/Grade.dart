@@ -9,6 +9,9 @@ class Grade {
   String get title => _title;
   int get to => _to;
 
+
+  Grade.init();
+
   Grade(this._img, this._step, this._to, this._title);
 
   Grade.fromJson(Map<String, dynamic> jsondata) {

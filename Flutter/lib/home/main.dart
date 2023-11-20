@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:smart_store_flutter_starter/dto/OrderDetailitem.dart';
 import 'package:smart_store_flutter_starter/menuorder/shopping_cart.dart';
 import 'package:smart_store_flutter_starter/service/OrderService.dart';
+import 'package:smart_store_flutter_starter/service/UserService.dart';
 import 'package:smart_store_flutter_starter/util/common.dart';
 import 'package:smart_store_flutter_starter/dto/Order.dart';
 
@@ -23,6 +24,7 @@ class _MainState extends State<Main> {
   var items = List.generate(5, (_) => Order('assets/coffee1.png', '아메리카노 외 3잔', 25000, '2023.11.15')).toList();
   var noticeItem = List.generate(3, (i) => "알림$i");
 
+  var userservice = UserService();
   var orderservice = OrderService();
   Widget orderlist = Container(); //주문 내역 위젯 초기화
 

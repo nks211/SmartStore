@@ -25,7 +25,12 @@ class OrderService {
       },
       body: jsonEncode(order.toJson()),
     );
-    return response.body;
+    if (response.statusCode == 200) {
+      return response.body;
+    }
+    else {
+      return '';
+    }
   }
 
 }

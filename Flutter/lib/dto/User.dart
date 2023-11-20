@@ -18,6 +18,8 @@ class User {
     _id = id; _name = name; _pass = pass; _stamps = stamps; _stampList = stamplist;
   }
 
+  User.init();
+
   User.fromJson(Map<String, dynamic> jsondata) {
     this._id = jsondata['id'];
     this._name = jsondata['name'];

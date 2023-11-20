@@ -8,7 +8,6 @@ import 'package:smart_store_flutter_starter/mypage/user_info.dart';
 import 'package:smart_store_flutter_starter/start/page_router.dart';
 import 'package:smart_store_flutter_starter/util/common.dart';
 import 'package:smart_store_flutter_starter/start/login.dart';
-import 'package:smart_store_flutter_starter/dto/order_detail.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();

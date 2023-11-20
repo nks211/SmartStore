@@ -1,16 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:smart_store_flutter_starter/mypage/user_info.dart';
+import 'package:smart_store_flutter_starter/service/OrderService.dart';
+import 'package:smart_store_flutter_starter/service/UserService.dart';
 import 'package:smart_store_flutter_starter/util/common.dart';
 
 import 'package:smart_store_flutter_starter/home/main.dart';
 import 'package:smart_store_flutter_starter/menuorder/menu.dart';
 
 import '../dto/Grade.dart';
+import '../dto/Orderitem.dart';
+import '../dto/User.dart';
 
 class PageRouter extends StatefulWidget {
-  List userdata = [];
-  PageRouter(this.userdata, {Key? key}) : super(key: key);
+  const PageRouter({super.key});
 
   @override
   State<PageRouter> createState() => _PageRouterState();
@@ -19,15 +23,48 @@ class PageRouter extends StatefulWidget {
 class _PageRouterState extends State<PageRouter> {
 
   int _selected = 0;
+  var userservice = UserService();
+  var orderservice = OrderService();
+  List userinfo = [];
+  List pages = [
+    Main(user: User.init(), orderdata: [],),
+    Menu(),
+    UserInfo(user: User.init(), orderdata: [], usergrade: Grade.init())];
+
+  void getUserInfo() {
+    Future<SharedPreferences> preferences = SharedPreferences.getInstance();
+    preferences.then((value) {
+      String? id = value.getString('id');
+      String? pass = value.getString('pass');
+      if (id != null && pass != null) {
+        User loginuser  = User(id, pass, '');
+        userservice.userInfo(loginuser).then((_) {
+          var grade = Grade.fromJson(_['grade']);
+          List<Orderitem> orders = [];
+          for (var data in _['order'] as List) {
+            orders.add(Orderitem.fromJson(data));
+          }
+          var name = User.fromJson(_['user']);
+          userinfo = [name, orders, grade];
+          pages = [
+            Main(user: name, orderdata: orders,),
+            Menu(),
+            UserInfo(user: name, orderdata: orders, usergrade: grade),
+          ];
+        });
+      }
+    });
+  }
+
+  @override
+  void initState() {
+    setState(() {
+      getUserInfo();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-
-    List pages = [
-      Main(user: widget.userdata[0], orderdata: widget.userdata[1],),
-      Menu(),
-      UserInfo(user: widget.userdata[0], orderdata: widget.userdata[1], usergrade: widget.userdata[2],)
-    ];
 
     return Scaffold(
       body: SafeArea(
@@ -52,6 +89,7 @@ class _PageRouterState extends State<PageRouter> {
         currentIndex: _selected,
         selectedItemColor: Colors.white,
         onTap: (index) { setState(() {
+          getUserInfo();
           _selected = index;
         }); },
       ),

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:smart_store_flutter_starter/dto/order_detail.dart';
 import 'package:smart_store_flutter_starter/util/common.dart';
 
 import '../dto/OrderDetailitem.dart';

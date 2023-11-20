@@ -1,15 +1,17 @@
 import 'dart:convert';
 
+import 'package:smart_store_flutter_starter/dto/OrderDetail.dart';
 import 'package:smart_store_flutter_starter/dto/OrderDetailitem.dart';
 
 class Orderitem {
 
   int _id = 0;
   String _userId = '';
-  String _orderTable = '';
+  String _orderTable = '웹주문';
   String _orderTime = '';
   String _completed = 'N';
   List<OrderDetailitem> _details = [];
+  List<OrderDetail> _jsondetails = [];
 
   int get id => _id;
   String get userId => _userId;
@@ -17,6 +19,8 @@ class Orderitem {
   String get orderTime => _orderTime;
   String get orderTable => _orderTable;
   List<OrderDetailitem> get details => _details;
+  List<OrderDetail> get jsondetails => _jsondetails;
+
 
   Orderitem(this._id, this._userId, this._orderTable, this._orderTime,
       this._completed);
@@ -24,6 +28,12 @@ class Orderitem {
 
   void setDetails(List<OrderDetailitem> value) {
     _details = value;
+  }
+
+  void jsonDetails() {
+    for (var detail in _details) {
+      _jsondetails.add(OrderDetail(detail.product_id, detail.quantity));
+    }
   }
 
   Orderitem.fromJson(Map<String, dynamic> jsondata) {
@@ -35,12 +45,12 @@ class Orderitem {
   }
 
   Map<String, dynamic> toJson() => {
+    'completed' : _completed,
+    'details' : _jsondetails.map((e) => jsonEncode(e.toJson())).toList(),
     'id' : _id,
-    'userId' : _userId,
     'orderTable' : _orderTable,
     'orderTime' : _orderTime,
-    'completed' : _completed,
-    'details' : _details.map((e) => jsonEncode(e.toJson())).toList(),
+    'userId' : _userId,
   };
 
   @override

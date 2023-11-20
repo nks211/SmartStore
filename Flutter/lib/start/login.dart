@@ -8,7 +8,6 @@ import 'package:smart_store_flutter_starter/util/common.dart';
 import '../dto/Grade.dart';
 import '../dto/User.dart';
 import 'join.dart';
-import 'package:smart_store_flutter_starter/menuorder/menu.dart';
 
 class Login extends StatefulWidget {
   @override
@@ -17,26 +16,25 @@ class Login extends StatefulWidget {
 
 class _Login extends State<Login> {
 
-  var userService = UserService();
+  var userservice = UserService();
   var idcontroller = TextEditingController();
   var passcontroller = TextEditingController();
 
-  void passpage(User user) {
-    userService.userInfo(user).then((value) {
-      var grade = Grade.fromJson(value['grade']);
-      List<Orderitem> orders = [];
-      for (var data in value['order'] as List) {
-        orders.add(Orderitem.fromJson(data));
-      }
-      var name = User.fromJson(value['user']);
-      List info = [name, orders, grade];
-      Navigator.push(context, MaterialPageRoute(builder: (context) => PageRouter(info)));
-    });
+  // 최초 로그인 시 회원 정보 받아온 다음 메인 화면으로 이동함
+  void passpage() {
+    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => PageRouter()));
   }
-
 
   @override
   Widget build(BuildContext context) {
+
+    //기존에 로그인된 정보가 있으면 자동으로 페이지 이동
+    Future<SharedPreferences> preferences = SharedPreferences.getInstance();
+    preferences.then((value) {
+      if (value.getString('id') != null) {
+        passpage();
+      }
+    });
 
     return Scaffold(
       body: SingleChildScrollView(
@@ -95,16 +93,19 @@ class _Login extends State<Login> {
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
                     ElevatedButton(
-                        onPressed: (){
+                        onPressed: () {
                           if (idcontroller.text != '' && passcontroller.text != '') {
                             var id = idcontroller.text;
                             var pass = passcontroller.text;
                             var loginuser = User(id, pass, "");
-                            userService.loginUser(loginuser).then((value) {
+                            userservice.loginUser(loginuser).then((value) {
                               if (id == value.id && pass == value.pass) {
                                 showToast("로그인되었습니다");
-
-                                passpage(loginuser);
+                                preferences.then((_) {
+                                  _.setString('id', value.id);
+                                  _.setString('pass', value.pass);
+                                });
+                                passpage();
                               }
                             }).catchError((e) => showToast("아이디나 비밀번호를 확인해주세요."));
                           }

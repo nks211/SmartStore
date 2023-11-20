@@ -1,6 +1,7 @@
 import 'dart:collection';
 
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:smart_store_flutter_starter/menuorder/map.dart';
 import 'package:smart_store_flutter_starter/menuorder/shopping_cart.dart';
 import 'package:smart_store_flutter_starter/service/ProductService.dart';
@@ -98,17 +99,13 @@ class _MenuState extends State<Menu> {
       ),
       floatingActionButton: ElevatedButton(
         onPressed: () async {
-          // var answer = await Navigator.push(context, MaterialPageRoute(
-          //     builder: (context)=> ShoppingCart(neworder: shoppingOrder,)));
-          // if (answer == 'OK') {
-          //   setState(() {
-          //     shoppingOrder.clear();
-          //   });
-          // }
-          WidgetsBinding.instance!.addPostFrameCallback((_) {
-            Navigator.push(context, MaterialPageRoute(
-                builder: (context)=> ShoppingCart(neworder: shoppingOrder,)));
-          });
+          var answer = await Navigator.push(context, MaterialPageRoute(
+              builder: (context)=> ShoppingCart(neworder: shoppingOrder,)));
+          if (answer == 'OK') {
+            setState(() {
+              shoppingOrder.clear();
+            });
+          }
         },
         style: ElevatedButton.styleFrom(
           shape: CircleBorder(),

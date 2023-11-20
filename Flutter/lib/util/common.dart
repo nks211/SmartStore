@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -5,7 +7,6 @@ import '../dto/Order.dart';
 import '../dto/OrderDetailitem.dart';
 import '../dto/Orderitem.dart';
 import '../dto/Product.dart';
-import '../dto/order_detail.dart';
 import '../menuorder/menudetail.dart';
 import '../menuorder/shopping_cart.dart';
 
@@ -31,17 +32,10 @@ const TextStyle textStyleRed30 = TextStyle(fontFamily: 'Montserrat', fontSize: 3
 const TextStyle textOrder = TextStyle(fontFamily: 'eland_choice_b', fontSize: 20, color: coffeeDarkBrown);
 
 //test용 데이터
-List<OrderDetail> testDetails =[
-  OrderDetail('assets/coffee1.png', '아메리카노', 2500, 2),
-  OrderDetail('assets/coffee3.png', '카페라떼', 3000, 3)
-];
 List comment = ['nice', 'cool', 'happy', 'happy'];
 
 //http통신 주소값
 const BaseUrl = "http://192.168.33.119:9987/";
-
-//SharedPreferences 초기화 설정
-
 
 // toast message
 void showToast(String msg){
