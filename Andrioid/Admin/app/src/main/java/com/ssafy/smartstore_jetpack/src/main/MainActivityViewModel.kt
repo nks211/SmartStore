@@ -4,21 +4,15 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.viewModelScope
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.ssafy.smartstore_jetpack.dto.Order
 import com.ssafy.smartstore_jetpack.dto.OrderDetail
 import com.ssafy.smartstore_jetpack.dto.Product
-import com.ssafy.smartstore_jetpack.dto.ShoppingCart
 import com.ssafy.smartstore_jetpack.src.main.menu.models.MenuDetailWithCommentResponse
-import com.ssafy.smartstore_jetpack.src.main.my.adapter.CompletedListAdapter
 import com.ssafy.smartstore_jetpack.src.main.my.models.LatestOrderResponse
-import com.ssafy.smartstore_jetpack.src.main.my.models.OrderDetailResponse
 import com.ssafy.smartstore_jetpack.util.CommonUtils
 import com.ssafy.smartstore_jetpack.util.RetrofitUtil
 import kotlinx.coroutines.launch
-import retrofit2.http.Path
 
 private const val TAG = "MainActivityVM_싸피"
 class MainActivityViewModel : ViewModel() {
@@ -62,7 +56,7 @@ class MainActivityViewModel : ViewModel() {
 
     fun getProductInfo(pId:Int) {
         viewModelScope.launch{
-            var info:List<MenuDetailWithCommentResponse> = try{
+            val info:List<MenuDetailWithCommentResponse> = try{
                 RetrofitUtil.productService.getProductWithComments(pId)
             }catch (e:Exception){
                 arrayListOf()

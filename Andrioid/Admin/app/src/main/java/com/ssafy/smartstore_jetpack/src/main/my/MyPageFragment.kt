@@ -1,16 +1,21 @@
 package com.ssafy.smartstore_jetpack.src.main.my
 
+import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.util.JsonReader
 import android.util.Log
 import android.view.View
+import android.widget.EditText
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.gson.Gson
+import com.google.gson.JsonObject
+import com.google.gson.internal.LinkedTreeMap
 import com.google.gson.reflect.TypeToken
 import com.ssafy.smartstore_jetpack.BuildConfig
 import com.ssafy.smartstore_jetpack.R
@@ -18,6 +23,7 @@ import com.ssafy.smartstore_jetpack.config.ApplicationClass
 import com.ssafy.smartstore_jetpack.config.BaseFragment
 import com.ssafy.smartstore_jetpack.databinding.FragmentMypageBinding
 import com.ssafy.smartstore_jetpack.dto.Grade
+import com.ssafy.smartstore_jetpack.dto.User
 import com.ssafy.smartstore_jetpack.src.main.LoginActivity
 import com.ssafy.smartstore_jetpack.src.main.MainActivity
 import com.ssafy.smartstore_jetpack.src.main.MainActivityViewModel
@@ -26,6 +32,8 @@ import com.ssafy.smartstore_jetpack.src.main.my.adapter.OrderListAdapter
 import com.ssafy.smartstore_jetpack.util.CommonUtils
 import com.ssafy.smartstore_jetpack.util.RetrofitUtil
 import kotlinx.coroutines.launch
+import org.json.JSONObject
+import java.io.StringReader
 
 // MyPage 탭
 private const val TAG = "MypageFragment_싸피"
@@ -34,6 +42,7 @@ class MyPageFragment : BaseFragment<FragmentMypageBinding>(FragmentMypageBinding
     private lateinit var completedOrderAdapter: CompletedListAdapter
     private lateinit var mainActivity: MainActivity
     private var isAdmin = false
+    private var pw = ""
 
     private val activityViewModel : MainActivityViewModel by activityViewModels()
 
@@ -44,15 +53,14 @@ class MyPageFragment : BaseFragment<FragmentMypageBinding>(FragmentMypageBinding
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         val id = getUserData().also {
             initData(it)
         }
         if(!isAdmin) {
             binding.levelLayout.visibility = View.VISIBLE
             binding.textLevelRest.visibility = View.VISIBLE
-            getGradeData(id)
         }
+        getGradeData(id)
     }
 
     private fun getUserData():String{
@@ -68,8 +76,11 @@ class MyPageFragment : BaseFragment<FragmentMypageBinding>(FragmentMypageBinding
     private fun getGradeData(id: String) {
         lifecycleScope.launch { 
             val userinfo = RetrofitUtil.userService.getInfowithstamp(id)
-            Log.d(TAG, "getGradeData: $userinfo")
+
             val gradeinfo = Gson().fromJson<Grade>(userinfo["grade"].toString(), object: TypeToken<Grade>(){}.type)
+
+            pw = (userinfo["user"] as LinkedTreeMap<*,*>)["pass"].toString()
+
             binding.imageLevel.setImageURI(Uri.parse(
                 "android.resource://" + BuildConfig.APPLICATION_ID
                         + "/drawable/" + gradeinfo.img.substring(0, gradeinfo.img.indexOf("."))))
@@ -128,6 +139,25 @@ class MyPageFragment : BaseFragment<FragmentMypageBinding>(FragmentMypageBinding
                 }
             }
         }
+        binding.userInfoUpdate.setOnClickListener {
+            val dlg = AlertDialog.Builder(requireContext())
+            val editText = EditText(requireContext())
+            dlg.setTitle("비밀번호를 입력해주세요")
+            dlg.setView(editText)
+            dlg.setPositiveButton("확인") { _, _ ->
+                if(editText.text.toString()==pw){
+                    Navigation.findNavController(requireView()).navigate(R.id.userInfoUpdateFragment)
+                }else{
+                    showToast("비밀번호를 다시 입력해주세요")
+                }
+            }
+            dlg.setNegativeButton("취소"){dialog,_->
+                dialog.dismiss()
+            }
+            dlg.show()
+
+        }
+
         binding.logout.setOnClickListener {
             ApplicationClass.sharedPreferencesUtil.deleteUser()
 

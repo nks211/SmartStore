@@ -41,7 +41,6 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(FragmentLoginBinding::b
                 loginActivity.openFragment(1)
             }
             else {
-                Log.d(TAG, "onViewCreated: aaa")
                 showToast("ID, Password를 확인하세요.")
             }
         }

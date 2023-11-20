@@ -14,29 +14,17 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.Toast
-import androidx.activity.viewModels
 import androidx.navigation.NavController
-import androidx.navigation.Navigation
 import androidx.navigation.fragment.NavHostFragment
-import androidx.navigation.ui.setupWithNavController
 import com.ssafy.smartstore_jetpack.R
 import com.ssafy.smartstore_jetpack.config.ApplicationClass
 import com.ssafy.smartstore_jetpack.config.BaseActivity
 import com.ssafy.smartstore_jetpack.databinding.ActivityMainBinding
-import com.ssafy.smartstore_jetpack.src.main.home.HomeFragment
-import com.ssafy.smartstore_jetpack.src.main.menu.MenuAddFragment
-import com.ssafy.smartstore_jetpack.src.main.menu.MenuDetailFragment
-import com.ssafy.smartstore_jetpack.src.main.menu.MenuFragment
-import com.ssafy.smartstore_jetpack.src.main.menu.OrderedListFragment
-import com.ssafy.smartstore_jetpack.src.main.menu.ShoppingListFragment
-import com.ssafy.smartstore_jetpack.src.main.my.MyPageFragment
-import com.ssafy.smartstore_jetpack.src.main.my.OrderDetailFragment
 import com.ssafy.smartstore_jetpack.util.BeaconSettingUtil
 
 private const val TAG = "MainActivity_싸피"
 class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::inflate) {
 
-    val viewModel : MainActivityViewModel by viewModels()
     val beaconsetting = BeaconSettingUtil(this)
     lateinit var nfcAdapter: NfcAdapter
     lateinit var pendingIntent: PendingIntent
@@ -106,8 +94,8 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
 
         //화면이동
         val intent = Intent(this, LoginActivity::class.java)
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
 
         startActivity(intent)
     }

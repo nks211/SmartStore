@@ -16,7 +16,7 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::i
         super.onCreate(savedInstanceState)
 
         //로그인 된 상태인지 확인
-        var user = sharedPreferencesUtil.getUser()
+        val user = sharedPreferencesUtil.getUser()
 
         //로그인 상태 확인. id가 있다면 로그인 된 상태
         if (user.id != ""){
@@ -34,8 +34,8 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::i
         when(int){
             1 -> {
                 val intent = Intent(this, MainActivity::class.java)
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                 startActivity(intent)
             }
             2 -> transaction.replace(R.id.frame_layout_login, JoinFragment())

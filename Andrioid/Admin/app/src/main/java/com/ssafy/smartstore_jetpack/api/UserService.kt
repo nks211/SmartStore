@@ -2,12 +2,16 @@ import com.ssafy.smartstore_jetpack.dto.User
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
+import retrofit2.http.PUT
 import retrofit2.http.Query
 
 interface UserService {
     // 사용자 정보를 추가한다.
     @POST("rest/user")
     suspend fun insert(@Body body: User): Boolean
+
+    @PUT("rest/user")
+    suspend fun update(@Body body: User): Boolean
 
     // 사용자의 정보와 함께 사용자의 주문 내역, 사용자 등급 정보를 반환한다.
     // userInfo["grade"]는 LinkedTreeMap<String,String>으로 들어오므로 Gson 의 Type을 이용하여

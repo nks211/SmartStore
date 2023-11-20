@@ -50,6 +50,9 @@
         <action
             android:id="@+id/action_myPageFragment_to_orderDetailFragment"
             app:destination="@id/orderDetailFragment" />
+        <action
+            android:id="@+id/action_myPageFragment_to_userInfoUpdateFragment"
+            app:destination="@id/userInfoUpdateFragment" />
     </fragment>
     <fragment
         android:id="@+id/menuFragment"
@@ -94,4 +97,10 @@
             app:argType="boolean"
             android:defaultValue="true" />
     </fragment>
+    <fragment
+        android:id="@+id/userInfoUpdateFragment"
+        android:name="com.ssafy.smartstore_jetpack.src.main.my.UserInfoUpdateFragment"
+        android:label="UserInfoUpdateFragment"
+        tools:layout="@layout/fragment_user_info_update"
+        />
 </navigation>
