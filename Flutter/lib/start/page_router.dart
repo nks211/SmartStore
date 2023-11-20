@@ -14,7 +14,8 @@ import '../dto/Orderitem.dart';
 import '../dto/User.dart';
 
 class PageRouter extends StatefulWidget {
-  const PageRouter({super.key});
+  List userdata = [];
+  PageRouter({required this.userdata});
 
   @override
   State<PageRouter> createState() => _PageRouterState();
@@ -29,37 +30,46 @@ class _PageRouterState extends State<PageRouter> {
   List pages = [
     Main(user: User.init(), orderdata: [],),
     Menu(),
-    UserInfo(user: User.init(), orderdata: [], usergrade: Grade.init())];
+    UserInfo(user: User.init(), orderdata: [], usergrade: Grade.init())
+  ];
 
+  // 최초 로딩 및 페이지 이동 시 사용자 정보 갱신
   void getUserInfo() {
-    Future<SharedPreferences> preferences = SharedPreferences.getInstance();
-    preferences.then((value) {
-      String? id = value.getString('id');
-      String? pass = value.getString('pass');
-      if (id != null && pass != null) {
-        User loginuser  = User(id, pass, '');
-        userservice.userInfo(loginuser).then((_) {
-          var grade = Grade.fromJson(_['grade']);
-          List<Orderitem> orders = [];
-          for (var data in _['order'] as List) {
-            orders.add(Orderitem.fromJson(data));
-          }
-          var name = User.fromJson(_['user']);
-          userinfo = [name, orders, grade];
-          pages = [
-            Main(user: name, orderdata: orders,),
-            Menu(),
-            UserInfo(user: name, orderdata: orders, usergrade: grade),
-          ];
-        });
-      }
+    setState(() {
+      Future<SharedPreferences> preferences = SharedPreferences.getInstance();
+      preferences.then((value) {
+        String? id = value.getString('id');
+        String? pass = value.getString('pass');
+        if (id != null && pass != null) {
+          User loginuser  = User(id, pass, '');
+          userservice.userInfo(loginuser).then((_) {
+            var grade = Grade.fromJson(_['grade']);
+            List<Orderitem> orders = [];
+            for (var data in _['order'] as List) {
+              orders.add(Orderitem.fromJson(data));
+            }
+            var name = User.fromJson(_['user']);
+            userinfo = [name, orders, grade];
+            pages = [
+              Main(user: name, orderdata: orders,),
+              Menu(),
+              UserInfo(user: name, orderdata: orders, usergrade: grade),
+            ];
+          });
+        }
+      });
     });
   }
 
   @override
   void initState() {
     setState(() {
-      getUserInfo();
+      userinfo = widget.userdata;
+      pages = [
+        Main(user: userinfo[0], orderdata: userinfo[1],),
+        Menu(),
+        UserInfo(user: userinfo[0], orderdata: userinfo[1], usergrade: userinfo[2])
+      ];
     });
   }
 

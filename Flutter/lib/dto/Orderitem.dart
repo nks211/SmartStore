@@ -46,15 +46,13 @@ class Orderitem {
 
   Map<String, dynamic> toJson() => {
     'completed' : _completed,
-    'details' : _jsondetails.map((e) => jsonEncode(e.toJson())).toList(),
-    'id' : _id,
+    'details' : _jsondetails,
     'orderTable' : _orderTable,
-    'orderTime' : _orderTime,
-    'userId' : _userId,
+    'userId' : _userId
   };
 
   @override
   String toString() {
-    return 'Orderitem{_id: $_id, _userId: $_userId, _orderTable: $_orderTable, _orderTime: $_orderTime, _completed: $_completed, _details: $_details}';
+    return 'Orderitem{_id: $_id, _userId: $_userId, _orderTable: $_orderTable, _orderTime: $_orderTime, _completed: $_completed, _details: $_details, _jsondetails: $_jsondetails}';
   }
 }

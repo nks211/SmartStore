@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -70,20 +72,10 @@ class _ShoppingCart extends State<ShoppingCart> {
     });
   }
 
-  String userid = '';
   var orderservice = OrderService();
 
   @override
   Widget build(BuildContext context) {
-
-    Future<SharedPreferences> preferences = SharedPreferences.getInstance();
-    preferences.then((value) {
-      if (value.getString('id') != null) {
-        setState(() {
-          userid = value.getString('id')!;
-        });
-      }
-    });
 
     return Scaffold(
       body: SafeArea(
@@ -125,21 +117,28 @@ class _ShoppingCart extends State<ShoppingCart> {
                           var completed = 'N';
                           var ordertable = '웹주문';
                           var ordertime = DateFormat('yyyy-MM-ddThh:mm:ss.000+00:00').format(DateTime.now());
-                          Orderitem newitem = Orderitem(0, userid, ordertable, ordertime, completed);
-                          newitem.setDetails(widget.neworder);
-                          newitem.jsonDetails();
-                          orderservice.makeOrder(newitem).then((value) {
-                            if (value != '') {
-                              showToast('주문이 완료되었습니다.');
-                              Future<SharedPreferences> preferences = SharedPreferences.getInstance();
-                              preferences.then((_) {
-                                _.setString('orderid', value);
-                                print(_.getString('orderid'));
+                          Future<SharedPreferences> preferences = SharedPreferences.getInstance();
+                          preferences.then((value) {
+                            if (value.getString('id') != null) {
+                              var userid = value.getString('id')!;
+                              Orderitem newitem = Orderitem(0, userid, ordertable, ordertime, completed);
+                              newitem.setDetails(widget.neworder);
+                              newitem.jsonDetails();
+                              print(jsonEncode(newitem.toJson()));
+                              orderservice.makeOrder(newitem).then((value) {
+                                if (value != '') {
+                                  showToast('주문이 완료되었습니다.');
+                                  Future<SharedPreferences> preferences = SharedPreferences.getInstance();
+                                  preferences.then((_) {
+                                    _.setString('orderid', value);
+                                    print(_.getString('orderid'));
+                                  });
+                                  Navigator.pop(context, 'OK');
+                                }
+                                else {
+                                  showToast('주문 오류');
+                                }
                               });
-                              Navigator.pop(context, 'OK');
-                            }
-                            else {
-                              showToast('주문 오류');
                             }
                           });
                         },

@@ -31,9 +31,6 @@ const TextStyle textStyle50 = TextStyle(fontFamily: 'Montserrat', fontSize: 50.0
 const TextStyle textStyleRed30 = TextStyle(fontFamily: 'Montserrat', fontSize: 30.0, color: Color(0xff9d0200));
 const TextStyle textOrder = TextStyle(fontFamily: 'eland_choice_b', fontSize: 20, color: coffeeDarkBrown);
 
-//test용 데이터
-List comment = ['nice', 'cool', 'happy', 'happy'];
-
 //http통신 주소값
 const BaseUrl = "http://192.168.33.119:9987/";
 

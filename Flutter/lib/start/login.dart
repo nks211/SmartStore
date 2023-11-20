@@ -22,7 +22,24 @@ class _Login extends State<Login> {
 
   // 최초 로그인 시 회원 정보 받아온 다음 메인 화면으로 이동함
   void passpage() {
-    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => PageRouter()));
+    Future<SharedPreferences> preferences = SharedPreferences.getInstance();
+    preferences.then((value) {
+      String? id = value.getString('id');
+      String? pass = value.getString('pass');
+      if (id != null && pass != null) {
+        User loginuser  = User(id, pass, '');
+        userservice.userInfo(loginuser).then((_) {
+          var grade = Grade.fromJson(_['grade']);
+          List<Orderitem> orders = [];
+          for (var data in _['order'] as List) {
+            orders.add(Orderitem.fromJson(data));
+          }
+          var name = User.fromJson(_['user']);
+          var userinfo = [name, orders, grade];
+          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => PageRouter(userdata: userinfo,)));
+        });
+      }
+    });
   }
 
   @override
