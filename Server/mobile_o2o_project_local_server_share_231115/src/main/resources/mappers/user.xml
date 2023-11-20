@@ -7,7 +7,7 @@
 INSERT INTO t_user
     (id, 
     name, 
-    pass
+    pass,
     is_admin
     )
 VALUES
