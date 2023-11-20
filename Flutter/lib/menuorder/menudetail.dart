@@ -1,11 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:smart_store_flutter_starter/dto/OrderDetailitem.dart';
+import 'package:smart_store_flutter_starter/service/CommentService.dart';
 import 'package:smart_store_flutter_starter/util/common.dart';
 
-class MenuDetail extends StatefulWidget {
-  final String path;
+import '../dto/Comment.dart';
+import '../dto/Product.dart';
 
-  const MenuDetail({required this.path});
+class MenuDetail extends StatefulWidget {
+  final Product menuitem;
+
+  MenuDetail({required this.menuitem});
 
   @override
   State<MenuDetail> createState() => _MenuDetailState();
@@ -20,6 +26,29 @@ class _MenuDetailState extends State<MenuDetail> {
   int index = -1;
   FocusNode focusmode = FocusNode();
   bool edited = false;
+  var commentservice = CommentService();
+  List<Comment> comments = [];
+  List<bool> editmode = [];
+
+  void allcomments() {
+    commentservice.getproductcomments(widget.menuitem.id).then((value) {
+      setState(() {
+        comments = value;
+        print(comments);
+        editmode = List.generate(comments.length, (index) => false);
+      });
+      commentservice.getaveragerating(widget.menuitem.id).then((value) {
+        setState(() {
+          ratebar = value;
+        });
+      });
+    });
+  }
+
+  @override
+  void initState() {
+    allcomments();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -33,11 +62,11 @@ class _MenuDetailState extends State<MenuDetail> {
             padding: EdgeInsets.symmetric(vertical: 10),
             height: 200,
             color: menuBackground,
-            child: Image.asset(widget.path, width: double.maxFinite,),
+            child: Image.asset('assets/${widget.menuitem.img}', width: double.maxFinite,),
           ),
           Container(
               margin: EdgeInsets.all(20),
-              child: Text('아메리카노', style: textStyle30,)
+              child: Text('${widget.menuitem.name}', style: textStyle30,)
           ),
           Container(
             height: 100,
@@ -49,7 +78,7 @@ class _MenuDetailState extends State<MenuDetail> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text('가격', style: textStyle20B,),
-                    Text('4100원', style: textStyle20,)
+                    Text('${widget.menuitem.price}원', style: textStyle20,)
                   ],
                 ),
                 Row(
@@ -95,7 +124,7 @@ class _MenuDetailState extends State<MenuDetail> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text('평점 ${rate}점', style: textStyle20,),
+                Text('평점 ${ratebar}점', style: textStyle20,),
                 InkWell(
                   onTap: () {
                     showDialog(context: context,
@@ -133,9 +162,6 @@ class _MenuDetailState extends State<MenuDetail> {
                               ),
                               TextButton(
                                   onPressed: (){
-                                    setState(() {
-                                      ratebar = rate;
-                                    });
                                     Navigator.pop(context);
                                   },
                                   child: Text('확인', style: textStyle15,)
@@ -174,20 +200,45 @@ class _MenuDetailState extends State<MenuDetail> {
               ElevatedButton(
                   onPressed: (){
                     setState(() {
-                      if (index < 0) {
-                        setState(() {
-                          comment.insert(0, controller.text);
-                        });
-                      }
-                      else {
-                        setState(() {
-                          comment[index] = controller.text;
-                          edited = false;
-                          index = -1;
-                        });
-                      }
-                      focusmode.unfocus();
-                      controller.text = '';
+                      var mention = controller.text;
+                      Future<SharedPreferences> preferences = SharedPreferences.getInstance();
+                      preferences.then((value) {
+                        String? id = value.getString('id');
+                        if (id != null) {
+                          var userid = id;
+                          Comment review = Comment(mention, 0, widget.menuitem.id, rate, userid);
+                          if (edited) {
+                            review.setid(comments[index].id);
+                            commentservice.updateComment(review).then((result) {
+                              if (result == 'true') {
+                                setState(() {
+                                  edited = false;
+                                  editmode[index] = false;
+                                  index = -1;
+                                  allcomments();
+                                });
+                              }
+                              else {
+                                showToast('error');
+                              }
+                            });
+                          }
+                          else {
+                            commentservice.makeComment(review).then((result) {
+                              if (result == 'true') {
+                                setState(() {
+                                  allcomments();
+                                });
+                              }
+                              else {
+                                showToast('error');
+                              }
+                            });
+                          }
+                          focusmode.unfocus();
+                          controller.text = '';
+                        }
+                      });
                     });
                   },
                   style: ElevatedButton.styleFrom(
@@ -203,70 +254,82 @@ class _MenuDetailState extends State<MenuDetail> {
           ),
           SizedBox(
             height: 150,
-            child: ListView.builder(
-              shrinkWrap: true,
-              itemCount: comment.length,
-              itemBuilder: (BuildContext context, int position){
-                return Container(
-                  margin: EdgeInsets.all(10),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(comment[position], style: textStyle15,),
-                      Container(
-                        width: 70,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            CircleAvatar(
-                              radius: 15,
-                              backgroundColor: coffeeDarkBrown,
-                              child: IconButton(
-                                onPressed: () {
-                                  setState(() {
-                                    edited = !edited;
-                                  });
-                                  if (edited) {
+            child: Expanded(
+              child: ListView.builder(
+                shrinkWrap: true,
+                itemCount: comments.length,
+                itemBuilder: (BuildContext context, int position){
+                  return Container(
+                    margin: EdgeInsets.all(10),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(comments[position].comment, style: textStyle15,),
+                        Container(
+                          width: 70,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              CircleAvatar(
+                                radius: 15,
+                                backgroundColor: coffeeDarkBrown,
+                                child: IconButton(
+                                  onPressed: () {
                                     setState(() {
-                                      index = position;
+                                      edited = !edited;
+                                      editmode[position] = !editmode[position];
                                     });
-                                    focusmode.requestFocus();
-                                  }
-                                  else {
-                                    focusmode.unfocus();
-                                  }
-                                },
-                                padding: EdgeInsets.zero,
-                                icon: Icon(edited? Icons.undo : Icons.edit, color: coffeeBrown,),
+                                    if (edited) {
+                                      setState(() {
+                                        index = position;
+                                      });
+                                      focusmode.requestFocus();
+                                    }
+                                    else {
+                                      index = -1;
+                                      focusmode.unfocus();
+                                    }
+                                  },
+                                  padding: EdgeInsets.zero,
+                                  icon: Icon(editmode[position]? Icons.undo : Icons.edit, color: coffeeBrown,),
+                                ),
                               ),
-                            ),
-                            CircleAvatar(
-                              radius: 15,
-                              backgroundColor: coffeeDarkBrown,
-                              child: IconButton(
-                                onPressed: () {
-                                  setState(() {
-                                    comment.removeAt(position);
-                                  });
-                                },
-                                padding: EdgeInsets.zero,
-                                icon: Icon(Icons.close, color: coffeeBrown,),
-                                color: coffeeBrown,
+                              CircleAvatar(
+                                radius: 15,
+                                backgroundColor: coffeeDarkBrown,
+                                child: IconButton(
+                                  onPressed: () {
+                                    setState(() {
+                                      commentservice.deleteComment(comments[position].id).then((value) {
+                                        allcomments();
+                                      });
+                                    });
+                                  },
+                                  padding: EdgeInsets.zero,
+                                  icon: Icon(Icons.close, color: coffeeBrown,),
+                                  color: coffeeBrown,
+                                ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
-                      ),
-                    ],
-                  ),
-                );
-              },
+                      ],
+                    ),
+                  );
+                },
+              ),
             ),
           ),
           ElevatedButton(
-              onPressed: (){
+              onPressed: () {
                 showToast("상품이 장바구니에 담겼습니다.");
-                Navigator.pop(context);
+                var img = widget.menuitem.img;
+                var id = widget.menuitem.id;
+                var name = widget.menuitem.name;
+                var price = widget.menuitem.price;
+                var quantity = count;
+                OrderDetailitem detailitem = OrderDetailitem(img, id, name, price, quantity, price * quantity);
+                Navigator.pop(context, detailitem);
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: coffeePointRed,

@@ -1,15 +1,22 @@
 import 'package:flutter/material.dart';
-import 'package:smart_store_flutter_starter/dto/order_detail.dart';
 import 'package:smart_store_flutter_starter/util/common.dart';
 
-class OrderDetailPage extends StatelessWidget {
+import '../dto/OrderDetailitem.dart';
+import '../dto/Orderitem.dart';
 
-  final List<OrderDetail> items;
 
-  const OrderDetailPage(this.items, {super.key});
+class OrderDetailPage extends StatefulWidget {
+  final Orderitem item;
+  OrderDetailPage({required this.item});
 
   @override
+  State<OrderDetailPage> createState() => _OrderDetailPageState();
+}
+
+class _OrderDetailPageState extends State<OrderDetailPage> {
+  @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       body: SafeArea(
         child: Center(
@@ -30,21 +37,24 @@ class OrderDetailPage extends StatelessWidget {
                     child: Row(
                       children: [
                         Expanded(
-
                           child: Text(
-                              "주문완료\n2021.05.01\n12500원", style: textStyle20.apply(color: coffeeDarkBrown, fontFamily: 'eland_choice_b')),
+                              "주문완료\n"
+                                  + "${widget.item.orderTime.substring(0, 10)}\n"
+                                  + "${totalprice(widget.item.details)}원",
+                              style: textStyle20.apply(
+                                  color: coffeeDarkBrown, 
+                                  fontFamily: 'eland_choice_b')),
                         ),
                       ],
                     )
                 ),
-
                 Expanded(
                   child: SizedBox(
                       height: 150,
                       child : ListView.builder(
-                        itemCount: items.length,
+                        itemCount: widget.item.details.length,
                         itemBuilder: (BuildContext context, int position){
-                          return orderedItem(items[position]);
+                          return orderedItem(widget.item.details[position], (){} );
                         },
                       )
                   ),
@@ -57,5 +67,3 @@ class OrderDetailPage extends StatelessWidget {
     );
   }
 }
-
-

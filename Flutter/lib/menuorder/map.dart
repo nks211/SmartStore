@@ -1,4 +1,7 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:smart_store_flutter_starter/util/common.dart';
 
 class CafeMap extends StatefulWidget {
@@ -9,10 +12,18 @@ class CafeMap extends StatefulWidget {
 }
 
 class _MapState extends State<CafeMap> {
+
+  // Completer<GoogleMapController> _completer = Completer();
+  // static final CameraPosition initposition = CameraPosition(
+  //     target: LatLng(36.108888,128.4113603),
+  //     zoom: 15,
+  // );
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: ListView(
+        shrinkWrap: true,
         children: [
           Container(
             padding: EdgeInsets.all(30),

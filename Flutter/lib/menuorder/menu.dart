@@ -1,9 +1,14 @@
 import 'dart:collection';
 
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:smart_store_flutter_starter/menuorder/map.dart';
 import 'package:smart_store_flutter_starter/menuorder/shopping_cart.dart';
+import 'package:smart_store_flutter_starter/service/ProductService.dart';
 import 'package:smart_store_flutter_starter/util/common.dart';
+
+import '../dto/OrderDetailitem.dart';
+import '../dto/Product.dart';
 
 class Menu extends StatefulWidget {
   const Menu({super.key});
@@ -14,10 +19,46 @@ class Menu extends StatefulWidget {
 
 class _MenuState extends State<Menu> {
 
+  List<Product> menulist = [];
+  var productservice = ProductService();
+
+  // 초기 메뉴판 위젯 구성
+  Widget board = Container();
+
+  List<OrderDetailitem> shoppingOrder = [];
+
+  void addOrder(OrderDetailitem orderdetail) {
+    setState(() {
+      shoppingOrder.add(orderdetail);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
 
-    List menuboard = List.generate(11, (index) => menuImageButton("assets/coffee${index+1}.png", context)).toList();
+    // 서버에서 메뉴 정보 가져와서 다시 이미지 구성함
+    productservice.getproductmenu().then((value) {
+      menulist = value;
+      setState(() {
+        board = GridView.count(
+          crossAxisCount: 3,
+          mainAxisSpacing: 10,
+          crossAxisSpacing: 10,
+          childAspectRatio: 1,
+          children: List.generate(menulist.length,
+                  (int index) => menuImageButton(menulist[index], context, addOrder)),
+        );
+      });
+    }).catchError((e) {
+      board = GridView.count(
+        crossAxisCount: 3,
+        mainAxisSpacing: 10,
+        crossAxisSpacing: 10,
+        childAspectRatio: 1,
+        children: List.generate(12,
+                (int index) => roundImage("assets/logo.png")),
+      );
+    });
 
     return Scaffold(
       body: Container(
@@ -51,21 +92,20 @@ class _MenuState extends State<Menu> {
               ),
             ),
             Expanded(
-                child: GridView.count(
-                  crossAxisCount: 3,
-                  mainAxisSpacing: 10,
-                  crossAxisSpacing: 10,
-                  childAspectRatio: 1,
-                  children: List.generate(menuboard.length,
-                          (int index) => menuboard[index]),
-                ),
+                child: board,
             ),
           ],
         ),
       ),
       floatingActionButton: ElevatedButton(
-        onPressed: (){
-          Navigator.push(context, MaterialPageRoute(builder: (context)=> ShoppingCart()));
+        onPressed: () async {
+          var answer = await Navigator.push(context, MaterialPageRoute(
+              builder: (context)=> ShoppingCart(neworder: shoppingOrder,)));
+          if (answer == 'OK') {
+            setState(() {
+              shoppingOrder.clear();
+            });
+          }
         },
         style: ElevatedButton.styleFrom(
           shape: CircleBorder(),

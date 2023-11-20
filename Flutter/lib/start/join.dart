@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:smart_store_flutter_starter/util/common.dart';
 
+import '../dto/User.dart';
+import '../service/UserService.dart';
+
 class Join extends StatefulWidget {
   const Join({super.key});
 
@@ -9,6 +12,13 @@ class Join extends StatefulWidget {
 }
 
 class _JoinState extends State<Join> {
+
+  var userService = UserService();
+  var idcontroller = TextEditingController();
+  var passcontroller = TextEditingController();
+  var namecontroller = TextEditingController();
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -38,6 +48,7 @@ class _JoinState extends State<Join> {
                     width: 250,
                     margin: EdgeInsets.symmetric(horizontal: 10),
                     child: TextField(
+                      controller: idcontroller,
                       decoration: InputDecoration(
                         hintText: '아이디를 입력하세요.',
                         border: OutlineInputBorder(
@@ -55,7 +66,16 @@ class _JoinState extends State<Join> {
                       backgroundColor: coffeeBrown,
                       padding: EdgeInsets.all(5),
                     ),
-                      onPressed: () {},
+                      onPressed: () {
+                        userService.isUsedId(idcontroller.text).then((value){
+                          if (value) {
+                            showToast("사용 중인 아이디입니다.");
+                          }
+                          else {
+                            showToast("사용 가능한 아이디입니다.");
+                          }
+                        });
+                      },
                       child: Container(
                         margin: EdgeInsets.symmetric(horizontal: 5),
                         width: 50,
@@ -69,6 +89,7 @@ class _JoinState extends State<Join> {
             Container(
               margin: EdgeInsets.symmetric(horizontal: 40, vertical: 10),
               child: TextField(
+                controller: passcontroller,
                 decoration: InputDecoration(
                   hintText: '비밀번호를 입력하세요.',
                   border: OutlineInputBorder(
@@ -81,6 +102,7 @@ class _JoinState extends State<Join> {
             Container(
               margin: EdgeInsets.symmetric(horizontal: 40, vertical: 10),
               child: TextField(
+                controller: namecontroller,
                 decoration: InputDecoration(
                   hintText: '별명을 입력하세요.',
                   border: OutlineInputBorder(
@@ -93,8 +115,37 @@ class _JoinState extends State<Join> {
             Container(
               padding: EdgeInsets.symmetric(vertical: 20),
               child: ElevatedButton(
-                  onPressed: (){
-                    Navigator.pop(context);
+                  onPressed: () {
+                    if (idcontroller.text != '' && passcontroller.text != '' && namecontroller.text != '') {
+                      var id = idcontroller.text;
+                      var pass = passcontroller.text;
+                      var name = namecontroller.text;
+                      userService.isUsedId(id).then((value) {
+                        if (!value) {
+                          var newuser = User(id, pass, name);
+                          userService.joinUser(newuser).then((value) {
+                            if (value == 'true') {
+                              Navigator.pop(context);
+                            }
+                          });
+                        }
+                        else {
+                          showToast("아이디가 중복됩니다.");
+                        }
+                      });
+                    }
+                    else {
+                      if (idcontroller.text == '') {
+                        showToast("아이디를 입력해주세요.");
+                      }
+                      if (passcontroller.text == '') {
+                        showToast("비밀번호를 입력해주세요.");
+                      }
+                      if (namecontroller.text == '') {
+                        showToast("별명을 입력해주세요.");
+                      }
+                    }
+                    // Navigator.pop(context);
                   },
                   style: ElevatedButton.styleFrom(
                     shape: RoundedRectangleBorder(

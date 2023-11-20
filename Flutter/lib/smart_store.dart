@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:smart_store_flutter_starter/home/main.dart';
 import 'package:smart_store_flutter_starter/mypage/order_detail_page.dart';
 import 'package:smart_store_flutter_starter/menuorder/shopping_cart.dart';
 import 'package:smart_store_flutter_starter/mypage/user_info.dart';
+import 'package:smart_store_flutter_starter/start/page_router.dart';
 import 'package:smart_store_flutter_starter/util/common.dart';
 import 'package:smart_store_flutter_starter/start/login.dart';
-import 'package:smart_store_flutter_starter/dto/order_detail.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();

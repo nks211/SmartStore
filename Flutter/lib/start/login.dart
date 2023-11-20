@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:smart_store_flutter_starter/dto/Orderitem.dart';
+import 'package:smart_store_flutter_starter/service/UserService.dart';
 import 'package:smart_store_flutter_starter/start/page_router.dart';
 import 'package:smart_store_flutter_starter/util/common.dart';
 
+import '../dto/Grade.dart';
+import '../dto/User.dart';
 import 'join.dart';
-import 'package:smart_store_flutter_starter/menuorder/menu.dart';
 
 class Login extends StatefulWidget {
   @override
@@ -12,10 +16,43 @@ class Login extends StatefulWidget {
 
 class _Login extends State<Login> {
 
+  var userservice = UserService();
+  var idcontroller = TextEditingController();
+  var passcontroller = TextEditingController();
 
+  // 최초 로그인 시 회원 정보 받아온 다음 메인 화면으로 이동함
+  void passpage() {
+    Future<SharedPreferences> preferences = SharedPreferences.getInstance();
+    preferences.then((value) {
+      String? id = value.getString('id');
+      String? pass = value.getString('pass');
+      if (id != null && pass != null) {
+        User loginuser  = User(id, pass, '');
+        userservice.userInfo(loginuser).then((_) {
+          var grade = Grade.fromJson(_['grade']);
+          List<Orderitem> orders = [];
+          for (var data in _['order'] as List) {
+            orders.add(Orderitem.fromJson(data));
+          }
+          var name = User.fromJson(_['user']);
+          var userinfo = [name, orders, grade];
+          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => PageRouter(userdata: userinfo,)));
+        });
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
+
+    //기존에 로그인된 정보가 있으면 자동으로 페이지 이동
+    Future<SharedPreferences> preferences = SharedPreferences.getInstance();
+    preferences.then((value) {
+      if (value.getString('id') != null) {
+        passpage();
+      }
+    });
+
     return Scaffold(
       body: SingleChildScrollView(
         child: Container(
@@ -44,6 +81,7 @@ class _Login extends State<Login> {
               Container(
                 padding: EdgeInsets.symmetric(horizontal: 30, vertical: 10),
                 child: TextField(
+                  controller: idcontroller,
                   decoration: InputDecoration(
                     hintText: 'ID',
                     border: OutlineInputBorder(
@@ -56,6 +94,7 @@ class _Login extends State<Login> {
               Container(
                 padding: EdgeInsets.symmetric(horizontal: 30, vertical: 10),
                 child: TextField(
+                  controller: passcontroller,
                   decoration: InputDecoration(
                     hintText: 'PW',
                     border: OutlineInputBorder(
@@ -71,8 +110,25 @@ class _Login extends State<Login> {
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
                     ElevatedButton(
-                        onPressed: (){
-                          Navigator.push(context, MaterialPageRoute(builder: (context) => PageRouter()));
+                        onPressed: () {
+                          if (idcontroller.text != '' && passcontroller.text != '') {
+                            var id = idcontroller.text;
+                            var pass = passcontroller.text;
+                            var loginuser = User(id, pass, "");
+                            userservice.loginUser(loginuser).then((value) {
+                              if (id == value.id && pass == value.pass) {
+                                showToast("로그인되었습니다");
+                                preferences.then((_) {
+                                  _.setString('id', value.id);
+                                  _.setString('pass', value.pass);
+                                });
+                                passpage();
+                              }
+                            }).catchError((e) => showToast("아이디나 비밀번호를 확인해주세요."));
+                          }
+                          else {
+                            showToast("아이디와 비밀번호를 입력해주세요.");
+                          }
                         },
                         style: ElevatedButton.styleFrom(
                           shape: RoundedRectangleBorder(

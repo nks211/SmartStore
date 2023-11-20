@@ -1,9 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:smart_store_flutter_starter/mypage/order_detail_page.dart';
 import 'package:smart_store_flutter_starter/dto/Order.dart';
 import 'package:smart_store_flutter_starter/util/common.dart';
 
+import '../dto/Grade.dart';
+import '../dto/OrderDetailitem.dart';
+import '../dto/Orderitem.dart';
+import '../dto/User.dart';
+import '../service/OrderService.dart';
+import '../start/login.dart';
+
 class UserInfo extends StatefulWidget {
+  final User user;
+  final List<Orderitem> orderdata;
+  final Grade usergrade;
+  UserInfo({required this.user, required this.orderdata, required this.usergrade});
   @override
   _UserInfo createState() => _UserInfo();
 }
@@ -13,33 +25,61 @@ class _UserInfo extends State<UserInfo> {
   //test용 데이터
   var items = List.generate(5, (_) => Order('assets/coffee1.png', '아메리카노 외 3잔', 25000, '2023.11.15')).toList();
 
-  var curLv = 2;
-  var curSubLv = 2;
+  var curLv = 0;
+  var curSubLv = 1;
   var curExp = 1;
   var curMxExp = 10;
+  var curLvImg = 'assets/seeds.png';
   var percent = 0.0;
 
   @override
   void initState() {
     super.initState();
 
-    var stamps = 12;
+    var stamps = widget.user.stamps;
 
     var lvInfo = calculateStampLevel(stamps);
     curLv = lvInfo[0];
     curSubLv = lvInfo[1];
+    curLvImg = levelimg[curLv];
     curMxExp = requiredStamps[curLv];
     curExp = curMxExp+lvInfo[2];
     percent = (curExp/curMxExp);
   }
 
-  void myOnTap(){
-    Navigator.push(context, MaterialPageRoute(builder: (context)=> OrderDetailPage(testDetails)));
+  void myOrderDetails(Orderitem item){
+    Navigator.push(context, MaterialPageRoute(builder: (context)=> OrderDetailPage(item: item,)));
   }
+
+  var orderservice = OrderService();
+  Widget orderlist = Container(); //주문 내역 위젯 초기화
 
 
   @override
   Widget build(BuildContext context) {
+
+    // 주문 id별 상세내역 추가한 후 리스트로 반환
+    for (var order in widget.orderdata) {
+      orderservice.getOrderDetails(order.id).then((value) {
+        order.setDetails(value);
+        setState(() {
+          orderlist = orderListRow(widget.orderdata, OutlinedButton(
+              onPressed: (){},
+              style: OutlinedButton.styleFrom(
+                  backgroundColor: coffeeBackground,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20),
+                  )
+              ),
+              child: const Padding(
+                  padding: EdgeInsets.all(10),
+                  child: Text("픽업 완료", style: textStyle20)
+              )
+          ), myOrderDetails, height: 340);
+        });
+      });
+    }
+
     return Scaffold(
       body: SafeArea(
         child: Center(
@@ -59,15 +99,21 @@ class _UserInfo extends State<UserInfo> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text("김싸피님", style: textStyle30.apply(color: coffeeDarkBrown)),
+                          Text("${widget.user.name}님", style: textStyle30.apply(color: coffeeDarkBrown)),
                           Text("안녕하세요.", style: textStyle20.apply(color: coffeeBrown))
                         ],
                       ),
                     ),
                     IconButton(
-                        onPressed: (){},
+                        onPressed: () async {
+                          Future<SharedPreferences> preferences = SharedPreferences.getInstance();
+                          preferences.then((value) {
+                            value.remove('id'); value.remove('pass');
+                          });
+                          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => Login()));
+                          },
                         iconSize: 50,
-                        icon: Image.asset('assets/logout.png'))
+                        icon: Image.asset('assets/logout.png', width: 50,))
                   ],
                 ),
                 Padding(
@@ -110,19 +156,7 @@ class _UserInfo extends State<UserInfo> {
                     ],
                   )
                 ),
-                orderListRow(items, OutlinedButton(
-                  onPressed: (){},
-                  style: OutlinedButton.styleFrom(
-                    backgroundColor: coffeeBackground,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20),
-                    )
-                  ),
-                  child: const Padding(
-                    padding: EdgeInsets.all(10),
-                    child: Text("픽업 완료", style: textStyle20)
-                  )
-                ), myOnTap, height: 320)
+                orderlist,
               ],
             ),
           ),
