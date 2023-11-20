@@ -11,6 +11,7 @@ public interface ProductDao {
     int insert(Product product);
 
     int update(Product product);
+    int updateWithImg(Product product);
 
     int delete(Integer productId);
 

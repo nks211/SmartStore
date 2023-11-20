@@ -19,7 +19,7 @@
 		#{originImgName})
 	</insert>
 
-	<update id="update" parameterType="Product">
+	<update id="updateWithImg" parameterType="Product">
 		UPDATE t_product
 		SET
 		name = #{name},
@@ -30,6 +30,17 @@
 		is_salable = #{isSalable}
 		WHERE id = #{id}
 	</update>
+	
+	<update id="update" parameterType="Product">
+		UPDATE t_product
+		SET
+		name = #{name},
+		type = #{type},
+		price = #{price},
+		is_salable = #{isSalable}
+		WHERE id = #{id}
+	</update>
+	
 	<delete id="delete" parameterType="int">
 		DELETE FROM t_product
 		WHERE id

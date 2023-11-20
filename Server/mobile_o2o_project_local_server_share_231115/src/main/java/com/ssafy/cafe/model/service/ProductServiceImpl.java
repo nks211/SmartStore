@@ -43,7 +43,14 @@ public class ProductServiceImpl implements ProductService{
 
 	@Override
 	public void updateProduct(Product product) {
-		pDao.update(product);
+		if(product.getOriginImgName() == null || product.getOriginImgName().isEmpty()) {
+			pDao.update(product);
+		}
+			
+		else {
+			pDao.updateWithImg(product);
+		}
+			
 		
 	}
     
