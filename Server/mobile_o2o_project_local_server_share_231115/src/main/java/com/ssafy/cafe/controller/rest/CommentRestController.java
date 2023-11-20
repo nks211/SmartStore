@@ -35,8 +35,9 @@ public class CommentRestController {
     @ApiOperation(value="comment 객체를 추가한다. 성공하면 true를 리턴한다. ", response = Boolean.class)
     public Boolean insert(@RequestBody Comment comment  ) throws IOException {
         cService.addComment(comment);
-        String token = "fv2kNDQxQ6CagVDq3_jeLG:APA91bGtwSFP4XLnb_kzQsYY1Uld8Y2wTk_zD-n2Hxu7XQyNXFgcx_1HeLkcJGjyz-2ePrLfISvCMMJ9lYOZ0zdIVde-cTcHx-KMzylwbd5pu7stAnXk_cY1RjF08XbkeRrbMRejQyUA";
-        fService.sendMessageTo(token, "tests", "bodyyy");
+//        String token = "fv2kNDQxQ6CagVDq3_jeLG:APA91bGtwSFP4XLnb_kzQsYY1Uld8Y2wTk_zD-n2Hxu7XQyNXFgcx_1HeLkcJGjyz-2ePrLfISvCMMJ9lYOZ0zdIVde-cTcHx-KMzylwbd5pu7stAnXk_cY1RjF08XbkeRrbMRejQyUA";
+//        fService.sendMessageTo(token, "tests", "bodyyy");
+        fService.sendMessageTo("tests", "bodyyy");
         return true;
     }
 

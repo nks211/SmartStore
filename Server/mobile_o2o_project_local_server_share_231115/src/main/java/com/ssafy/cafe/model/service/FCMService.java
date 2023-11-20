@@ -27,6 +27,8 @@ public class FCMService {
 	
 	private final String API_URL = "https://fcm.googleapis.com/v1/projects/smartstore-83706/messages:send";
 	
+	private String app_token = "clLH1tLtQY2rC_DVvkgeLO:APA91bGuoICh5g_lxgZA52CMThYicjvhPhlgAyDLbexweqjGtA0QNWGWu5Ba1eZ5D09M8KdTc5iXTGiTAWX_7ugrhsUUOxPiigvG398DwmfEECpVxNmDK-ef_KqczL7kNaE9iE8KeELY";
+	
 	
 	private String getAccessToken() throws IOException{
 		String firebaseConfigPath = "firebase/firebase_service_key.json";
@@ -41,10 +43,11 @@ public class FCMService {
 	
 	
 	
-	public void sendMessageTo(String targetToken, String title, String body) throws IOException{
-		
+//	public void sendMessageTo(String targetToken, String title, String body) throws IOException{
+	public void sendMessageTo(String title, String body) throws IOException{	
 
-		String message = makeMessage(targetToken, title, body);
+//		String message = makeMessage(targetToken, title, body);
+		String message = makeMessage(app_token, title, body);
 		OkHttpClient client = new OkHttpClient();
 		RequestBody requestBody = RequestBody.create(message, MediaType.get("application/json; charset=utf-8"));
 		Request request = new Request.Builder()

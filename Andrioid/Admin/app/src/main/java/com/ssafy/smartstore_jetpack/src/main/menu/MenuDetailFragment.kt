@@ -8,6 +8,8 @@ import android.view.View
 import android.widget.Toast
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.Navigation
+import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.ssafy.smartstore_jetpack.R
@@ -28,7 +30,7 @@ import kotlin.math.round
 
 //메뉴 상세 화면 . Order탭 - 특정 메뉴 선택시 열림
 private const val TAG = "MenuDetailFragment_싸피"
-class MenuDetailFragment(var isSalable: Int = 1) : BaseFragment<FragmentMenuDetailBinding>(FragmentMenuDetailBinding::bind, R.layout.fragment_menu_detail){
+class MenuDetailFragment : BaseFragment<FragmentMenuDetailBinding>(FragmentMenuDetailBinding::bind, R.layout.fragment_menu_detail){
     private lateinit var mainActivity: MainActivity
     private var commentAdapter = CommentAdapter(emptyList())
 
@@ -117,10 +119,9 @@ class MenuDetailFragment(var isSalable: Int = 1) : BaseFragment<FragmentMenuDeta
                 }
                 activityViewModel.addToShoppingList(orderDetail)
                 Toast.makeText(context,"상품이 장바구니에 담겼습니다.",Toast.LENGTH_SHORT).show()
-                parentFragmentManager.popBackStack()
+                Navigation.findNavController(requireView()).popBackStack()
             }else{
-                mainActivity.openFragment(1, "", isSalable)
-
+                Navigation.findNavController(requireView()).navigate(R.id.menuAddFragment)
             }
 
         }

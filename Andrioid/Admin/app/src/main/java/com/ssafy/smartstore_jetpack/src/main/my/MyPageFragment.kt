@@ -1,6 +1,7 @@
 package com.ssafy.smartstore_jetpack.src.main.my
 
 import android.content.Context
+import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
@@ -8,6 +9,7 @@ import android.view.View
 import android.widget.LinearLayout
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
@@ -17,6 +19,7 @@ import com.ssafy.smartstore_jetpack.config.ApplicationClass
 import com.ssafy.smartstore_jetpack.config.BaseFragment
 import com.ssafy.smartstore_jetpack.databinding.FragmentMypageBinding
 import com.ssafy.smartstore_jetpack.dto.Grade
+import com.ssafy.smartstore_jetpack.src.main.LoginActivity
 import com.ssafy.smartstore_jetpack.src.main.MainActivity
 import com.ssafy.smartstore_jetpack.src.main.MainActivityViewModel
 import com.ssafy.smartstore_jetpack.src.main.my.adapter.CompletedListAdapter
@@ -95,7 +98,7 @@ class MyPageFragment : BaseFragment<FragmentMypageBinding>(FragmentMypageBinding
                 orderAdapter.setItemClickListener(object : OrderListAdapter.ItemClickListener {
                     override fun onClick(view: View, position: Int, orderid: Int) {
                         activityViewModel.setOrderId(orderid)
-                        mainActivity.openFragment(2)
+                        Navigation.findNavController(view).navigate(R.id.orderDetailFragment)
                     }
                 })
 
@@ -112,7 +115,7 @@ class MyPageFragment : BaseFragment<FragmentMypageBinding>(FragmentMypageBinding
                 completedOrderAdapter.setItemClickListener(object : CompletedListAdapter.ItemClickListener{
                     override fun onClick(view: View, position: Int, orderid: Int) {
                         activityViewModel.setOrderId(orderid)
-                        mainActivity.openFragment(2)
+                        Navigation.findNavController(view).navigate(R.id.orderDetailFragment)
                     }
 
                 })
@@ -124,7 +127,14 @@ class MyPageFragment : BaseFragment<FragmentMypageBinding>(FragmentMypageBinding
             }
         }
         binding.logout.setOnClickListener {
-            mainActivity.openFragment(5)
+            ApplicationClass.sharedPreferencesUtil.deleteUser()
+
+            //화면이동
+            val intent = Intent(requireContext(), LoginActivity::class.java)
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+            startActivity(intent)
         }
     }
 

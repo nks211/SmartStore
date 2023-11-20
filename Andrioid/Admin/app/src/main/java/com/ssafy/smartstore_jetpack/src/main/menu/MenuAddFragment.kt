@@ -14,6 +14,8 @@ import androidx.activity.result.ActivityResultCallback
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.Navigation
+import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
 import com.ssafy.smartstore_jetpack.R
 import com.ssafy.smartstore_jetpack.config.ApplicationClass
@@ -34,7 +36,7 @@ import okhttp3.RequestBody.Companion.toRequestBody
 import java.io.File
 
 private const val TAG = "MenuAddFragment_싸피"
-class MenuAddFragment(var isSalable: Int = 1) : BaseFragment<FragmentMenuAddBinding>(FragmentMenuAddBinding::bind, R.layout.fragment_menu_add){
+class MenuAddFragment : BaseFragment<FragmentMenuAddBinding>(FragmentMenuAddBinding::bind, R.layout.fragment_menu_add){
 
     private val activityViewModel: MainActivityViewModel by activityViewModels()
     private lateinit var mainActivity: MainActivity
@@ -45,7 +47,6 @@ class MenuAddFragment(var isSalable: Int = 1) : BaseFragment<FragmentMenuAddBind
     private var updateImg = true
 
     private var id = -1
-
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -67,7 +68,7 @@ class MenuAddFragment(var isSalable: Int = 1) : BaseFragment<FragmentMenuAddBind
             binding.productName.setText(curItem.productName)
             binding.productPrice.setText("${curItem.productPrice}")
             binding.productType.setText(curItem.type)
-            binding.isSalable.isChecked = isSalable == 1
+            binding.isSalable.isChecked = activityViewModel.productSalable.value!!
             updateImg = false
         }
 
@@ -104,7 +105,8 @@ class MenuAddFragment(var isSalable: Int = 1) : BaseFragment<FragmentMenuAddBind
                     )
                     if(bool) {
                         showToast("저장 되었습니다.")
-                        parentFragmentManager.popBackStack()
+                        activityViewModel.setProductSalable(binding.isSalable.isChecked)
+                        Navigation.findNavController(requireView()).popBackStack()
                     }
                 }
             }else{
@@ -116,11 +118,14 @@ class MenuAddFragment(var isSalable: Int = 1) : BaseFragment<FragmentMenuAddBind
                             type = binding.productType.text.toString(),
                             price = binding.productPrice.text.toString().toInt(),
                             img = imgName
-                        ).apply { isSalable = binding.isSalable.isChecked }
+                        ).apply {
+                            isSalable = binding.isSalable.isChecked
+                        }
                     )
                     if(bool) {
                         showToast("저장 되었습니다.")
-                        parentFragmentManager.popBackStack()
+                        activityViewModel.setProductSalable(binding.isSalable.isChecked)
+                        Navigation.findNavController(requireView()).popBackStack()
                     }
                 }
 

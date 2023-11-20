@@ -48,17 +48,24 @@ class MainActivityViewModel : ViewModel() {
         _productId.value = productId
     }
 
+    private val _productSalable = MutableLiveData<Boolean>()
+    val productSalable: LiveData<Boolean>
+        get() = _productSalable
+
+    fun setProductSalable(isSalable: Boolean){
+        _productSalable.value = isSalable
+    }
+
     private val _productInfo = MutableLiveData<List<MenuDetailWithCommentResponse>>()
     val productInfo: LiveData<List<MenuDetailWithCommentResponse>>
         get() = _productInfo
 
     fun getProductInfo(pId:Int) {
         viewModelScope.launch{
-            var info:List<MenuDetailWithCommentResponse>
-            try{
-                info = RetrofitUtil.productService.getProductWithComments(pId)
+            var info:List<MenuDetailWithCommentResponse> = try{
+                RetrofitUtil.productService.getProductWithComments(pId)
             }catch (e:Exception){
-                info = arrayListOf()
+                arrayListOf()
             }
             _productInfo.value = info
         }

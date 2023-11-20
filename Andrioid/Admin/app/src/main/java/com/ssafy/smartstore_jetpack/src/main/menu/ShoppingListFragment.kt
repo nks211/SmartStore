@@ -8,6 +8,7 @@ import android.view.View
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.activityViewModels
+import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.ssafy.smartstore_jetpack.R
@@ -194,7 +195,7 @@ class ShoppingListFragment(val orderId: Int = -1) : BaseFragment<FragmentShoppin
             viewModel.setOrderCompleted(result)
         }
         Toast.makeText(context,"주문이 완료되었습니다.",Toast.LENGTH_SHORT).show()
-        parentFragmentManager.popBackStack()
+        Navigation.findNavController(requireView()).popBackStack()
 
     }
 

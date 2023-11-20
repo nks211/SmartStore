@@ -5,6 +5,8 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import androidx.fragment.app.activityViewModels
+import androidx.navigation.Navigation
+import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.ssafy.smartstore_jetpack.R
@@ -19,10 +21,13 @@ import com.ssafy.smartstore_jetpack.src.main.menu.adapter.ShoppingListAdapter
 
 private const val TAG = "OrderedListFragment"
 
-class OrderedListFragment(val orderId: Int = -1) : BaseFragment<FragmentShoppingListBinding>(
+class OrderedListFragment : BaseFragment<FragmentShoppingListBinding>(
     FragmentShoppingListBinding::bind,
     R.layout.fragment_shopping_list
 ){
+    private val args : OrderedListFragmentArgs by navArgs()
+    var orderId = -1
+
     private var shoppingListAdapter : ShoppingListAdapter = ShoppingListAdapter(true)
     private lateinit var mainActivity: MainActivity
 
@@ -40,6 +45,8 @@ class OrderedListFragment(val orderId: Int = -1) : BaseFragment<FragmentShopping
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        orderId = args.oId
 
         binding.pageTitle.text = "주문목록"
         binding.btnShop.visibility = View.GONE
@@ -105,8 +112,7 @@ class OrderedListFragment(val orderId: Int = -1) : BaseFragment<FragmentShopping
             }
         )
         Toast.makeText(context, "제작 완료되었습니다.", Toast.LENGTH_SHORT).show()
-        parentFragmentManager.popBackStack()
-
+        Navigation.findNavController(requireView()).popBackStack()
     }
 
 }

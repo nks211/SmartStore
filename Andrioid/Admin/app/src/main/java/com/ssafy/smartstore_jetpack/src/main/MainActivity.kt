@@ -15,6 +15,10 @@ import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.activity.viewModels
+import androidx.navigation.NavController
+import androidx.navigation.Navigation
+import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.ui.setupWithNavController
 import com.ssafy.smartstore_jetpack.R
 import com.ssafy.smartstore_jetpack.config.ApplicationClass
 import com.ssafy.smartstore_jetpack.config.BaseActivity
@@ -38,6 +42,8 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
     lateinit var pendingIntent: PendingIntent
     lateinit var filters: Array<IntentFilter>
     var tablenumber = -1
+
+    private lateinit var navController: NavController
 
     override fun onResume() {
         super.onResume()
@@ -65,30 +71,21 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
         setBeacon()
 
         createNotificationChannel("ssafy_channel", "ssafy")
+        navController = (supportFragmentManager.findFragmentById(binding.frameLayoutMain.id) as NavHostFragment).navController
 
-
-        supportFragmentManager.beginTransaction()
-            .replace(R.id.frame_layout_main, HomeFragment())
-            .commit()
 
         binding.bottomNavigation.setOnItemSelectedListener { item ->
             when(item.itemId){
                 R.id.navigation_page_1 -> {
-                    supportFragmentManager.beginTransaction()
-                        .replace(R.id.frame_layout_main, HomeFragment())
-                        .commit()
+                    navController.navigate(R.id.homeFragment)
                     true
                 }
                 R.id.navigation_page_2 -> {
-                    supportFragmentManager.beginTransaction()
-                        .replace(R.id.frame_layout_main, MenuFragment())
-                        .commit()
+                    navController.navigate(R.id.menuFragment)
                     true
                 }
                 R.id.navigation_page_3 -> {
-                    supportFragmentManager.beginTransaction()
-                        .replace(R.id.frame_layout_main, MyPageFragment())
-                        .commit()
+                    navController.navigate(R.id.myPageFragment)
                     true
                 }
                 else -> false
@@ -101,45 +98,6 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
                 binding.bottomNavigation.selectedItemId = item.itemId
             }
         }
-    }
-
-    fun openFragment(index:Int, key:String, value:Int){
-        moveFragment(index, key, value)
-    }
-
-    fun openFragment(index: Int) {
-        moveFragment(index, "", -1)
-    }
-
-    private fun moveFragment(index:Int, key:String, value:Int){
-        val transaction = supportFragmentManager.beginTransaction()
-        when(index){
-            //상품 추가
-            1 -> {
-                Log.d(TAG, "moveFragment: $value")
-                transaction.replace(R.id.frame_layout_main, MenuAddFragment(value))
-                .addToBackStack(null)
-            }
-            //주문 상세 보기
-            2 -> transaction.replace(R.id.frame_layout_main, OrderDetailFragment())
-                .addToBackStack(null)
-            //메뉴 상세 보기
-            3 -> {
-                transaction.replace(R.id.frame_layout_main, MenuDetailFragment(value))
-                    .addToBackStack(null)
-            }
-
-            4-> {
-                Log.d(TAG, "moveFragment: $value")
-                transaction.replace(R.id.frame_layout_main, OrderedListFragment(value))
-                    .addToBackStack(null)
-            }
-            //logout
-            5 -> {
-                logout()
-            }
-        }
-        transaction.commit()
     }
 
     private fun logout(){

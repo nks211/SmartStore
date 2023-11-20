@@ -6,6 +6,8 @@ import android.util.Log
 import android.view.View
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
+import androidx.navigation.NavOptions
+import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.ssafy.smartstore_jetpack.R
 import com.ssafy.smartstore_jetpack.config.ApplicationClass
@@ -82,14 +84,17 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::bind
             }
         }
 
-        latestOrderAdapter = LatestOrderAdapter(mainActivity, CommonUtils.makeLatestOrderList(listOf()))
+        latestOrderAdapter = LatestOrderAdapter().apply {
+            submitList(CommonUtils.makeLatestOrderList(listOf()))
+        }
         latestOrderAdapter.setItemClickListener(object : LatestOrderAdapter.ItemClickListener{
             override fun onClick(view: View, position: Int) {
-                Log.d(TAG, "onClick: ${latestOrderAdapter.list[position]}")
+                Log.d(TAG, "onClick: ${mainActivityViewModel.waitingOrders.value!![position]}")
 //                mainActivity.openFragment(1, "", latestOrderAdapter.list[position].orderId)
 //                mainActivityViewModel.setOrderId(latestOrderAdapter.list[position].orderId)
 //                mainActivity.openFragment(2)
-                mainActivity.openFragment(4, "", latestOrderAdapter.list[position].orderId)
+                val action = HomeFragmentDirections.actionHomeFragmentToOrderedListFragment(mainActivityViewModel.waitingOrders.value!![position].orderId)
+                Navigation.findNavController(view).navigate(action)
             }
         })
         binding.recyclerViewLatestOrder.apply {
@@ -99,13 +104,11 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::bind
 
         if(!isAdmin){
             viewModel.userLastOrderData.observe(viewLifecycleOwner){
-                latestOrderAdapter.list = CommonUtils.makeLatestOrderList(it)
-                latestOrderAdapter.notifyDataSetChanged()
+                latestOrderAdapter.submitList(CommonUtils.makeLatestOrderList(it))
             }
         }else{
             mainActivityViewModel.waitingOrders.observe(viewLifecycleOwner){
-                latestOrderAdapter.list = CommonUtils.makeLatestOrderList(it)
-                latestOrderAdapter.notifyDataSetChanged()
+                latestOrderAdapter.submitList(CommonUtils.makeLatestOrderList(it))
             }
         }
 

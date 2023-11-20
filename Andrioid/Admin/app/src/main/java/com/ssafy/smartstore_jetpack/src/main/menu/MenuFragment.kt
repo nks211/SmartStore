@@ -8,6 +8,9 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.NavController
+import androidx.navigation.NavHostController
+import androidx.navigation.Navigation
 import androidx.recyclerview.widget.GridLayoutManager
 import com.ssafy.smartstore_jetpack.R
 import com.ssafy.smartstore_jetpack.config.ApplicationClass
@@ -16,6 +19,7 @@ import com.ssafy.smartstore_jetpack.databinding.FragmentOrderBinding
 import com.ssafy.smartstore_jetpack.dto.Product
 import com.ssafy.smartstore_jetpack.src.main.MainActivity
 import com.ssafy.smartstore_jetpack.src.main.MainActivityViewModel
+import com.ssafy.smartstore_jetpack.src.main.home.HomeFragmentDirections
 import com.ssafy.smartstore_jetpack.src.main.menu.adapter.MenuAdapter
 import com.ssafy.smartstore_jetpack.util.RetrofitUtil
 import kotlinx.coroutines.launch
@@ -80,7 +84,7 @@ class MenuFragment : BaseFragment<FragmentOrderBinding>(FragmentOrderBinding::bi
 
         binding.floatingBtn.setOnClickListener{
             activityViewModel.setProductId(-1)
-            mainActivity.openFragment(1)
+            Navigation.findNavController(view).navigate(R.id.menuAddFragment)
         }
     }
 
@@ -94,7 +98,11 @@ class MenuFragment : BaseFragment<FragmentOrderBinding>(FragmentOrderBinding::bi
                     override fun onClick(view: View, position: Int, productId:Int) {
                         activityViewModel.setProductId(productId)
                         val salable = if(it[position].isSalable) 1 else 0
-                        mainActivity.openFragment(3, "", salable)
+                        activityViewModel.setProductSalable(it[position].isSalable)
+//                        val action = MenuFragmentDirections.actionMenuFragmentToMenuDetailFragment(it[position].isSalable)
+//                        Navigation.findNavController(requireView()).navigate(action)
+                        Navigation.findNavController(requireView()).navigate(R.id.menuDetailFragment)
+//                        mainActivity.openFragment(3, "", salable)
                     }
                 })
             }
