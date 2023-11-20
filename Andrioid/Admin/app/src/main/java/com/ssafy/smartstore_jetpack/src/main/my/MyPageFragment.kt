@@ -6,7 +6,6 @@ import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.widget.LinearLayout
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.Navigation
@@ -58,7 +57,8 @@ class MyPageFragment : BaseFragment<FragmentMypageBinding>(FragmentMypageBinding
 
     private fun getUserData():String{
         val user = ApplicationClass.sharedPreferencesUtil.getUser()
-        binding.textUserName.text = user.name + " 님"
+        val tunText = "${user.name} 님"
+        binding.textUserName.text = tunText
         isAdmin = user.isAdmin
         Log.d(TAG, "getUserData: ${user.isAdmin}")
 
@@ -67,14 +67,16 @@ class MyPageFragment : BaseFragment<FragmentMypageBinding>(FragmentMypageBinding
 
     private fun getGradeData(id: String) {
         lifecycleScope.launch { 
-            var userinfo = RetrofitUtil.userService.getInfowithstamp(id)
+            val userinfo = RetrofitUtil.userService.getInfowithstamp(id)
             Log.d(TAG, "getGradeData: $userinfo")
-            var gradeinfo = Gson().fromJson<Grade>(userinfo["grade"].toString(), object: TypeToken<Grade>(){}.type)
+            val gradeinfo = Gson().fromJson<Grade>(userinfo["grade"].toString(), object: TypeToken<Grade>(){}.type)
             binding.imageLevel.setImageURI(Uri.parse(
                 "android.resource://" + BuildConfig.APPLICATION_ID
                         + "/drawable/" + gradeinfo.img.substring(0, gradeinfo.img.indexOf("."))))
-            binding.textUserLevel.text = gradeinfo.title + " " + gradeinfo.step.toString() + "단계"
-            binding.textLevelRest.text = "다음 레벨까지 " + gradeinfo.to.toString() + "잔 남았습니다."
+            val tulText = "${gradeinfo.title} ${gradeinfo.step} 단계"
+            binding.textUserLevel.text = tulText
+            val tlrText = "다음 레벨까지 ${gradeinfo.to} 잔 남았습니다."
+            binding.textLevelRest.text = tlrText
             var state = ""
             when(gradeinfo.title) {
                 "씨앗" -> { state = "${10 - gradeinfo.to}/10" }
@@ -94,14 +96,14 @@ class MyPageFragment : BaseFragment<FragmentMypageBinding>(FragmentMypageBinding
             lifecycleScope.launch {
                 val userLastOrderData = RetrofitUtil.orderService.getLastMonthOrder(id)
 
-                orderAdapter = OrderListAdapter(mainActivity, CommonUtils.makeLatestOrderList(userLastOrderData))
+                orderAdapter = OrderListAdapter()
                 orderAdapter.setItemClickListener(object : OrderListAdapter.ItemClickListener {
                     override fun onClick(view: View, position: Int, orderid: Int) {
                         activityViewModel.setOrderId(orderid)
                         Navigation.findNavController(view).navigate(R.id.orderDetailFragment)
                     }
                 })
-
+                orderAdapter.submitList(CommonUtils.makeLatestOrderList(userLastOrderData))
                 binding.recyclerViewOrder.apply {
                     layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
                     adapter = orderAdapter
@@ -131,8 +133,8 @@ class MyPageFragment : BaseFragment<FragmentMypageBinding>(FragmentMypageBinding
 
             //화면이동
             val intent = Intent(requireContext(), LoginActivity::class.java)
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
 
             startActivity(intent)
         }

@@ -3,19 +3,34 @@ package com.ssafy.smartstore_jetpack.src.main.menu.adapter
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.ssafy.smartstore_jetpack.config.ApplicationClass
 import com.ssafy.smartstore_jetpack.databinding.ListItemCommentBinding
 import com.ssafy.smartstore_jetpack.src.main.menu.models.MenuDetailWithCommentResponse
 
 
-class CommentAdapter(var list:List<MenuDetailWithCommentResponse> ) :RecyclerView.Adapter<CommentAdapter.CommentHolder>(){
+class CommentAdapter : ListAdapter<MenuDetailWithCommentResponse, CommentAdapter.CommentHolder>(CommentComparator){
+
+    companion object CommentComparator:DiffUtil.ItemCallback<MenuDetailWithCommentResponse>(){
+        override fun areItemsTheSame(
+            oldItem: MenuDetailWithCommentResponse, newItem: MenuDetailWithCommentResponse
+        ): Boolean {
+            return System.identityHashCode(oldItem) == System.identityHashCode(newItem)
+        }
+
+        override fun areContentsTheSame(oldItem: MenuDetailWithCommentResponse, newItem: MenuDetailWithCommentResponse
+        ): Boolean {
+            return oldItem == newItem
+        }
+    }
 
     inner class CommentHolder(private val binding: ListItemCommentBinding) : RecyclerView.ViewHolder(binding.root){
 
         fun bindInfo(data : MenuDetailWithCommentResponse){
             val user = ApplicationClass.sharedPreferencesUtil.getUser()
-            val item = list[layoutPosition]
+            val item = getItem(layoutPosition)
             binding.textNoticeContent.text = data.commentContent
 
             binding.etCommentContent.visibility = View.GONE
@@ -42,12 +57,12 @@ class CommentAdapter(var list:List<MenuDetailWithCommentResponse> ) :RecyclerVie
             }
 
             binding.ivDeleteComment.setOnClickListener{
-                itemClickListner.onDelete(it, data.commentId)
+                itemClickListener.onDelete(it, data.commentId)
             }
 
 
             binding.ivModifyAcceptComment.setOnClickListener{
-                itemClickListner.onUpdate(it, data, binding.etCommentContent.text.toString())
+                itemClickListener.onUpdate(it, data, binding.etCommentContent.text.toString())
                 binding.ivModifyAcceptComment.visibility = View.GONE
                 binding.ivModifyCancelComment.visibility = View.GONE
                 binding.etCommentContent.visibility = View.GONE
@@ -73,11 +88,7 @@ class CommentAdapter(var list:List<MenuDetailWithCommentResponse> ) :RecyclerVie
     }
 
     override fun onBindViewHolder(holder: CommentHolder, position: Int) {
-        holder.bindInfo(list[position])
-    }
-
-    override fun getItemCount(): Int {
-        return list.size
+        holder.bindInfo(getItem(position))
     }
 
     //클릭 인터페이스 정의 사용하는 곳에서 만들어준다.
@@ -86,10 +97,10 @@ class CommentAdapter(var list:List<MenuDetailWithCommentResponse> ) :RecyclerVie
         fun onDelete(view: View, id: Int)
     }
     //클릭리스너 선언
-    private lateinit var itemClickListner: ItemClickListener
+    private lateinit var itemClickListener: ItemClickListener
     //클릭리스너 등록 매소드
     fun setItemClickListener(itemClickListener: ItemClickListener) {
-        this.itemClickListner = itemClickListener
+        this.itemClickListener = itemClickListener
     }
 
 }

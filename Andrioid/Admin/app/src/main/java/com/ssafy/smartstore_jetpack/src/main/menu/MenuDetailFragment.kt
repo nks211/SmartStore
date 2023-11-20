@@ -32,7 +32,7 @@ import kotlin.math.round
 private const val TAG = "MenuDetailFragment_싸피"
 class MenuDetailFragment : BaseFragment<FragmentMenuDetailBinding>(FragmentMenuDetailBinding::bind, R.layout.fragment_menu_detail){
     private lateinit var mainActivity: MainActivity
-    private var commentAdapter = CommentAdapter(emptyList())
+    private var commentAdapter = CommentAdapter()
 
     private val activityViewModel:MainActivityViewModel by activityViewModels()
     private var rating = 0f
@@ -80,9 +80,7 @@ class MenuDetailFragment : BaseFragment<FragmentMenuDetailBinding>(FragmentMenuD
         activityViewModel.productInfo.observe(viewLifecycleOwner) {
             Log.d(TAG, "registerObserver: $it")
             // comment 가 없을 경우 -> 들어온 response가 1개이고 해당 userId 가 null일 경우 빈 배열 Adapter 연결
-            commentAdapter.list = it
-            commentAdapter.notifyDataSetChanged()
-
+            commentAdapter.submitList(it)
             // 화면 정보 갱신
             setScreen(it[0])
         }

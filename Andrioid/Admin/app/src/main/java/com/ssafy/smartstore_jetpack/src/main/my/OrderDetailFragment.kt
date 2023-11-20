@@ -43,23 +43,22 @@ class OrderDetailFragment : BaseFragment<FragmentOrderDetailBinding>(FragmentOrd
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        activityViewModel.orderId.observe(viewLifecycleOwner){
-            initData(it)
+        orderDetailListAdapter = OrderDetailListAdapter()
+        binding.recyclerViewOrderDetailList.apply {
+            val linearLayoutManager = LinearLayoutManager(context)
+            linearLayoutManager.orientation = LinearLayoutManager.VERTICAL
+            layoutManager = linearLayoutManager
+            adapter = orderDetailListAdapter
         }
+
+        renewData(activityViewModel.orderId.value!!)
+
     }
 
-    private fun initData(orderId:Int) {
+    private fun renewData(orderId:Int) {
         lifecycleScope.launch{
             RetrofitUtil.orderService.getOrderDetail(orderId).let{
-                orderDetailListAdapter = OrderDetailListAdapter(mainActivity, it)
-
-                binding.recyclerViewOrderDetailList.apply {
-                    val linearLayoutManager = LinearLayoutManager(context)
-                    linearLayoutManager.orientation = LinearLayoutManager.VERTICAL
-                    layoutManager = linearLayoutManager
-                    adapter = orderDetailListAdapter
-                }
-
+                orderDetailListAdapter.submitList(it)
                 setOrderDetailScreen(it)
 
                 Log.d(TAG, "onViewCreated: $it")
