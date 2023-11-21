@@ -5,12 +5,14 @@ class Product {
   String _name = '';
   int _price = 0;
   String _type = '';
+  bool _isSalable = false;
 
   int get id => _id;
   String get img => _img;
   String get type => _type;
   int get price => _price;
   String get name => _name;
+  bool get isSalable => _isSalable;
 
   Product(this._id, this._img, this._name, this._price, this._type);
 
@@ -20,6 +22,9 @@ class Product {
     this._type = jsondata['type'];
     this._price = jsondata['price'];
     this._img = jsondata['img'];
+    if (jsondata['isSalable'] == 'true') {
+      this._isSalable = true;
+    }
   }
 
   @override

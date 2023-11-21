@@ -48,4 +48,15 @@ class UserService {
     return jsonDecode(response.body);
   }
 
+  Future<String> updateUser(User user) async {
+    final String url = BaseUrl + 'rest/user';
+    var response = await http.put(Uri.parse(url),
+      headers: {
+        "content-type": "application/json",
+      },
+      body: jsonEncode(user.toJson()),
+    );
+    return response.body;
+  }
+
 }

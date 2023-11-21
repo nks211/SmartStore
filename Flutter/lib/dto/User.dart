@@ -34,6 +34,7 @@ class User {
 
   Map<String, dynamic> toJson() => {
     'id' : _id,
+    'isAdmin' : false,
     'name' : _name,
     'pass' : _pass,
     'stampList' : _stampList,

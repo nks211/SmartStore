@@ -91,6 +91,7 @@ class _JoinState extends State<Join> {
               margin: EdgeInsets.symmetric(horizontal: 40, vertical: 10),
               child: TextField(
                 controller: passcontroller,
+                obscureText: true,
                 decoration: InputDecoration(
                   hintText: '비밀번호를 입력하세요.',
                   border: OutlineInputBorder(

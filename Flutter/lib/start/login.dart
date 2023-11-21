@@ -77,6 +77,7 @@ class _Login extends State<Login> {
                 padding: EdgeInsets.symmetric(horizontal: 30, vertical: 10),
                 child: TextField(
                   controller: passcontroller,
+                  obscureText: true,
                   decoration: InputDecoration(
                     hintText: 'PW',
                     border: OutlineInputBorder(

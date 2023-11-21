@@ -4,10 +4,10 @@ import 'package:smart_store/menuorder/shopping_cart.dart';
 import 'package:smart_store/service/OrderService.dart';
 import 'package:smart_store/service/UserService.dart';
 import 'package:smart_store/util/common.dart';
-import 'package:smart_store/dto/Order.dart';
 
 import '../dto/Orderitem.dart';
 import '../dto/User.dart';
+import '../start/page_router.dart';
 
 class Main extends StatefulWidget {
   final User user;
@@ -21,22 +21,24 @@ class Main extends StatefulWidget {
 
 class _MainState extends State<Main> {
   //테스트용 데이터
-  var items = List.generate(5,
-          (_) => Order('assets/coffee1.png', '아메리카노 외 3잔', 25000, '2023.11.15'))
-      .toList();
   var noticeItem = List.generate(3, (i) => "알림$i");
 
   var userservice = UserService();
   var orderservice = OrderService();
   Widget orderlist = Container(); //주문 내역 위젯 초기화
 
-  void reorder(Orderitem item) {
-    Navigator.push(
+  void reorder(Orderitem item) async {
+    var answer = await Navigator.push(
         context,
         MaterialPageRoute(
             builder: (context) => ShoppingCart(
                   neworder: item.details,
                 )));
+    if (answer == 'OK') {
+      setState(() {
+        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => PageRouter()));
+      });
+    }
   }
 
   @override

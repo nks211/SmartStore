@@ -2,13 +2,10 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import '../dto/Order.dart';
 import '../dto/OrderDetailitem.dart';
 import '../dto/Orderitem.dart';
 import '../dto/Product.dart';
 import '../menuorder/menudetail.dart';
-import '../menuorder/shopping_cart.dart';
 
 // Color 정의
 const Color coffeeBrown = Color(0xff907f60);
@@ -45,7 +42,7 @@ const TextStyle textOrder = TextStyle(
 //http통신 주소값
 const BaseUrl = "http://192.168.33.119:9987/";
 
-//서버 내 이미지 저장 경로값. (C:\Temp\imgs\menu)
+//서버 내 이미지 저장 경로값. (ex. C:\Temp\imgs\menu)
 const imagepath = "imgs/menu/";
 
 // toast message
@@ -65,7 +62,10 @@ Widget notice(String content) {
     children: [
       Expanded(flex: 1, child: Text(content, style: textStyle15)),
       IconButton(
-          onPressed: () {}, icon: const Icon(Icons.cancel, color: coffeeBrown))
+          onPressed: () {
+
+          },
+          icon: const Icon(Icons.cancel, color: coffeeBrown))
     ],
   );
 }
