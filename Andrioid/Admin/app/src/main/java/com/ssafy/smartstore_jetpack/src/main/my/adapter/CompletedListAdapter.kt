@@ -27,7 +27,6 @@ class CompletedListAdapter: ListAdapter<LatestOrderResponse, CompletedListAdapte
 
     inner class OrderHolder(val binding: ListItemCompletedOrderBinding) : RecyclerView.ViewHolder(binding.root){
         fun bindInfo(data: LatestOrderResponse){
-            Log.d(TAG, "bindInfo: $data")
 
             if(data.orderCnt > 1){
                 binding.textMenuNames.text = "${data.productName} 외 ${data.orderCnt -1}건"  //외 x건
@@ -40,7 +39,6 @@ class CompletedListAdapter: ListAdapter<LatestOrderResponse, CompletedListAdapte
             binding.textCompleted.text = CommonUtils.isOrderCompleted(data)
             //클릭연결
             itemView.setOnClickListener{
-                Log.d(TAG, "bindInfo: ${data.orderId}")
                 itemClickListner.onClick(it, layoutPosition, data.orderId)
             }
         }

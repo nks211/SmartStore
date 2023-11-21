@@ -14,7 +14,6 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.gson.Gson
-import com.google.gson.JsonObject
 import com.google.gson.internal.LinkedTreeMap
 import com.google.gson.reflect.TypeToken
 import com.ssafy.smartstore_jetpack.BuildConfig
@@ -23,7 +22,6 @@ import com.ssafy.smartstore_jetpack.config.ApplicationClass
 import com.ssafy.smartstore_jetpack.config.BaseFragment
 import com.ssafy.smartstore_jetpack.databinding.FragmentMypageBinding
 import com.ssafy.smartstore_jetpack.dto.Grade
-import com.ssafy.smartstore_jetpack.dto.User
 import com.ssafy.smartstore_jetpack.src.main.LoginActivity
 import com.ssafy.smartstore_jetpack.src.main.MainActivity
 import com.ssafy.smartstore_jetpack.src.main.MainActivityViewModel
@@ -32,8 +30,6 @@ import com.ssafy.smartstore_jetpack.src.main.my.adapter.OrderListAdapter
 import com.ssafy.smartstore_jetpack.util.CommonUtils
 import com.ssafy.smartstore_jetpack.util.RetrofitUtil
 import kotlinx.coroutines.launch
-import org.json.JSONObject
-import java.io.StringReader
 
 // MyPage 탭
 private const val TAG = "MypageFragment_싸피"

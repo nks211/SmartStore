@@ -36,8 +36,6 @@ class LatestOrderAdapter: ListAdapter<LatestOrderResponse, LatestOrderAdapter.La
 
     inner class LatestOrderHolder(val binding: ListItemLatestOrderBinding) : RecyclerView.ViewHolder(binding.root){
         fun bindInfo(data: LatestOrderResponse){
-            Log.d(TAG, "bindInfo: ${data}")
-
             Glide.with(itemView)
                 .load("${ApplicationClass.MENU_IMGS_URL}${data.img}")
                 .into(binding.menuImage)

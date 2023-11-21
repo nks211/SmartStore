@@ -30,8 +30,6 @@ class ShoppingListAdapter(val isAdmin: Boolean = false): ListAdapter<OrderDetail
     inner class ShoppingListHolder(private val binding: ListItemShoppingListBinding) : RecyclerView.ViewHolder(binding.root){
 
         fun bindInfo(data: OrderDetail){
-            Log.d(TAG, "bindInfo: $data")
-
             if(isAdmin)
                 binding.cancelButton.visibility = View.GONE
 

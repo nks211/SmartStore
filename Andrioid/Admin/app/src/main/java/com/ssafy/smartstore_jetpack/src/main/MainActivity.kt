@@ -26,22 +26,22 @@ private const val TAG = "MainActivity_싸피"
 class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::inflate) {
 
     val beaconsetting = BeaconSettingUtil(this)
-    lateinit var nfcAdapter: NfcAdapter
-    lateinit var pendingIntent: PendingIntent
-    lateinit var filters: Array<IntentFilter>
+//    lateinit var nfcAdapter: NfcAdapter
+//    lateinit var pendingIntent: PendingIntent
+//    lateinit var filters: Array<IntentFilter>
     var tablenumber = -1
 
     private lateinit var navController: NavController
 
-    override fun onResume() {
-        super.onResume()
-        nfcAdapter.enableForegroundDispatch(this, pendingIntent, filters, null)
-    }
+//    override fun onResume() {
+//        super.onResume()
+//        nfcAdapter.enableForegroundDispatch(this, pendingIntent, filters, null)
+//    }
 
-    override fun onPause() {
-        super.onPause()
-        nfcAdapter.disableForegroundDispatch(this)
-    }
+//    override fun onPause() {
+//        super.onPause()
+//        nfcAdapter.disableForegroundDispatch(this)
+//    }
 
     override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
@@ -54,13 +54,12 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
 
         // 가장 첫 화면은 홈 화면의 Fragment로 지정
 
-        setNdef()
+//        setNdef()
+//
+//        setBeacon()
 
-        setBeacon()
-
-        createNotificationChannel("ssafy_channel", "ssafy")
+//        createNotificationChannel("ssafy_channel", "ssafy")
         navController = (supportFragmentManager.findFragmentById(binding.frameLayoutMain.id) as NavHostFragment).navController
-
 
         binding.bottomNavigation.setOnItemSelectedListener { item ->
             when(item.itemId){
@@ -105,20 +104,19 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
         else binding.bottomNavigation.visibility = View.VISIBLE
     }
 
-    fun setNdef(){
-        nfcAdapter = NfcAdapter.getDefaultAdapter(this)
-        var intent = Intent(this, MainActivity::class.java).apply {
-            flags = Intent.FLAG_ACTIVITY_SINGLE_TOP
-        }
-        pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_MUTABLE)
-        val filter = IntentFilter(NfcAdapter.ACTION_NDEF_DISCOVERED)
-        filter.addDataType("text/plain")
-        filters = arrayOf(filter)
-    }
+//    fun setNdef(){
+//        nfcAdapter = NfcAdapter.getDefaultAdapter(this)
+//        var intent = Intent(this, MainActivity::class.java).apply {
+//            flags = Intent.FLAG_ACTIVITY_SINGLE_TOP
+//        }
+//        pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_MUTABLE)
+//        val filter = IntentFilter(NfcAdapter.ACTION_NDEF_DISCOVERED)
+//        filter.addDataType("text/plain")
+//        filters = arrayOf(filter)
+//    }
 
     fun readdata(intent: Intent) {
         val action = intent.action
-        Log.d(TAG, "setNdef: ${action}")
         if (action == NfcAdapter.ACTION_NDEF_DISCOVERED) {
             val messages = intent.getParcelableArrayExtra(NfcAdapter.EXTRA_NDEF_MESSAGES)
             messages?.forEachIndexed { _, pacelable ->

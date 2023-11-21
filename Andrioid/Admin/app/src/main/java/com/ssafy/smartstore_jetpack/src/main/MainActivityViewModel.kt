@@ -83,7 +83,7 @@ class MainActivityViewModel : ViewModel() {
     fun getNewOrder(){
         viewModelScope.launch{
             try{
-                _waitingOrders.value = RetrofitUtil.orderService.getAllOrdersByResults("N")
+                _waitingOrders.value = CommonUtils.makeLatestOrderList(RetrofitUtil.orderService.getAllOrdersByResults("N"))
             }catch(e: Exception){
                 _waitingOrders.value = arrayListOf()
             }

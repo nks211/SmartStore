@@ -19,13 +19,25 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <Spinner
-        android:id="@+id/state_select"
+
+    <LinearLayout
+        android:id="@+id/spinner_container"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/menu"
-        app:layout_constraintStart_toStartOf="parent"
-        />
+        android:layout_marginEnd="20dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:background="@color/coffee_brown_light">
+
+        <Spinner
+            style="@style/Widget.AppCompat.DropDownItem.Spinner"
+            android:id="@+id/state_select"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAlignment="center"
+            />
+
+    </LinearLayout>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerViewMenu"
@@ -34,20 +46,24 @@
         android:layout_marginTop="20dp"
         app:layout_constrainedHeight="true"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/state_select"
+        app:layout_constraintTop_toBottomOf="@id/spinner_container"
         app:layout_constraintBottom_toBottomOf="parent"/>
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
+    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
         android:id="@+id/floatingBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="end|bottom"
-        android:src="@drawable/shopping_cart"
+        android:gravity="center"
+        android:text="메뉴 추가"
+        app:icon="@drawable/baseline_add_24"
+        style="@style/Text.Regular"
+        android:textColor="@color/white"
         app:backgroundTint="@color/coffee_brown_light"
-        app:elevation="0dp"
         app:fabSize="normal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
+        android:outlineSpotShadowColor="#00000000"
         app:useCompatPadding="false" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

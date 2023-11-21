@@ -45,7 +45,10 @@ class MenuFragment : BaseFragment<FragmentOrderBinding>(FragmentOrderBinding::bi
         Log.d(TAG, "onViewCreated: aa")
 
         val items = resources.getStringArray(R.array.menu_state)
-        val spinnerAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_dropdown_item_1line, items)
+
+//        val spinnerAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_dropdown_item, items)
+
+        val spinnerAdapter = ArrayAdapter(requireContext(), R.layout.dropdown_item, items)
         binding.stateSelect.adapter = spinnerAdapter
         binding.stateSelect.onItemSelectedListener =
             object: AdapterView.OnItemSelectedListener{

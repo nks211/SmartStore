@@ -2,8 +2,8 @@
 <resources>
     <string-array name="menu_state">
         <item>전체</item>
-        <item>판매 중</item>
-        <item>판매 x</item>
+        <item>판매 상품</item>
+        <item>중단 상품</item>
     </string-array>
 
 </resources>
