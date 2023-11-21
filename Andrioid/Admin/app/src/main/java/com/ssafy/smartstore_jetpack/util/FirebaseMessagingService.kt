@@ -32,11 +32,11 @@ class FirebaseMessagingService : FirebaseMessagingService() {
     }
 
     override fun onMessageReceived(message: RemoteMessage) {
-        message.notification.let {
+        message.data.let {
             
             
-            val title = it!!.title
-            val content = it!!.body
+            val title = it["title"]
+            val content = it["body"]
             Log.d(TAG, "onMessageReceived: $title")
 //            Log.d(TAG, "onMessageReceived: $content")
 //

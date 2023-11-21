@@ -2,6 +2,8 @@ package com.ssafy.cafe.model.service;
 
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
@@ -10,13 +12,9 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.auth.oauth2.GoogleCredentials;
 import org.apache.http.HttpHeaders;
-import com.google.gson.JsonObject;
 import com.ssafy.cafe.FcmMessage;
 import com.ssafy.cafe.FcmMessage.Message;
-import com.ssafy.cafe.FcmMessage.Notification;
-
 import okhttp3.MediaType;
-import okhttp3.OkHttp;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
@@ -63,9 +61,18 @@ public class FCMService {
 	}
 	
 	private String makeMessage(String targetToken, String title, String body) throws JsonProcessingException{
-		Notification noti = new FcmMessage.Notification(title, body, null);
-		Message message = new FcmMessage.Message(noti, targetToken);
-		FcmMessage fcmMessage = new FcmMessage(false, message);
+//		Notification noti = new FcmMessage.Notification(title, body, null);
+//		Message message = new FcmMessage.Message(noti, targetToken);
+		
+		Map<String,String> map = new HashMap<>();
+    	map.put("title", title);
+    	map.put("body", body);
+    	
+    	Message message = new Message();
+        message.setToken(targetToken);
+        message.setData(map);
+        
+        FcmMessage fcmMessage = new FcmMessage(false, message);
 		
 		return new ObjectMapper().writeValueAsString(fcmMessage);
 		

@@ -1,11 +1,13 @@
 package com.ssafy.cafe;
 
+import java.util.Map;
+
 public class FcmMessage {
 	private boolean validate_only;
 	private Message message;
 	
 	
-	
+	public FcmMessage() {}
 	public FcmMessage(boolean validate_only, Message message) {
 		super();
 		this.validate_only = validate_only;
@@ -31,6 +33,10 @@ public class FcmMessage {
 	public static class Message{
 		private Notification notification;
 		private String token;
+		private Map<String, String> data;
+		
+		public Message() {}
+		
 		public Message(Notification notification, String token) {
 			super();
 			this.notification = notification;
@@ -49,6 +55,13 @@ public class FcmMessage {
 			this.token = token;
 		}
 		
+		public void setData(Map<String,String> data) {
+			this.data = data;
+		}
+		
+		public Map<String, String> getData() {
+			return data;
+		}
 		
 	}
 	
