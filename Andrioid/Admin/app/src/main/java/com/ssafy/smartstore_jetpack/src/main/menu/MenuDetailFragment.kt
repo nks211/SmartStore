@@ -19,6 +19,7 @@ import com.ssafy.smartstore_jetpack.databinding.DialogMenuCommentBinding
 import com.ssafy.smartstore_jetpack.databinding.FragmentMenuDetailBinding
 import com.ssafy.smartstore_jetpack.dto.Comment
 import com.ssafy.smartstore_jetpack.dto.OrderDetail
+import com.ssafy.smartstore_jetpack.dto.ReComment
 import com.ssafy.smartstore_jetpack.src.main.MainActivity
 import com.ssafy.smartstore_jetpack.src.main.MainActivityViewModel
 import com.ssafy.smartstore_jetpack.src.main.menu.adapter.CommentAdapter
@@ -149,7 +150,22 @@ class MenuDetailFragment : BaseFragment<FragmentMenuDetailBinding>(FragmentMenuD
                     val bool = RetrofitUtil.commentService.delete(id)
                     if(bool) activityViewModel.getProductInfo(activityViewModel.productId.value!!)
                 }
+            }
 
+            override suspend fun onOpenReply(id: Int): ReComment {
+                return RetrofitUtil.commentService.getReComment(id)
+            }
+
+            override fun onSaveReply(reComment: ReComment) {
+                lifecycleScope.launch{
+                    RetrofitUtil.commentService.insertReComment(reComment)
+                }
+            }
+
+            override fun onUpdateReply(reComment: ReComment) {
+            }
+
+            override fun onDeleteReply(id: Int) {
             }
         })
     }

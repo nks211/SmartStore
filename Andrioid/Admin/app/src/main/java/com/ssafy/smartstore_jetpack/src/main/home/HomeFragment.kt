@@ -57,7 +57,6 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::bind
     private fun initUserData(){
         val user = ApplicationClass.sharedPreferencesUtil.getUser()
         id = user.id
-        Log.d(TAG, "initUserData: $user")
         binding.textUserName.text = "${user.name} 님"
         isAdmin = user.isAdmin
     }
@@ -100,10 +99,12 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::bind
 
         if(!isAdmin){
             viewModel.userLastOrderData.observe(viewLifecycleOwner){
+                binding.orderCnt.text = "${it.size}건"
                 latestOrderAdapter.submitList(it)
             }
         }else{
             mainActivityViewModel.waitingOrders.observe(viewLifecycleOwner){
+                binding.orderCnt.text = "${it.size}건"
                 latestOrderAdapter.submitList(it)
             }
         }

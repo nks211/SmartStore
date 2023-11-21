@@ -2,6 +2,7 @@ package com.ssafy.cafe.model.service;
 
 import java.util.List;
 import com.ssafy.cafe.model.dto.Comment;
+import com.ssafy.cafe.model.dto.ReComment;
 
 public interface CommentService {
     /**
@@ -35,4 +36,9 @@ public interface CommentService {
      * @return
      */
     List<Comment> selectByProduct(Integer productId);
+    
+    void addRecomment(ReComment recomment);
+    ReComment getReComment(Integer comment_id);
+    
+    
 }

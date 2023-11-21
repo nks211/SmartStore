@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.ssafy.cafe.model.dao.CommentDao;
 import com.ssafy.cafe.model.dto.Comment;
+import com.ssafy.cafe.model.dto.ReComment;
 
 /**
  * @author taeshik.heo
@@ -46,5 +47,18 @@ public class CommentServiceImpl implements CommentService {
     public Comment selectComment(Integer id) {
         return cDao.select(id);
     }
+
+	@Override
+	public void addRecomment(ReComment recomment) {
+		cDao.insertReComment(recomment);
+		
+	}
+
+	@Override
+	public ReComment getReComment(Integer comment_id) {
+		ReComment rcmt = cDao.selectReComment(comment_id);
+		if(rcmt!=null) return rcmt;
+		else return new ReComment(comment_id, "");
+	}
 
 }

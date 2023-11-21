@@ -30,4 +30,16 @@
 	<select id="selectByProduct" parameterType="int" resultType="Comment">
 		select * from t_comment where product_id=#{productId} order by id desc
 	</select>
+	
+	<insert id="insertReComment" parameterType="ReComment">
+		INSERT INTO t_re_comment (comment_id, comment)
+		VALUES (#{commentId}, #{comment})
+	</insert>
+	
+	<select id="selectReComment" parameterType="int" resultType="ReComment">
+		select * from t_re_comment
+		where comment_id = #{id}
+	</select>
+	
+	
 </mapper>
