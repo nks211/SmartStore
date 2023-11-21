@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:smart_store_flutter_starter/dto/Orderitem.dart';
-import 'package:smart_store_flutter_starter/service/UserService.dart';
-import 'package:smart_store_flutter_starter/start/page_router.dart';
-import 'package:smart_store_flutter_starter/util/common.dart';
+import 'package:smart_store/dto/Orderitem.dart';
+import 'package:smart_store/service/UserService.dart';
+import 'package:smart_store/start/page_router.dart';
+import 'package:smart_store/util/common.dart';
 
 import '../dto/Grade.dart';
 import '../dto/User.dart';
@@ -15,36 +15,17 @@ class Login extends StatefulWidget {
 }
 
 class _Login extends State<Login> {
-
   var userservice = UserService();
   var idcontroller = TextEditingController();
   var passcontroller = TextEditingController();
 
   // 최초 로그인 시 회원 정보 받아온 다음 메인 화면으로 이동함
   void passpage() {
-    Future<SharedPreferences> preferences = SharedPreferences.getInstance();
-    preferences.then((value) {
-      String? id = value.getString('id');
-      String? pass = value.getString('pass');
-      if (id != null && pass != null) {
-        User loginuser  = User(id, pass, '');
-        userservice.userInfo(loginuser).then((_) {
-          var grade = Grade.fromJson(_['grade']);
-          List<Orderitem> orders = [];
-          for (var data in _['order'] as List) {
-            orders.add(Orderitem.fromJson(data));
-          }
-          var name = User.fromJson(_['user']);
-          var userinfo = [name, orders, grade];
-          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => PageRouter(userdata: userinfo,)));
-        });
-      }
-    });
+    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => PageRouter()));
   }
 
   @override
   Widget build(BuildContext context) {
-
     //기존에 로그인된 정보가 있으면 자동으로 페이지 이동
     Future<SharedPreferences> preferences = SharedPreferences.getInstance();
     preferences.then((value) {
@@ -72,7 +53,8 @@ class _Login extends State<Login> {
               Align(
                 alignment: Alignment.center,
                 child: Text(
-                  'Login', style: textLogin,
+                  'Login',
+                  style: textLogin,
                 ),
               ),
               SizedBox(
@@ -111,7 +93,8 @@ class _Login extends State<Login> {
                   children: [
                     ElevatedButton(
                         onPressed: () {
-                          if (idcontroller.text != '' && passcontroller.text != '') {
+                          if (idcontroller.text != '' &&
+                              passcontroller.text != '') {
                             var id = idcontroller.text;
                             var pass = passcontroller.text;
                             var loginuser = User(id, pass, "");
@@ -124,9 +107,9 @@ class _Login extends State<Login> {
                                 });
                                 passpage();
                               }
-                            }).catchError((e) => showToast("아이디나 비밀번호를 확인해주세요."));
-                          }
-                          else {
+                            }).catchError(
+                                (e) => showToast("아이디나 비밀번호를 확인해주세요."));
+                          } else {
                             showToast("아이디와 비밀번호를 입력해주세요.");
                           }
                         },
@@ -140,11 +123,14 @@ class _Login extends State<Login> {
                             alignment: Alignment.center,
                             width: 120,
                             height: 50,
-                            child: Text('Login', style: TextStyle(color: Colors.white),))
-                    ),
+                            child: Text(
+                              'Login',
+                              style: TextStyle(color: Colors.white),
+                            ))),
                     ElevatedButton(
-                        onPressed: (){
-                          Navigator.push(context, MaterialPageRoute(builder: (context) => Join()));
+                        onPressed: () {
+                          Navigator.push(context,
+                              MaterialPageRoute(builder: (context) => Join()));
                         },
                         style: ElevatedButton.styleFrom(
                           shape: RoundedRectangleBorder(
@@ -156,8 +142,10 @@ class _Login extends State<Login> {
                             alignment: Alignment.center,
                             width: 120,
                             height: 50,
-                            child: Text('Join', style: TextStyle(color: Colors.white),))
-                    ),
+                            child: Text(
+                              'Join',
+                              style: TextStyle(color: Colors.white),
+                            ))),
                   ],
                 ),
               ),

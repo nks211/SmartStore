@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:smart_store_flutter_starter/util/common.dart';
+import 'package:smart_store/util/common.dart';
 
 class CafeMap extends StatefulWidget {
   const CafeMap({super.key});

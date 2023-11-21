@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-import 'package:smart_store_flutter_starter/util/common.dart';
+import 'package:smart_store/util/common.dart';
 
 import '../dto/User.dart';
 

@@ -1,7 +1,7 @@
 import 'dart:convert';
 
-import 'package:smart_store_flutter_starter/dto/OrderDetail.dart';
-import 'package:smart_store_flutter_starter/dto/OrderDetailitem.dart';
+import 'package:smart_store/dto/OrderDetail.dart';
+import 'package:smart_store/dto/OrderDetailitem.dart';
 
 class Orderitem {
 

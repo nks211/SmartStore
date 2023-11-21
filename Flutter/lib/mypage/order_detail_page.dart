@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:smart_store_flutter_starter/util/common.dart';
+import 'package:smart_store/util/common.dart';
 
 import '../dto/OrderDetailitem.dart';
 import '../dto/Orderitem.dart';
 
-
 class OrderDetailPage extends StatefulWidget {
   final Orderitem item;
+
   OrderDetailPage({required this.item});
 
   @override
@@ -16,7 +16,6 @@ class OrderDetailPage extends StatefulWidget {
 class _OrderDetailPageState extends State<OrderDetailPage> {
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       body: SafeArea(
         child: Center(
@@ -28,7 +27,8 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                   children: [
                     Expanded(
                       flex: 1,
-                      child: Text("주문상세", style: textStyle30.apply(color: coffeePointRed)),
+                      child: Text("주문상세",
+                          style: textStyle30.apply(color: coffeePointRed)),
                     ),
                   ],
                 ),
@@ -38,26 +38,25 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                       children: [
                         Expanded(
                           child: Text(
-                              "주문완료\n"
-                                  + "${widget.item.orderTime.substring(0, 10)}\n"
-                                  + "${totalprice(widget.item.details)}원",
+                              "주문완료\n" +
+                                  "${widget.item.orderTime}\n" +
+                                  "${totalprice(widget.item.details)}원",
                               style: textStyle20.apply(
-                                  color: coffeeDarkBrown, 
+                                  color: coffeeDarkBrown,
                                   fontFamily: 'eland_choice_b')),
                         ),
                       ],
-                    )
-                ),
+                    )),
                 Expanded(
                   child: SizedBox(
                       height: 150,
-                      child : ListView.builder(
+                      child: ListView.builder(
                         itemCount: widget.item.details.length,
-                        itemBuilder: (BuildContext context, int position){
-                          return orderedItem(widget.item.details[position], (){} );
+                        itemBuilder: (BuildContext context, int position) {
+                          return orderedItem(
+                              widget.item.details[position], () {});
                         },
-                      )
-                  ),
+                      )),
                 )
               ],
             ),

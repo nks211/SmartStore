@@ -36,7 +36,7 @@ class User {
     'id' : _id,
     'name' : _name,
     'pass' : _pass,
-    'stampList' : _stampList.map((e) => jsonEncode(e.toJson())).toList(),
+    'stampList' : _stampList,
     'stamps' : _stamps,
   };
 

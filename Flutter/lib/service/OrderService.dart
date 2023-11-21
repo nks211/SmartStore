@@ -1,7 +1,7 @@
 import 'package:http/http.dart' as http;
-import 'package:smart_store_flutter_starter/dto/OrderDetailitem.dart';
+import 'package:smart_store/dto/OrderDetailitem.dart';
 import 'dart:convert';
-import 'package:smart_store_flutter_starter/util/common.dart';
+import 'package:smart_store/util/common.dart';
 
 import '../dto/Orderitem.dart';
 

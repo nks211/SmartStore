@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:smart_store_flutter_starter/util/common.dart';
+import 'package:smart_store/util/common.dart';
 
 import '../dto/User.dart';
 import '../service/UserService.dart';
@@ -12,12 +12,10 @@ class Join extends StatefulWidget {
 }
 
 class _JoinState extends State<Join> {
-
   var userService = UserService();
   var idcontroller = TextEditingController();
   var passcontroller = TextEditingController();
   var namecontroller = TextEditingController();
-
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +33,8 @@ class _JoinState extends State<Join> {
               child: Image.asset("assets/logo.png"),
             ),
             Text(
-              'Join', style: textLogin,
+              'Join',
+              style: textLogin,
             ),
             SizedBox(
               height: 30,
@@ -66,22 +65,24 @@ class _JoinState extends State<Join> {
                       backgroundColor: coffeeBrown,
                       padding: EdgeInsets.all(5),
                     ),
-                      onPressed: () {
-                        userService.isUsedId(idcontroller.text).then((value){
-                          if (value) {
-                            showToast("사용 중인 아이디입니다.");
-                          }
-                          else {
-                            showToast("사용 가능한 아이디입니다.");
-                          }
-                        });
-                      },
-                      child: Container(
-                        margin: EdgeInsets.symmetric(horizontal: 5),
-                        width: 50,
-                        height: 50,
-                        child: Image.asset("assets/check.png", fit: BoxFit.fill,),
+                    onPressed: () {
+                      userService.isUsedId(idcontroller.text).then((value) {
+                        if (value) {
+                          showToast("사용 중인 아이디입니다.");
+                        } else {
+                          showToast("사용 가능한 아이디입니다.");
+                        }
+                      });
+                    },
+                    child: Container(
+                      margin: EdgeInsets.symmetric(horizontal: 5),
+                      width: 50,
+                      height: 50,
+                      child: Image.asset(
+                        "assets/check.png",
+                        fit: BoxFit.fill,
                       ),
+                    ),
                   ),
                 ],
               ),
@@ -116,7 +117,9 @@ class _JoinState extends State<Join> {
               padding: EdgeInsets.symmetric(vertical: 20),
               child: ElevatedButton(
                   onPressed: () {
-                    if (idcontroller.text != '' && passcontroller.text != '' && namecontroller.text != '') {
+                    if (idcontroller.text != '' &&
+                        passcontroller.text != '' &&
+                        namecontroller.text != '') {
                       var id = idcontroller.text;
                       var pass = passcontroller.text;
                       var name = namecontroller.text;
@@ -128,13 +131,11 @@ class _JoinState extends State<Join> {
                               Navigator.pop(context);
                             }
                           });
-                        }
-                        else {
+                        } else {
                           showToast("아이디가 중복됩니다.");
                         }
                       });
-                    }
-                    else {
+                    } else {
                       if (idcontroller.text == '') {
                         showToast("아이디를 입력해주세요.");
                       }
@@ -157,8 +158,10 @@ class _JoinState extends State<Join> {
                       alignment: Alignment.center,
                       width: 120,
                       height: 50,
-                      child: Text('Join', style: TextStyle(color: Colors.white),))
-              ),
+                      child: Text(
+                        'Join',
+                        style: TextStyle(color: Colors.white),
+                      ))),
             ),
           ],
         ),

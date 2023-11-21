@@ -18,64 +18,77 @@ const Color coffeeDarkBrown = Color(0xff493319);
 const Color menuBackground = Color(0xffeee1da);
 
 // TextStyle 정의
-const TextStyle textLogin =  TextStyle(fontFamily: 'cafe24', fontSize: 50.0);
-const TextStyle textStyle15 = TextStyle(fontFamily: 'Montserrat', fontSize: 15.0);
-const TextStyle textStyle15Bold = TextStyle(fontFamily: 'Montserrat', fontSize: 15.0, fontWeight: FontWeight.bold);
-const TextStyle textStyle20 = TextStyle(fontFamily: 'Montserrat', fontSize: 20.0);
-const TextStyle textStyle20Bold = TextStyle(fontFamily: 'Montserrat', fontSize: 20.0, fontWeight: FontWeight.bold);
-const TextStyle textStyle20White = TextStyle(fontFamily: 'Montserrat', fontSize: 20.0, color: Colors.white);
-const TextStyle textStyle25 = TextStyle(fontFamily: 'Montserrat', fontSize: 25.0);
-const TextStyle textStyle20B = TextStyle(fontFamily: 'Montserrat', fontSize: 20.0, fontWeight: FontWeight.bold);
-const TextStyle textStyle30 = TextStyle(fontFamily: 'eland_choice_b', fontSize: 30.0);
-const TextStyle textStyle50 = TextStyle(fontFamily: 'Montserrat', fontSize: 50.0);
-const TextStyle textStyleRed30 = TextStyle(fontFamily: 'Montserrat', fontSize: 30.0, color: Color(0xff9d0200));
-const TextStyle textOrder = TextStyle(fontFamily: 'eland_choice_b', fontSize: 20, color: coffeeDarkBrown);
+const TextStyle textLogin = TextStyle(fontFamily: 'cafe24', fontSize: 50.0);
+const TextStyle textStyle15 =
+    TextStyle(fontFamily: 'Montserrat', fontSize: 15.0);
+const TextStyle textStyle15Bold = TextStyle(
+    fontFamily: 'Montserrat', fontSize: 15.0, fontWeight: FontWeight.bold);
+const TextStyle textStyle20 =
+    TextStyle(fontFamily: 'Montserrat', fontSize: 20.0);
+const TextStyle textStyle20Bold = TextStyle(
+    fontFamily: 'Montserrat', fontSize: 20.0, fontWeight: FontWeight.bold);
+const TextStyle textStyle20White =
+    TextStyle(fontFamily: 'Montserrat', fontSize: 20.0, color: Colors.white);
+const TextStyle textStyle25 =
+    TextStyle(fontFamily: 'Montserrat', fontSize: 25.0);
+const TextStyle textStyle20B = TextStyle(
+    fontFamily: 'Montserrat', fontSize: 20.0, fontWeight: FontWeight.bold);
+const TextStyle textStyle30 =
+    TextStyle(fontFamily: 'eland_choice_b', fontSize: 30.0);
+const TextStyle textStyle50 =
+    TextStyle(fontFamily: 'Montserrat', fontSize: 50.0);
+const TextStyle textStyleRed30 = TextStyle(
+    fontFamily: 'Montserrat', fontSize: 30.0, color: Color(0xff9d0200));
+const TextStyle textOrder = TextStyle(
+    fontFamily: 'eland_choice_b', fontSize: 20, color: coffeeDarkBrown);
 
 //http통신 주소값
 const BaseUrl = "http://192.168.33.119:9987/";
 
+//서버 내 이미지 저장 경로값. (C:\Temp\imgs\menu)
+const imagepath = "imgs/menu/";
+
 // toast message
-void showToast(String msg){
+void showToast(String msg) {
   Fluttertoast.showToast(
       msg: msg,
       toastLength: Toast.LENGTH_SHORT,
       gravity: ToastGravity.BOTTOM,
       timeInSecForIosWeb: 1,
       textColor: Colors.white,
-      fontSize: 16.0
-  );
+      fontSize: 16.0);
 }
 
 //알림판 구성 및 항목 구성
-Widget notice(String content){
+Widget notice(String content) {
   return Row(
     children: [
       Expanded(flex: 1, child: Text(content, style: textStyle15)),
-      IconButton(onPressed: (){}, icon:const Icon(Icons.cancel, color: coffeeBrown))
+      IconButton(
+          onPressed: () {}, icon: const Icon(Icons.cancel, color: coffeeBrown))
     ],
   );
 }
 
-Widget noticeScroll(List<String> notices){
+Widget noticeScroll(List<String> notices) {
   return ListView.builder(
     padding: EdgeInsets.zero,
     itemCount: notices.length,
-    itemBuilder: (BuildContext context, int position){
+    itemBuilder: (BuildContext context, int position) {
       return notice(notices[position]);
     },
   );
 }
 
-
 //이미지 위젯
-Widget roundImage(String src, {double height = 150, double width = 150}){
+Widget roundImage(String src, {double height = 150, double width = 150}) {
   return ClipRRect(
     borderRadius: BorderRadius.circular(30),
     child: Container(
       height: height,
       width: width,
       color: coffeeBackground,
-      child: Image.asset(src),
+      child: Image.network(src),
     ),
   );
 }
@@ -83,36 +96,43 @@ Widget roundImage(String src, {double height = 150, double width = 150}){
 //메뉴판 이미지 위젯 (roundImage 활용)
 Widget menuImageButton(Product item, BuildContext context, Function function) {
   return InkWell(
-      onTap: () async {
-        OrderDetailitem newitem = await Navigator.push(context,
-            MaterialPageRoute(builder: (context) => MenuDetail(menuitem: item,)));
-        function(newitem);
-      },
-      child: roundImage('assets/${item.img}'),
+    onTap: () async {
+      OrderDetailitem newitem = await Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => MenuDetail(
+                    menuitem: item,
+                  )));
+      function(newitem);
+    },
+    child: roundImage(BaseUrl + imagepath + item.img),
   );
 }
 
-
 //장바구니 및 최근 주문 목록 구성 위젯
-Widget orderedItem(OrderDetailitem item, Function function, {bool btnVisible = false}){
+Widget orderedItem(OrderDetailitem item, Function function,
+    {bool btnVisible = false}) {
   return Padding(
     padding: const EdgeInsets.only(top: 10, bottom: 10),
     child: Stack(
       children: [
         Row(
           children: [
-            roundImage('assets/${item.img}', width: 100, height: 100),
+            roundImage(BaseUrl + imagepath + item.img, width: 100, height: 100),
             const SizedBox(width: 20),
-            Expanded(child: Column(
+            Expanded(
+                child: Column(
               children: [
                 Row(
                   children: [
                     Expanded(
-                      child: Text(item.name, style: textStyle20.apply(color: coffeeDarkBrown)),
+                      child: Text(item.name,
+                          style: textStyle20.apply(color: coffeeDarkBrown)),
                     ),
                     Padding(
                       padding: const EdgeInsets.only(right: 40),
-                      child: Text("${item.quantity}잔", style: textStyle20.apply(color: coffeeDarkBrown)),
+                      child: Text("${item.quantity}잔",
+                          style: textStyle20.apply(color: coffeeDarkBrown)),
                     )
                   ],
                 ),
@@ -120,11 +140,13 @@ Widget orderedItem(OrderDetailitem item, Function function, {bool btnVisible = f
                 Row(
                   children: [
                     Expanded(
-                      child: Text("${item.unitprice}원", style: textStyle20.apply(color: coffeeDarkBrown)),
+                      child: Text("${item.unitprice}원",
+                          style: textStyle20.apply(color: coffeeDarkBrown)),
                     ),
                     Padding(
                       padding: const EdgeInsets.only(right: 30),
-                      child: Text("${item.totalprice}원", style: textStyle15.apply(color: coffeeDarkBrown)),
+                      child: Text("${item.totalprice}원",
+                          style: textStyle15.apply(color: coffeeDarkBrown)),
                     )
                   ],
                 )
@@ -137,12 +159,13 @@ Widget orderedItem(OrderDetailitem item, Function function, {bool btnVisible = f
           child: Container(
               alignment: Alignment.topRight,
               child: IconButton(
-                  onPressed: btnVisible? (){ function(item); } : (){},
-                  icon: Icon(Icons.cancel, color: coffeeBrown)
-              )
-          ),
+                  onPressed: btnVisible
+                      ? () {
+                          function(item);
+                        }
+                      : () {},
+                  icon: Icon(Icons.cancel, color: coffeeBrown))),
         )
-
       ],
     ),
   );
@@ -166,7 +189,7 @@ int totalprice(List<OrderDetailitem> items) {
 }
 
 //주문 관련 위젯 (최근 주문, 주문 내역 목록에서 사용)
-Card orderCard(Orderitem item, Widget widget, Function onTap1){
+Card orderCard(Orderitem item, Widget widget, Function onTap1) {
   return Card(
     shape: RoundedRectangleBorder(
       borderRadius: BorderRadius.circular(10),
@@ -175,14 +198,15 @@ Card orderCard(Orderitem item, Widget widget, Function onTap1){
     child: Padding(
       padding: const EdgeInsets.only(top: 10, left: 20, right: 20),
       child: InkWell(
-        onTap: (){
+        onTap: () {
           onTap1(item);
         },
         child: Column(
           children: [
-            roundImage('assets/${item.details[0].img}'),
+            roundImage(BaseUrl + imagepath + item.details[0].img),
             const SizedBox(height: 20),
-            Text('${item.details[0].name} 외 ${totalquantity(item.details)}잔', style: textOrder),
+            Text('${item.details[0].name} 외 ${totalquantity(item.details)}잔',
+                style: textOrder),
             Text('${totalprice(item.details)}원', style: textOrder),
             Text(item.orderTime.substring(0, 10), style: textOrder),
             const SizedBox(height: 2),
@@ -194,28 +218,27 @@ Card orderCard(Orderitem item, Widget widget, Function onTap1){
   );
 }
 
-
 // 최근 주문 및 주문 내역에 표시될 위젯
-Widget orderScroll(List<Orderitem> orderList, Widget widget, Function onTab){
+Widget orderScroll(List<Orderitem> orderList, Widget widget, Function onTab) {
   return ListView.builder(
     scrollDirection: Axis.horizontal,
     itemCount: orderList.length,
-    itemBuilder: (BuildContext context, int position){
+    itemBuilder: (BuildContext context, int position) {
       return orderCard(orderList[position], widget, onTab);
     },
   );
 }
 
-Widget orderListRow(List<Orderitem> items, Widget widget, Function onTab, {double height = 350}){
+Widget orderListRow(List<Orderitem> items, Widget widget, Function onTab,
+    {double height = 350}) {
   return Row(
     children: [
       Expanded(
-          child: SizedBox(height: height, child: orderScroll(items, widget, onTab))
-      )
+          child: SizedBox(
+              height: height, child: orderScroll(items, widget, onTab)))
     ],
   );
 }
-
 
 //stamp 관련 데이터 및 함수 모음
 List<int> requiredStamps = [10, 15, 20, 25, 0];
@@ -228,17 +251,17 @@ List<String> levelimg = [
   'assets/coffee_tree.png'
 ];
 
-List<int> calculateStampLevel(int stamps){
+List<int> calculateStampLevel(int stamps) {
   int cur = stamps;
   bool check = false;
   int level = 4;
   int subLevel = 1;
 
-  for(int lv=0;lv<4;lv++){
-    if(!check){
-      for(int j=1;j<=5;j++){
+  for (int lv = 0; lv < 4; lv++) {
+    if (!check) {
+      for (int j = 1; j <= 5; j++) {
         cur -= requiredStamps[lv];
-        if(cur<=0){
+        if (cur <= 0) {
           check = true;
           subLevel = j;
           level = lv;
@@ -249,5 +272,4 @@ List<int> calculateStampLevel(int stamps){
   }
 
   return [level, subLevel, cur];
-
 }

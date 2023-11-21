@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:smart_store_flutter_starter/dto/OrderDetailitem.dart';
-import 'package:smart_store_flutter_starter/service/CommentService.dart';
-import 'package:smart_store_flutter_starter/util/common.dart';
+import 'package:smart_store/dto/OrderDetailitem.dart';
+import 'package:smart_store/service/CommentService.dart';
+import 'package:smart_store/util/common.dart';
 
 import '../dto/Comment.dart';
 import '../dto/Product.dart';
@@ -18,7 +18,6 @@ class MenuDetail extends StatefulWidget {
 }
 
 class _MenuDetailState extends State<MenuDetail> {
-
   int count = 1;
   double rate = 3.0;
   double ratebar = 3.0;
@@ -52,7 +51,6 @@ class _MenuDetailState extends State<MenuDetail> {
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       body: ListView(
         shrinkWrap: true,
@@ -62,12 +60,17 @@ class _MenuDetailState extends State<MenuDetail> {
             padding: EdgeInsets.symmetric(vertical: 10),
             height: 200,
             color: menuBackground,
-            child: Image.asset('assets/${widget.menuitem.img}', width: double.maxFinite,),
+            child: Image.network(
+              BaseUrl + imagepath + widget.menuitem.img,
+              width: double.maxFinite,
+            ),
           ),
           Container(
               margin: EdgeInsets.all(20),
-              child: Text('${widget.menuitem.name}', style: textStyle30,)
-          ),
+              child: Text(
+                '${widget.menuitem.name}',
+                style: textStyle30,
+              )),
           Container(
             height: 100,
             margin: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
@@ -77,14 +80,23 @@ class _MenuDetailState extends State<MenuDetail> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text('가격', style: textStyle20B,),
-                    Text('${widget.menuitem.price}원', style: textStyle20,)
+                    Text(
+                      '가격',
+                      style: textStyle20B,
+                    ),
+                    Text(
+                      '${widget.menuitem.price}원',
+                      style: textStyle20,
+                    )
                   ],
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text('수량', style: textStyle20B,),
+                    Text(
+                      '수량',
+                      style: textStyle20B,
+                    ),
                     Container(
                       width: 100,
                       child: Row(
@@ -98,16 +110,27 @@ class _MenuDetailState extends State<MenuDetail> {
                                 });
                               }
                             },
-                            child: Image.asset("assets/minus.png", width: 30, color: coffeePointRed,),
+                            child: Image.asset(
+                              "assets/minus.png",
+                              width: 30,
+                              color: coffeePointRed,
+                            ),
                           ),
-                          Text(count.toString(), style: textStyle20,),
+                          Text(
+                            count.toString(),
+                            style: textStyle20,
+                          ),
                           InkWell(
                             onTap: () {
                               setState(() {
                                 count++;
                               });
                             },
-                            child: Image.asset("assets/add.png", width: 30, color: coffeePointRed,),
+                            child: Image.asset(
+                              "assets/add.png",
+                              width: 30,
+                              color: coffeePointRed,
+                            ),
                           ),
                         ],
                       ),
@@ -124,17 +147,24 @@ class _MenuDetailState extends State<MenuDetail> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text('평점 ${ratebar}점', style: textStyle20,),
+                Text(
+                  '평점 ${ratebar}점',
+                  style: textStyle20,
+                ),
                 InkWell(
                   onTap: () {
-                    showDialog(context: context,
+                    showDialog(
+                        context: context,
                         builder: (context) {
                           return AlertDialog(
                             content: Container(
                               height: 70,
                               child: Column(
                                 children: [
-                                  Text('별점선택', style: textStyle20B,),
+                                  Text(
+                                    '별점선택',
+                                    style: textStyle20B,
+                                  ),
                                   RatingBar.builder(
                                       initialRating: 3,
                                       minRating: 0.5,
@@ -142,39 +172,46 @@ class _MenuDetailState extends State<MenuDetail> {
                                       direction: Axis.horizontal,
                                       itemCount: 5,
                                       itemBuilder: (context, _) => Icon(
-                                        Icons.star, color: coffeePointRed,
-                                      ),
+                                            Icons.star,
+                                            color: coffeePointRed,
+                                          ),
                                       onRatingUpdate: (rating) {
                                         setState(() {
                                           rate = rating;
                                         });
-                                      }
-                                  ),
+                                      }),
                                 ],
                               ),
                             ),
                             actions: [
                               TextButton(
-                                  onPressed: (){
+                                  onPressed: () {
                                     Navigator.pop(context);
                                   },
-                                  child: Text('취소', style: textStyle15,)
-                              ),
+                                  child: Text(
+                                    '취소',
+                                    style: textStyle15,
+                                  )),
                               TextButton(
-                                  onPressed: (){
+                                  onPressed: () {
                                     Navigator.pop(context);
                                   },
-                                  child: Text('확인', style: textStyle15,)
-                              ),
+                                  child: Text(
+                                    '확인',
+                                    style: textStyle15,
+                                  )),
                             ],
                           );
-                    });
+                        });
                   },
                   child: RatingBarIndicator(
                     rating: ratebar,
                     direction: Axis.horizontal,
                     itemCount: 5,
-                    itemBuilder: (context, _) => Icon(Icons.star, color: coffeePointRed,),
+                    itemBuilder: (context, _) => Icon(
+                      Icons.star,
+                      color: coffeePointRed,
+                    ),
                   ),
                 ),
               ],
@@ -198,47 +235,51 @@ class _MenuDetailState extends State<MenuDetail> {
                 ),
               ),
               ElevatedButton(
-                  onPressed: (){
+                  onPressed: () {
                     setState(() {
                       var mention = controller.text;
-                      Future<SharedPreferences> preferences = SharedPreferences.getInstance();
-                      preferences.then((value) {
-                        String? id = value.getString('id');
-                        if (id != null) {
-                          var userid = id;
-                          Comment review = Comment(mention, 0, widget.menuitem.id, rate, userid);
-                          if (edited) {
-                            review.setid(comments[index].id);
-                            commentservice.updateComment(review).then((result) {
-                              if (result == 'true') {
-                                setState(() {
-                                  edited = false;
-                                  editmode[index] = false;
-                                  index = -1;
-                                  allcomments();
-                                });
-                              }
-                              else {
-                                showToast('error');
-                              }
-                            });
+                      if (mention == '') {
+                        showToast('리뷰를 최소 10자 이상 입력해주세요.');
+                      }
+                      else {
+                        Future<SharedPreferences> preferences =
+                        SharedPreferences.getInstance();
+                        preferences.then((value) {
+                          String? id = value.getString('id');
+                          if (id != null) {
+                            var userid = id;
+                            Comment review = Comment(
+                                mention, 0, widget.menuitem.id, rate, userid);
+                            if (edited) {
+                              review.setid(comments[index].id);
+                              commentservice.updateComment(review).then((result) {
+                                if (result == 'true') {
+                                  setState(() {
+                                    edited = false;
+                                    editmode[index] = false;
+                                    index = -1;
+                                    allcomments();
+                                  });
+                                } else {
+                                  showToast('error');
+                                }
+                              });
+                            } else {
+                              commentservice.makeComment(review).then((result) {
+                                if (result == 'true') {
+                                  setState(() {
+                                    allcomments();
+                                  });
+                                } else {
+                                  showToast('error');
+                                }
+                              });
+                            }
+                            focusmode.unfocus();
+                            controller.text = '';
                           }
-                          else {
-                            commentservice.makeComment(review).then((result) {
-                              if (result == 'true') {
-                                setState(() {
-                                  allcomments();
-                                });
-                              }
-                              else {
-                                showToast('error');
-                              }
-                            });
-                          }
-                          focusmode.unfocus();
-                          controller.text = '';
-                        }
-                      });
+                        });
+                      }
                     });
                   },
                   style: ElevatedButton.styleFrom(
@@ -248,8 +289,10 @@ class _MenuDetailState extends State<MenuDetail> {
                     ),
                     minimumSize: Size(100, 50),
                   ),
-                  child: Text('등록', style: textStyle15.apply(color: coffeeBrown),)
-              ),
+                  child: Text(
+                    '등록',
+                    style: textStyle15.apply(color: coffeeBrown),
+                  )),
             ],
           ),
           SizedBox(
@@ -258,13 +301,16 @@ class _MenuDetailState extends State<MenuDetail> {
               child: ListView.builder(
                 shrinkWrap: true,
                 itemCount: comments.length,
-                itemBuilder: (BuildContext context, int position){
+                itemBuilder: (BuildContext context, int position) {
                   return Container(
                     margin: EdgeInsets.all(10),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text(comments[position].comment, style: textStyle15,),
+                        Text(
+                          comments[position].comment,
+                          style: textStyle15,
+                        ),
                         Container(
                           width: 70,
                           child: Row(
@@ -284,14 +330,18 @@ class _MenuDetailState extends State<MenuDetail> {
                                         index = position;
                                       });
                                       focusmode.requestFocus();
-                                    }
-                                    else {
+                                    } else {
                                       index = -1;
                                       focusmode.unfocus();
                                     }
                                   },
                                   padding: EdgeInsets.zero,
-                                  icon: Icon(editmode[position]? Icons.undo : Icons.edit, color: coffeeBrown,),
+                                  icon: Icon(
+                                    editmode[position]
+                                        ? Icons.undo
+                                        : Icons.edit,
+                                    color: coffeeBrown,
+                                  ),
                                 ),
                               ),
                               CircleAvatar(
@@ -300,13 +350,18 @@ class _MenuDetailState extends State<MenuDetail> {
                                 child: IconButton(
                                   onPressed: () {
                                     setState(() {
-                                      commentservice.deleteComment(comments[position].id).then((value) {
+                                      commentservice
+                                          .deleteComment(comments[position].id)
+                                          .then((value) {
                                         allcomments();
                                       });
                                     });
                                   },
                                   padding: EdgeInsets.zero,
-                                  icon: Icon(Icons.close, color: coffeeBrown,),
+                                  icon: Icon(
+                                    Icons.close,
+                                    color: coffeeBrown,
+                                  ),
                                   color: coffeeBrown,
                                 ),
                               ),
@@ -328,7 +383,8 @@ class _MenuDetailState extends State<MenuDetail> {
                 var name = widget.menuitem.name;
                 var price = widget.menuitem.price;
                 var quantity = count;
-                OrderDetailitem detailitem = OrderDetailitem(img, id, name, price, quantity, price * quantity);
+                OrderDetailitem detailitem = OrderDetailitem(
+                    img, id, name, price, quantity, price * quantity);
                 Navigator.pop(context, detailitem);
               },
               style: ElevatedButton.styleFrom(
@@ -336,9 +392,11 @@ class _MenuDetailState extends State<MenuDetail> {
               ),
               child: Container(
                 alignment: Alignment.center,
-                child: Text('담기', style: textStyle15.apply(color: Colors.white),),
-              )
-          )
+                child: Text(
+                  '담기',
+                  style: textStyle15.apply(color: Colors.white),
+                ),
+              ))
         ],
       ),
     );
