@@ -8,6 +8,7 @@ import androidx.lifecycle.viewModelScope
 import com.ssafy.smartstore_jetpack.dto.Order
 import com.ssafy.smartstore_jetpack.dto.OrderDetail
 import com.ssafy.smartstore_jetpack.dto.Product
+import com.ssafy.smartstore_jetpack.dto.ReComment
 import com.ssafy.smartstore_jetpack.src.main.menu.models.MenuDetailWithCommentResponse
 import com.ssafy.smartstore_jetpack.src.main.my.models.LatestOrderResponse
 import com.ssafy.smartstore_jetpack.util.CommonUtils
@@ -83,12 +84,28 @@ class MainActivityViewModel : ViewModel() {
     fun getNewOrder(){
         viewModelScope.launch{
             try{
-                _waitingOrders.value = RetrofitUtil.orderService.getAllOrdersByResults("N")
+                _waitingOrders.value = CommonUtils.makeLatestOrderList(RetrofitUtil.orderService.getAllOrdersByResults("N"))
             }catch(e: Exception){
                 _waitingOrders.value = arrayListOf()
             }
         }
     }
+
+    private val _productReComments = MutableLiveData<List<ReComment>>()
+    val productReComment : LiveData<List<ReComment>>
+        get() = _productReComments
+
+    fun setProductReComment(p_id: Int){
+        viewModelScope.launch {
+            try{
+                _productReComments.value = RetrofitUtil.commentService.getReComment(p_id)
+                Log.d(TAG, "setProductReComment: abc")
+            }catch (e: Exception){
+                _productReComments.value = arrayListOf()
+            }
+        }
+    }
+
 
     fun completeOrder(order: Order){
         viewModelScope.launch {

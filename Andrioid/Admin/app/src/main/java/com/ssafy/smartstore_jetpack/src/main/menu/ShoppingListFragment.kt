@@ -67,7 +67,7 @@ class ShoppingListFragment(val orderId: Int = -1) : BaseFragment<FragmentShoppin
 
         beaconsetting = mainActivity.beaconsetting
 
-        mainActivity.setNdef()
+//        mainActivity.setNdef()
 
         shoppingListAdapter.buttonClickListener = object: ShoppingListAdapter.ButtonClickListener{
             override fun onClick(position: Int) {
@@ -135,7 +135,6 @@ class ShoppingListFragment(val orderId: Int = -1) : BaseFragment<FragmentShoppin
             binding.textShoppingMoney.text = "${totalAmount()} 원"
         }
         viewModel.isOrderCompleted.observe(viewLifecycleOwner){
-            Log.d(TAG, "registerObserver: aaaa")
             if(it) viewModel.clearShoppingList(it)
         }
     }

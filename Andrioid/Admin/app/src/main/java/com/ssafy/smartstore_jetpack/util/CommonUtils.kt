@@ -58,7 +58,11 @@ object CommonUtils {
             }
         }
         val list = ArrayList(hm.values)
-        list.sortWith { o1, o2 -> o2.orderDate.compareTo(o1.orderDate) }
+        if(ApplicationClass.sharedPreferencesUtil.getUser().isAdmin) {
+            list.sortWith { o1, o2 -> o1.orderDate.compareTo(o2.orderDate) }
+        } else{
+            list.sortWith { o1, o2 -> o2.orderDate.compareTo(o1.orderDate) }
+        }
         return list
     }
 

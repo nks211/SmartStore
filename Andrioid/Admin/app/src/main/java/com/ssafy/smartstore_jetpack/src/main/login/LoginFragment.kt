@@ -6,6 +6,7 @@ import android.util.Log
 import android.view.View
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.Navigation
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.ssafy.smartstore_jetpack.R
@@ -17,6 +18,7 @@ import com.ssafy.smartstore_jetpack.src.main.LoginActivity
 import com.ssafy.smartstore_jetpack.util.RetrofitUtil
 import com.ssafy.smartstore_jetpack.util.SharedPreferencesUtil
 import kotlinx.coroutines.launch
+import kotlin.math.log
 
 
 // 로그인 화면
@@ -29,8 +31,6 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(FragmentLoginBinding::b
         super.onAttach(context)
         loginActivity = context as LoginActivity
     }
-    
-    
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -38,13 +38,12 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(FragmentLoginBinding::b
         viewModel.user.observe(viewLifecycleOwner) {
             if (it.id.isNotEmpty()) {
                 ApplicationClass.sharedPreferencesUtil.addUser(it)
-                loginActivity.openFragment(1)
+                loginActivity.openMainActivity()
             }
             else {
                 showToast("ID, Password를 확인하세요.")
             }
         }
-
         // 로그인 구현
         binding.btnLogin.setOnClickListener {
             lifecycleScope.launch {
@@ -56,11 +55,9 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(FragmentLoginBinding::b
         }
 
         binding.btnJoin.setOnClickListener {
-            loginActivity.openFragment(2)
+            Navigation.findNavController(requireView()).navigate(R.id.joinFragment)
         }
     }
-
-
 }
 
 

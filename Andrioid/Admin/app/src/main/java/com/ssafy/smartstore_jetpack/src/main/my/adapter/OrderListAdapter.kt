@@ -34,7 +34,6 @@ class OrderListAdapter: ListAdapter<LatestOrderResponse, OrderListAdapter.OrderH
 
     inner class OrderHolder(val binding: ListItemOrderBinding) : RecyclerView.ViewHolder(binding.root){
         fun bindInfo(data: LatestOrderResponse){
-            Log.d(TAG, "bindInfo: ${data}")
 
             Glide.with(itemView)
                 .load("${ApplicationClass.MENU_IMGS_URL}${data.img}")
@@ -51,7 +50,6 @@ class OrderListAdapter: ListAdapter<LatestOrderResponse, OrderListAdapter.OrderH
             binding.textCompleted.text = CommonUtils.isOrderCompleted(data)
             //클릭연결
             itemView.setOnClickListener{
-                Log.d(TAG, "bindInfo: ${data.orderId}")
                 itemClickListner.onClick(it, layoutPosition, data.orderId)
             }
         }

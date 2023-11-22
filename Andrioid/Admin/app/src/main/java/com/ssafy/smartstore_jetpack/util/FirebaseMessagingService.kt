@@ -33,13 +33,8 @@ class FirebaseMessagingService : FirebaseMessagingService() {
 
     override fun onMessageReceived(message: RemoteMessage) {
         message.data.let {
-            
-            
             val title = it["title"]
-            val content = it["body"]
             Log.d(TAG, "onMessageReceived: $title")
-//            Log.d(TAG, "onMessageReceived: $content")
-//
 //            val mainIntent = Intent(this, ApplicationClass::class.java).apply{
 //                flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_SINGLE_TOP
 //            }

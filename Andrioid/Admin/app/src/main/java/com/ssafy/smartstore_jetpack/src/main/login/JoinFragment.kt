@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.Navigation
 import com.ssafy.smartstore_jetpack.R
 import com.ssafy.smartstore_jetpack.config.BaseFragment
 import com.ssafy.smartstore_jetpack.databinding.FragmentJoinBinding
@@ -53,7 +54,7 @@ class JoinFragment : BaseFragment<FragmentJoinBinding>(FragmentJoinBinding::bind
                     lifecycleScope.launch {
                         val user = User(id, password, nickname)
                         RetrofitUtil.userService.insert(user)
-                        (requireActivity() as LoginActivity).openFragment(3)
+                        Navigation.findNavController(requireView()).popBackStack()
                     }
                 }
                 else{

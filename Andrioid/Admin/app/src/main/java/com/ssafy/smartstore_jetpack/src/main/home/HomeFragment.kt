@@ -57,7 +57,6 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::bind
     private fun initUserData(){
         val user = ApplicationClass.sharedPreferencesUtil.getUser()
         id = user.id
-        Log.d(TAG, "initUserData: $user")
         binding.textUserName.text = "${user.name} 님"
         isAdmin = user.isAdmin
     }
@@ -73,7 +72,6 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::bind
 
     // 최근 한달간 주문내역
     private fun registerObserver(){
-
         FirebaseMessagingService.messageReceivedListener = object : FirebaseMessagingService.OnMessageReceivedListener{
             override fun onMessageReceived() {
                 if(!isAdmin)
@@ -89,10 +87,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::bind
         }
         latestOrderAdapter.setItemClickListener(object : LatestOrderAdapter.ItemClickListener{
             override fun onClick(view: View, position: Int) {
-                Log.d(TAG, "onClick: ${mainActivityViewModel.waitingOrders.value!![position]}")
-//                mainActivity.openFragment(1, "", latestOrderAdapter.list[position].orderId)
-//                mainActivityViewModel.setOrderId(latestOrderAdapter.list[position].orderId)
-//                mainActivity.openFragment(2)
+
                 val action = HomeFragmentDirections.actionHomeFragmentToOrderedListFragment(mainActivityViewModel.waitingOrders.value!![position].orderId)
                 Navigation.findNavController(view).navigate(action)
             }
@@ -104,11 +99,13 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::bind
 
         if(!isAdmin){
             viewModel.userLastOrderData.observe(viewLifecycleOwner){
-                latestOrderAdapter.submitList(CommonUtils.makeLatestOrderList(it))
+                binding.orderCnt.text = "${it.size}건"
+                latestOrderAdapter.submitList(it)
             }
         }else{
             mainActivityViewModel.waitingOrders.observe(viewLifecycleOwner){
-                latestOrderAdapter.submitList(CommonUtils.makeLatestOrderList(it))
+                binding.orderCnt.text = "${it.size}건"
+                latestOrderAdapter.submitList(it)
             }
         }
 

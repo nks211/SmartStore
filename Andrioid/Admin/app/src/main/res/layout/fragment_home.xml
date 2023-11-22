@@ -46,17 +46,33 @@
         android:layout_height="120dp"
         android:layout_marginBottom="20dp"/>
 
-    <TextView
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="최근 주문"
-        android:textSize="25dp"
-        style="@style/Text.Title"
-        android:layout_marginBottom="20dp"/>
+        android:orientation="horizontal"
+        >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="대기 주문"
+            android:textSize="25sp"
+            style="@style/Text.Title"
+            android:layout_marginBottom="20dp"
+            android:layout_marginRight="10dp"/>
+        <TextView
+            android:id="@+id/order_cnt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="0건"
+            android:textSize="22sp"
+            style="@style/Text.Regular"
+            />
+    </LinearLayout>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerViewLatestOrder"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="wrap_content" />
 
 </LinearLayout>

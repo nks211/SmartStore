@@ -3,16 +3,16 @@
     <item
         android:id="@+id/navigation_page_1"
         android:enabled="true"
-        android:title="Home"
+        android:title="홈"
         android:icon="@drawable/home"/>
     <item
         android:id="@+id/navigation_page_2"
         android:enabled="true"
-        android:title="Order"
+        android:title="메뉴"
         android:icon="@drawable/shopping_list"/>
     <item
         android:id="@+id/navigation_page_3"
         android:enabled="true"
-        android:title="Mypage"
+        android:title="내 정보"
         android:icon="@drawable/user"/>
 </menu>
