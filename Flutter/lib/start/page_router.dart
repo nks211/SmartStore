@@ -8,6 +8,7 @@ import 'package:smart_store/util/common.dart';
 
 import 'package:smart_store/home/main.dart';
 import 'package:smart_store/menuorder/menu.dart';
+import 'package:smart_store/util/notification.dart';
 
 import '../dto/Grade.dart';
 import '../dto/Orderitem.dart';
@@ -32,6 +33,16 @@ class _PageRouterState extends State<PageRouter> {
     Menu(),
     UserInfo(user: User.init(), orderdata: [], usergrade: Grade.init())
   ];
+
+  // 알림 생성 함수
+  void localnotice(int stamps) {
+    List stampinfo = calculateStampLevel(stamps);
+    String stampstep = '${levelName[stampinfo[0]]} ${stampinfo[1]}단계';
+    LocalNotification.makeNotification(stampstep);
+    setState(() {
+      noticeItem.add(stampstep + '가 되신 것을 축하드립니다! 앞으로도 더 많이 이용해주세요');
+    });
+  }
 
   // 최초 로딩 및 페이지 이동 시 사용자 정보 갱신
   void getUserInfo() {
@@ -59,6 +70,11 @@ class _PageRouterState extends State<PageRouter> {
                 Menu(),
                 UserInfo(user: name, orderdata: orders, usergrade: grade),
               ];
+              if (value.getString('orderid') != null) {
+                localnotice(name.stamps);
+                value.remove('orderid');
+                value.setStringList('notice${name.id}', noticeItem);
+              }
             });
           });
         }
@@ -68,6 +84,7 @@ class _PageRouterState extends State<PageRouter> {
 
   @override
   void initState() {
+    LocalNotification.init();
     setState(() {
       getUserInfo();
     });
@@ -75,6 +92,7 @@ class _PageRouterState extends State<PageRouter> {
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       body: SafeArea(
         child: pages[_selected],

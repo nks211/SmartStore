@@ -19,12 +19,15 @@ class Menu extends StatefulWidget {
 }
 
 class _MenuState extends State<Menu> {
+
+  double distance = 350;
   List<Product> menulist = [];
   var productservice = ProductService();
 
   // 초기 메뉴판 위젯 구성
   Widget board = Container();
 
+  // 현재 장바구니에 담긴 목록 리스트 초기화
   List<OrderDetailitem> shoppingOrder = [];
 
   void addOrder(OrderDetailitem orderdetail) {
@@ -35,6 +38,7 @@ class _MenuState extends State<Menu> {
 
   @override
   void initState() {
+
     // 서버에서 메뉴 정보 가져와서 다시 이미지 구성함
     productservice.getproductmenu().then((value) {
       for (var menu in value) {
@@ -79,7 +83,7 @@ class _MenuState extends State<Menu> {
               child: Row(
                 children: [
                   Text(
-                    '매장과의 거리가 350m입니다.',
+                    '매장과의 거리가 ${distance}m입니다.',
                     style: textStyle20,
                   ),
                   InkWell(

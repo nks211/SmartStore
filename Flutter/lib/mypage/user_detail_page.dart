@@ -16,7 +16,8 @@ class UserDetailPage extends StatefulWidget {
 }
 
 class _UserDetailPageState extends State<UserDetailPage> {
-  String path = BaseUrl + imagepath + 'user.png';
+  String path = platform == Platform.naver? BaseUrl + imagepath + 'naver.png'
+      : BaseUrl + imagepath + 'user.png';
   String id = '';
   String pass = '';
   String newpass = '';

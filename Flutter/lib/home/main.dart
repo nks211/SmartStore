@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:smart_store/dto/OrderDetailitem.dart';
 import 'package:smart_store/menuorder/shopping_cart.dart';
 import 'package:smart_store/service/OrderService.dart';
@@ -20,8 +21,6 @@ class Main extends StatefulWidget {
 }
 
 class _MainState extends State<Main> {
-  //테스트용 데이터
-  var noticeItem = List.generate(3, (i) => "알림$i");
 
   var userservice = UserService();
   var orderservice = OrderService();
@@ -41,8 +40,31 @@ class _MainState extends State<Main> {
     }
   }
 
+  void addnotification(String notice) {
+    setState(() {
+      noticeItem.add(notice);
+    });
+  }
+
+  // 알림판 내 알림 닫는 함수
+  void closenotification(String notice) {
+    setState(() {
+      noticeItem.remove(notice);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
+
+    // 알림 목록 최신 순으로 가져오기
+    Future<SharedPreferences> preferences = SharedPreferences.getInstance();
+    preferences.then((value) {
+      if (value.getStringList('notice${widget.user.id}') != null) {
+        noticeItem = List.from(value.getStringList('notice${widget.user.id}')!.reversed);
+        value.remove('notice${widget.user.id}');
+      }
+    });
+
     // 주문 id별 상세내역 추가한 후 리스트로 반환
     for (var order in widget.orderdata) {
       orderservice.getOrderDetails(order.id).then((value) {
@@ -106,7 +128,7 @@ class _MainState extends State<Main> {
                             const BorderSide(width: 2, color: coffeeDarkBrown)),
                     child: Container(
                       padding: const EdgeInsets.only(left: 20, right: 20),
-                      child: noticeScroll(noticeItem),
+                      child: noticeScroll(noticeItem, closenotification),
                     ),
                   ),
                 ),

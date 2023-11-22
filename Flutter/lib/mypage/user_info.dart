@@ -63,6 +63,9 @@ class _UserInfo extends State<UserInfo> {
   @override
   Widget build(BuildContext context) {
 
+    var path = platform == Platform.naver? BaseUrl + imagepath + 'naver.png'
+        : BaseUrl + imagepath + 'user.png';
+
     // 주문 id별 상세내역 추가한 후 리스트로 반환
     for (var order in widget.orderdata) {
       orderservice.getOrderDetails(order.id).then((value) {
@@ -135,7 +138,7 @@ class _UserInfo extends State<UserInfo> {
                         },
                         child: SizedBox(
                           height: 60,
-                          child: Image.network(BaseUrl + imagepath + 'user.png'),
+                          child: Image.network(path),
                         ),
                       ),
                       Expanded(
@@ -157,6 +160,9 @@ class _UserInfo extends State<UserInfo> {
                             preferences.then((value) {
                               value.remove('id');
                               value.remove('pass');
+                              value.setStringList('notice${widget.user.id}', noticeItem);
+                              platform = Platform.none;
+                              noticeItem = [];
                             });
                             Navigator.pushReplacement(context,
                                 MaterialPageRoute(builder: (context) => Login()));

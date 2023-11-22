@@ -10,6 +10,7 @@ import '../dto/OrderDetail.dart';
 import '../dto/OrderDetailitem.dart';
 import '../dto/Orderitem.dart';
 import '../start/page_router.dart';
+import '../util/notification.dart';
 
 //주문 옵션 토클 버튼
 Widget toggleBtn(String content, bool isSelected, Function onPressed1) {
@@ -114,12 +115,9 @@ class _ShoppingCart extends State<ShoppingCart> {
                             onPressed: () {
                               var completed = 'N';
                               var ordertable = '웹주문';
-                              var realtime =
-                                  DateTime.fromMillisecondsSinceEpoch(
-                                      DateTime.now().millisecond + 32400000);
                               var ordertime =
                                   DateFormat('yyyy-MM-ddThh:mm:ss.000+00:00')
-                                      .format(realtime);
+                                      .format(DateTime.now());
                               Future<SharedPreferences> preferences =
                                   SharedPreferences.getInstance();
                               preferences.then((value) {
@@ -129,9 +127,9 @@ class _ShoppingCart extends State<ShoppingCart> {
                                       ordertable, ordertime, completed);
                                   newitem.setDetails(widget.neworder);
                                   newitem.jsonDetails();
-                                  print(jsonEncode(newitem.toJson()));
-                                  orderservice.makeOrder(newitem).then((value) {
-                                    if (value != '') {
+                                  orderservice.makeOrder(newitem).then((_) {
+                                    if (_ != '') {
+                                      value.setString('orderid', _);
                                       showToast('주문이 완료되었습니다.');
                                       Navigator.pop(context, 'OK');
                                     } else {

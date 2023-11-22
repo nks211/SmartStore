@@ -41,4 +41,9 @@ class User {
     'stamps' : _stamps,
   };
 
+  @override
+  String toString() {
+    return 'User{_id: $_id, _name: $_name, _pass: $_pass, _stamps: $_stamps, _stampList: $_stampList}';
+  }
+
 }

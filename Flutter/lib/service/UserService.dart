@@ -34,7 +34,7 @@ class UserService {
         },
         body: jsonEncode(user.toJson()),
     );
-    return User.fromJson(jsonDecode(response.body));
+    return User.fromJson(jsonDecode(utf8.decode(response.bodyBytes)));
   }
 
   Future<Map<String, dynamic>> userInfo(User user) async {
@@ -45,7 +45,7 @@ class UserService {
         },
         body: jsonEncode(user.toJson()),
     );
-    return jsonDecode(response.body);
+    return jsonDecode(utf8.decode(response.bodyBytes));
   }
 
   Future<String> updateUser(User user) async {

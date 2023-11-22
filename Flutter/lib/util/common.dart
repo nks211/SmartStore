@@ -1,7 +1,8 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:location/location.dart';
 import '../dto/OrderDetailitem.dart';
 import '../dto/Orderitem.dart';
 import '../dto/Product.dart';
@@ -45,6 +46,32 @@ const BaseUrl = "http://192.168.33.119:9987/";
 //서버 내 이미지 저장 경로값. (ex. C:\Temp\imgs\menu)
 const imagepath = "imgs/menu/";
 
+//알림판에 표시되는 목록 데이터
+List<String> noticeItem = [];
+
+// 네이버 계정 로그인 판별용 상수값
+enum Platform {
+  naver,
+  none,
+}
+
+Platform platform = Platform.none;
+
+
+
+Future<bool> GeoPermission() async {
+  bool service = await Geolocator.isLocationServiceEnabled();
+  if (!service) return Future.value(false);
+  LocationPermission permission = await Geolocator.checkPermission();
+  if (permission == LocationPermission.denied) {
+    permission = await Geolocator.requestPermission();
+    if (permission == LocationPermission.denied) return Future.value(false);
+  }
+  if (permission == LocationPermission.deniedForever) return Future.value(false);
+
+  return Future.value(true);
+}
+
 // toast message
 void showToast(String msg) {
   Fluttertoast.showToast(
@@ -57,25 +84,23 @@ void showToast(String msg) {
 }
 
 //알림판 구성 및 항목 구성
-Widget notice(String content) {
+Widget notice(String content, Function function) {
   return Row(
     children: [
       Expanded(flex: 1, child: Text(content, style: textStyle15)),
       IconButton(
-          onPressed: () {
-
-          },
+          onPressed: () { function(content); },
           icon: const Icon(Icons.cancel, color: coffeeBrown))
     ],
   );
 }
 
-Widget noticeScroll(List<String> notices) {
+Widget noticeScroll(List<String> notices, Function function) {
   return ListView.builder(
     padding: EdgeInsets.zero,
     itemCount: notices.length,
     itemBuilder: (BuildContext context, int position) {
-      return notice(notices[position]);
+      return notice(notices[position], function);
     },
   );
 }
