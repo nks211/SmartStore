@@ -84,7 +84,18 @@ class MenuDetailFragment : BaseFragment<FragmentMenuDetailBinding>(FragmentMenuD
         activityViewModel.productInfo.observe(viewLifecycleOwner) {
             Log.d(TAG, "registerObserver: $it")
             // comment 가 없을 경우 -> 들어온 response가 1개이고 해당 userId 가 null일 경우 빈 배열 Adapter 연결
+
+
             commentAdapter.submitList(it)
+            if(it[0].productCommentTotalCnt>0){
+                binding.recyclerScroll.visibility = View.VISIBLE
+                binding.substituteText.visibility = View.GONE
+
+            }
+            else{
+                binding.recyclerScroll.visibility = View.GONE
+                binding.substituteText.visibility = View.VISIBLE
+            }
             // 화면 정보 갱신
             setScreen(it[0])
         }

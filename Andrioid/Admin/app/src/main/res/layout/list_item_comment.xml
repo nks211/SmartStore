@@ -18,7 +18,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:textSize="15dp"
+            android:textSize="23sp"
             android:layout_weight="1"
             tools:text="댓글 입니다."
             style="@style/Text.Regular"/>
@@ -36,8 +36,8 @@
 
         <ImageView
             android:id="@+id/iv_reply_open"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
             android:layout_marginEnd="5dp"
             android:background="@drawable/button_regular"
             app:backgroundTint="@null"
@@ -46,8 +46,8 @@
 
         <ImageView
             android:id="@+id/iv_reply_close"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
             android:layout_marginEnd="5dp"
             android:background="@drawable/button_regular"
             app:backgroundTint="@null"
@@ -78,8 +78,8 @@
 
         <ImageView
             android:id="@+id/iv_modify_comment"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
             android:layout_marginRight="5dp"
             android:background="@drawable/button_regular"
             app:backgroundTint="@null"
@@ -87,8 +87,8 @@
 
         <ImageView
             android:id="@+id/iv_delete_comment"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
             android:background="@drawable/button_regular"
             app:backgroundTint="@null"
             app:srcCompat="@android:drawable/ic_menu_close_clear_cancel" />
@@ -111,7 +111,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:textSize="15dp"
+            android:textSize="23sp"
             android:layout_weight="1"
             tools:text="댓글 입니다."
             style="@style/Text.Regular"/>
@@ -121,17 +121,17 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:textSize="15sp"
-            tools:text="댓글 입니다."
+            android:textSize="23sp"
             android:visibility="gone"
             tools:visibility="visible"
+            android:hint="답글을 입력해 주세요"
             android:layout_weight="1"
             style="@style/Text.Regular"/>
 
         <ImageView
             android:id="@+id/iv_modify_accept_re_comment"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
             android:layout_marginEnd="5dp"
             android:background="@drawable/button_regular"
             app:backgroundTint="@null"
@@ -141,8 +141,8 @@
 
         <ImageView
             android:id="@+id/iv_modify_cancel_re_comment"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
             android:layout_marginEnd="5dp"
             android:background="@drawable/button_regular"
             app:backgroundTint="@null"
@@ -152,8 +152,8 @@
 
         <ImageView
             android:id="@+id/iv_modify_re_comment"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
             android:layout_marginRight="5dp"
             android:background="@drawable/button_regular"
             app:backgroundTint="@null"
@@ -161,8 +161,8 @@
 
         <ImageView
             android:id="@+id/iv_delete_re_comment"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
             android:background="@drawable/button_regular"
             app:backgroundTint="@null"
             app:srcCompat="@android:drawable/ic_menu_close_clear_cancel" />

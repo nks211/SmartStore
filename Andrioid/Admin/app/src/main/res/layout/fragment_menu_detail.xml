@@ -141,12 +141,23 @@
             style="@style/Text.Title"/>
     </LinearLayout>
 
+    <TextView
+        android:id="@+id/substitute_text"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:text="아직 댓글이 없습니다"
+        android:textSize="30sp"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:visibility="gone"
+        />
 
     <ScrollView
+        android:id="@+id/recycler_scroll"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight="1">
-
+        android:layout_weight="1"
+        >
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerViewMenuDetail"
             android:layout_width="match_parent"

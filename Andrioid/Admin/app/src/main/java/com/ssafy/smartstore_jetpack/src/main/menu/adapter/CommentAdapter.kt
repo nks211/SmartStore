@@ -1,9 +1,11 @@
 package com.ssafy.smartstore_jetpack.src.main.menu.adapter
 
 import android.graphics.Color
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -17,6 +19,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 
+private const val TAG = "CommentAdapter_싸피"
 class CommentAdapter : ListAdapter<MenuDetailWithCommentResponse, CommentAdapter.CommentHolder>(CommentComparator){
 
     companion object CommentComparator:DiffUtil.ItemCallback<MenuDetailWithCommentResponse>(){
@@ -46,16 +49,12 @@ class CommentAdapter : ListAdapter<MenuDetailWithCommentResponse, CommentAdapter
             binding.ivDeleteComment.visibility = if(user.id!=item.userId) View.GONE else View.VISIBLE
 
             binding.ivReplyOpen.setOnClickListener {
-                onOpenReComment(true)
-                onReCommentWriting(false)
                 reComment = itemClickListener.onOpenReply(data.commentId)
-
+                onOpenReComment(true)
                 if(reComment==null){
-                    binding.tvReCommentContent.text = "답글을 입력해 주세요"
-                    binding.tvReCommentContent.setTextColor(Color.GRAY)
-                    binding.ivDeleteReComment.visibility = View.GONE
-
+                    onReCommentWriting(true)
                 }else{
+                    onReCommentWriting(false)
                     binding.tvReCommentContent.text = reComment!!.comment
                     binding.ivDeleteReComment.visibility = View.VISIBLE
                 }
@@ -89,31 +88,37 @@ class CommentAdapter : ListAdapter<MenuDetailWithCommentResponse, CommentAdapter
             }
 
             binding.ivModifyAcceptReComment.setOnClickListener {
-                if(reComment == null){
-                    itemClickListener.onSaveReply(ReComment(data.commentId, binding.etReCommentContent.text.toString()))
-                }else{
-                    itemClickListener.onUpdateReply(ReComment(reComment!!.id, reComment!!.commentId, binding.etReCommentContent.text.toString()))
-                }
                 reComment = itemClickListener.onOpenReply(data.commentId)
-                binding.tvReCommentContent.text = binding.etReCommentContent.text.toString()
-                afterReCommentSave()
+
+                if(binding.etReCommentContent.text.toString().isEmpty()){
+                    Toast.makeText(it.context, "내용을 입력해 주세요", Toast.LENGTH_SHORT).show()
+                }else{
+                    if(reComment == null){
+                        itemClickListener.onSaveReply(ReComment(data.commentId, binding.etReCommentContent.text.toString()))
+                    }else{
+                        itemClickListener.onUpdateReply(ReComment(reComment!!.id, reComment!!.commentId, binding.etReCommentContent.text.toString()))
+                    }
+                    binding.tvReCommentContent.text = binding.etReCommentContent.text.toString()
+                    afterReCommentSave()
+                }
             }
 
             binding.ivModifyCancelReComment.setOnClickListener {
-                onReCommentWriting(false)
+                reComment = itemClickListener.onOpenReply(data.commentId)
                 if(reComment==null){
-                    binding.ivDeleteReComment.visibility = View.GONE
+                    onReCommentWriting(true)
+                    binding.etReCommentContent.text.clear()
+                }else{
+                    onReCommentWriting(false)
                 }
             }
 
             binding.ivDeleteReComment.setOnClickListener {
                 reComment = itemClickListener.onOpenReply(data.commentId)
                 itemClickListener.onDeleteReply(reComment!!.id)
-                binding.tvReCommentContent.text = "답글을 입력해 주세요"
-                binding.tvReCommentContent.setTextColor(Color.GRAY)
-                onReCommentWriting(false)
+                onReCommentWriting(true)
+                binding.etReCommentContent.text.clear()
                 binding.ivDeleteReComment.visibility = View.GONE
-                reComment = null
             }
         }
 

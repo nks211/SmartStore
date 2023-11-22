@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.ssafy.smartstore_jetpack.R
 
 
-class NoticeAdapter :RecyclerView.Adapter<NoticeAdapter.NoticeHolder>(){
+class NoticeAdapter:RecyclerView.Adapter<NoticeAdapter.NoticeHolder>(){
 
     inner class NoticeHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
 

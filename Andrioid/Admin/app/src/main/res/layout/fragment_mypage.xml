@@ -103,7 +103,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="주문내역"
+        android:text="주문 완료 내역"
         android:textSize="25dp"
         style="@style/Text.Title"
         android:layout_marginBottom="20dp"/>
@@ -111,13 +111,19 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerViewOrder"
         android:layout_width="match_parent"
-        android:layout_height="250dp" />
+        android:layout_height="350dp"
+        android:layout_gravity="center"
+        />
+
 
     <Button
         android:id="@+id/user_info_update"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="50dp"
         android:text="회원 정보 수정"
         />
+
 
 </LinearLayout>
