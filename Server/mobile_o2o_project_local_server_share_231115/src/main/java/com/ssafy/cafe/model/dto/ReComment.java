@@ -3,14 +3,15 @@ package com.ssafy.cafe.model.dto;
 public class ReComment {
 	private Integer id;
 	private Integer commentId;
+	private Integer productId;
 	private String comment;
 	
 	public ReComment() {
 		
 	}
 	
-	public ReComment(Integer commentId, String comment) {
-		this.commentId = commentId;
+	public ReComment(Integer productId, String comment) {
+		this.productId = productId;
 		this.comment = comment;
 	}
 	
@@ -26,6 +27,15 @@ public class ReComment {
 	public void setCommentId(Integer commentId) {
 		this.commentId = commentId;
 	}
+	
+	public Integer getProductId() {
+		return productId;
+	}
+
+	public void setProductId(Integer productId) {
+		this.productId = productId;
+	}
+	
 	public String getComment() {
 		return comment;
 	}

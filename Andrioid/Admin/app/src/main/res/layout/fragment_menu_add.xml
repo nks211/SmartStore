@@ -11,7 +11,7 @@
         android:paddingHorizontal="20dp"
         android:paddingTop="20dp"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:layout_weight="1"
         >
 
@@ -20,7 +20,6 @@
             android:layout_height="0dp"
             android:orientation="vertical"
             android:scrollbars="vertical"
-            android:layout_weight="1"
             >
 
             <androidx.cardview.widget.CardView

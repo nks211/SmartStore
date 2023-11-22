@@ -141,6 +141,7 @@
             style="@style/Text.Title"/>
     </LinearLayout>
 
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -153,7 +154,6 @@
             android:layout_marginHorizontal="5dp"
             />
     </ScrollView>
-
 
     <Button
         android:id="@+id/btnAddList"

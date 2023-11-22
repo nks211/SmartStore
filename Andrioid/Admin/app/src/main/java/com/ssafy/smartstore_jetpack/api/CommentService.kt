@@ -17,10 +17,16 @@ interface CommentService {
     @DELETE("rest/comment/{id}")
     suspend fun delete(@Path("id") id: Int): Boolean
 
-    @GET("rest/comment/reComment/{c_id}")
-    suspend fun getReComment(@Path("c_id") c_id: Int): ReComment
+    @GET("rest/comment/reComment/{p_id}")
+    suspend fun getReComment(@Path("p_id") p_id: Int): List<ReComment>
 
     @POST("rest/comment/reComment")
     suspend fun insertReComment(@Body reComment: ReComment): Boolean
+
+    @PUT("rest/comment/reComment")
+    suspend fun updateReComment(@Body reComment: ReComment): Boolean
+
+    @DELETE("rest/comment/reComment/{id}")
+    suspend fun deleteReComment(@Path("id") id: Int): Boolean
 
 }

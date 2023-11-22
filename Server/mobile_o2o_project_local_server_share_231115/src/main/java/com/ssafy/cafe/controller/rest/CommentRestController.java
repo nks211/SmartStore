@@ -1,6 +1,7 @@
 package com.ssafy.cafe.controller.rest;
 
 import java.io.IOException;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
@@ -67,12 +68,28 @@ public class CommentRestController {
     	return true;
     }
     
-    @GetMapping("/reComment/{comment_id}")
+    @GetMapping("/reComment/{product_id}")
     @Transactional
-    @ApiOperation(value = "{comment_id}에 해당하는 댓글의 답글을 불러온다", response = ReComment.class)
-    public ReComment getComment(@PathVariable Integer comment_id) {
-    	return cService.getReComment(comment_id);
+    @ApiOperation(value = "{product_id}에 해당하는 댓글의 답글들을 불러온다", response = List.class)
+    public List<ReComment> getComment(@PathVariable Integer product_id) {
+    	return cService.getReComment(product_id);
    	
+    }
+    
+    @PutMapping("/reComment")
+    @Transactional
+    @ApiOperation(value="reComment 객체를 수정한다. 성공하면 true를 리턴한다. ", response = Boolean.class)
+    public Boolean updateReComment(@RequestBody ReComment recomment ) {
+        cService.updateReComment(recomment);
+        return true;
+    }
+    
+    @DeleteMapping("/reComment/{id}")
+    @Transactional
+    @ApiOperation(value="{id}에 해당하는 답글을 삭제한다. 성공하면 true를 리턴한다. ", response = Boolean.class)
+    public Boolean deleteReComment(@PathVariable Integer id) {
+        cService.removeReComment(id);
+        return true;
     }
     
 

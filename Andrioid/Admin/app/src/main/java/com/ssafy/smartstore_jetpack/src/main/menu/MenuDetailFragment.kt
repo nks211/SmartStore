@@ -26,7 +26,9 @@ import com.ssafy.smartstore_jetpack.src.main.menu.adapter.CommentAdapter
 import com.ssafy.smartstore_jetpack.src.main.menu.models.MenuDetailWithCommentResponse
 import com.ssafy.smartstore_jetpack.util.CommonUtils
 import com.ssafy.smartstore_jetpack.util.RetrofitUtil
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import kotlin.math.round
 
 //메뉴 상세 화면 . Order탭 - 특정 메뉴 선택시 열림
@@ -67,6 +69,7 @@ class MenuDetailFragment : BaseFragment<FragmentMenuDetailBinding>(FragmentMenuD
 
         registerObserver()
         activityViewModel.getProductInfo(activityViewModel.productId.value!!)
+        activityViewModel.setProductReComment(activityViewModel.productId.value!!)
 
         initListener()
 
@@ -85,6 +88,7 @@ class MenuDetailFragment : BaseFragment<FragmentMenuDetailBinding>(FragmentMenuD
             // 화면 정보 갱신
             setScreen(it[0])
         }
+
     }
 
     // 초기 화면 설정
@@ -152,20 +156,37 @@ class MenuDetailFragment : BaseFragment<FragmentMenuDetailBinding>(FragmentMenuD
                 }
             }
 
-            override suspend fun onOpenReply(id: Int): ReComment {
-                return RetrofitUtil.commentService.getReComment(id)
+            override fun onOpenReply(id: Int): ReComment? {
+                var res = activityViewModel.productReComment.value!!.filter {
+                    it.commentId == id
+                }
+                return if(res.isEmpty()) null else res[0]
             }
 
             override fun onSaveReply(reComment: ReComment) {
                 lifecycleScope.launch{
-                    RetrofitUtil.commentService.insertReComment(reComment)
+                    val bool = RetrofitUtil.commentService.insertReComment(reComment.apply {
+                        productId = activityViewModel.productId.value!!
+                    })
+                    if(bool) activityViewModel.setProductReComment(activityViewModel.productId.value!!)
                 }
             }
 
             override fun onUpdateReply(reComment: ReComment) {
+                lifecycleScope.launch{
+                    val bool = RetrofitUtil.commentService.updateReComment(reComment.apply {
+                        productId = activityViewModel.productId.value!!
+                    })
+                    if(bool) activityViewModel.setProductReComment(activityViewModel.productId.value!!)
+                }
             }
 
             override fun onDeleteReply(id: Int) {
+                lifecycleScope.launch{
+                    val bool = RetrofitUtil.commentService.deleteReComment(id)
+                    if(bool) activityViewModel.setProductReComment(activityViewModel.productId.value!!)
+                }
+
             }
         })
     }
@@ -206,6 +227,4 @@ class MenuDetailFragment : BaseFragment<FragmentMenuDetailBinding>(FragmentMenuD
             binding.etComment.setText("")
         }
     }
-
-
 }

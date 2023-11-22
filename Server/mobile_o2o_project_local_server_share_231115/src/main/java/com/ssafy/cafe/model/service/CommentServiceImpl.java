@@ -55,10 +55,22 @@ public class CommentServiceImpl implements CommentService {
 	}
 
 	@Override
-	public ReComment getReComment(Integer comment_id) {
-		ReComment rcmt = cDao.selectReComment(comment_id);
-		if(rcmt!=null) return rcmt;
-		else return new ReComment(comment_id, "");
+	public List<ReComment> getReComment(Integer product_id) {
+//		List<ReComment> rcmt = cDao.selectReComment(product_id);
+//		if(rcmt!=null) return rcmt;
+//		else return new ReComment(product_id, "");
+		return cDao.selectReComment(product_id);
+	}
+
+	@Override
+	public void updateReComment(ReComment recomment) {
+		cDao.updateReComment(recomment);
+	}
+
+	@Override
+	public void removeReComment(Integer id) {
+		cDao.deleteReComment(id);
+		
 	}
 
 }

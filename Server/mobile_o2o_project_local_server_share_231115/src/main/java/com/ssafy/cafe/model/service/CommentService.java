@@ -38,7 +38,9 @@ public interface CommentService {
     List<Comment> selectByProduct(Integer productId);
     
     void addRecomment(ReComment recomment);
-    ReComment getReComment(Integer comment_id);
+    List<ReComment> getReComment(Integer product_id);
+    void updateReComment(ReComment recomment);
+    void removeReComment(Integer id);
     
     
 }

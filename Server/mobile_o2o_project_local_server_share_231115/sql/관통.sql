@@ -138,4 +138,7 @@ create table t_re_comment(
    constraint fk_comment_id foreign key(comment_id) references t_comment(id) on delete cascade
 );
 
+alter table t_re_comment add product_id integer not null;
+alter table t_re_comment add constraint fk_product_id foreign key(product_id) references t_product(id) on delete cascade;
+
 commit;

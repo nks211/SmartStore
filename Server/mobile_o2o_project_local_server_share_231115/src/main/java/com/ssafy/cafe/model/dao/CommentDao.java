@@ -19,6 +19,10 @@ public interface CommentDao {
     
     int insertReComment(ReComment recomment);
     
-    ReComment selectReComment(Integer commentId); 
+    List<ReComment> selectReComment(Integer commentId); 
+    
+    int updateReComment(ReComment recomment);
+    
+    int deleteReComment(Integer recommentid);
     
 }

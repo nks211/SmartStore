@@ -32,14 +32,28 @@
 	</select>
 	
 	<insert id="insertReComment" parameterType="ReComment">
-		INSERT INTO t_re_comment (comment_id, comment)
-		VALUES (#{commentId}, #{comment})
+		INSERT INTO t_re_comment (comment_id, product_id, comment)
+		VALUES (#{commentId}, #{productId}, #{comment})
 	</insert>
 	
 	<select id="selectReComment" parameterType="int" resultType="ReComment">
 		select * from t_re_comment
-		where comment_id = #{id}
+		where product_id = #{id}
 	</select>
+	
+	<update id="updateReComment" parameterType="ReComment">
+		UPDATE t_re_comment SET
+		id = #{id},
+		comment_id = #{commentId},
+		product_id =  #{productId},
+		comment = #{comment}
+		WHERE id = #{id}
+	</update>
+	
+	<delete id="deleteReComment" parameterType="int">
+		DELETE FROM t_re_comment
+		WHERE id = #{id}
+	</delete>
 	
 	
 </mapper>

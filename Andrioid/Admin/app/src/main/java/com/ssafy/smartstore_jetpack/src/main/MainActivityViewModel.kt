@@ -8,6 +8,7 @@ import androidx.lifecycle.viewModelScope
 import com.ssafy.smartstore_jetpack.dto.Order
 import com.ssafy.smartstore_jetpack.dto.OrderDetail
 import com.ssafy.smartstore_jetpack.dto.Product
+import com.ssafy.smartstore_jetpack.dto.ReComment
 import com.ssafy.smartstore_jetpack.src.main.menu.models.MenuDetailWithCommentResponse
 import com.ssafy.smartstore_jetpack.src.main.my.models.LatestOrderResponse
 import com.ssafy.smartstore_jetpack.util.CommonUtils
@@ -89,6 +90,22 @@ class MainActivityViewModel : ViewModel() {
             }
         }
     }
+
+    private val _productReComments = MutableLiveData<List<ReComment>>()
+    val productReComment : LiveData<List<ReComment>>
+        get() = _productReComments
+
+    fun setProductReComment(p_id: Int){
+        viewModelScope.launch {
+            try{
+                _productReComments.value = RetrofitUtil.commentService.getReComment(p_id)
+                Log.d(TAG, "setProductReComment: abc")
+            }catch (e: Exception){
+                _productReComments.value = arrayListOf()
+            }
+        }
+    }
+
 
     fun completeOrder(order: Order){
         viewModelScope.launch {
