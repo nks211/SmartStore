@@ -31,7 +31,7 @@ public class NoteServiceImpl implements NoteService {
 	}
 
 	@Override
-	public List<Note> selectAll(Integer id) {
+	public List<Note> selectAll(String id) {
 		return nDao.selectAll(id);
 	}
 

@@ -62,10 +62,10 @@ public class NoteRestController {
         return true;
     }   
     
-    @GetMapping
+    @GetMapping("/{id}")
     @Transactional
     @ApiOperation(value="{id}를 receiver로 갖는 노트를을 불러온다", response = List.class)
-    public List<Note> selectAll(@PathVariable Integer id) {
+    public List<Note> selectAll(@PathVariable String id) {
         return nService.selectAll(id);
     } 
 

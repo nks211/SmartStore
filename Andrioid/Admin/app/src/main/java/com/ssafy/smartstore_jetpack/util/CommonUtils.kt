@@ -2,6 +2,7 @@ package com.ssafy.smartstore_jetpack.util
 
 import android.util.Log
 import com.ssafy.smartstore_jetpack.config.ApplicationClass
+import com.ssafy.smartstore_jetpack.dto.Note
 import com.ssafy.smartstore_jetpack.dto.OrderDetail
 import com.ssafy.smartstore_jetpack.src.main.my.models.LatestOrderResponse
 import com.ssafy.smartstore_jetpack.src.main.my.models.OrderDetailResponse
@@ -77,4 +78,17 @@ object CommonUtils {
         }
         return list
     }
+//
+//    fun makeNoteDetail(lst: List<Note>): List<Note>{
+//        val list = arrayListOf<Note>()
+//        lst.forEach{
+//            if()
+//
+//            list.add(Note(
+//                it.id, it.title, it.content, it.orderTime, it.senderId, it.receiverId, it.isRead
+//            ))
+//        }
+//        return list
+//    }
+//
 }

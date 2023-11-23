@@ -86,8 +86,25 @@ class MainActivityViewModel : ViewModel() {
         viewModelScope.launch {
             try{
                 _notes.value = RetrofitUtil.noteService.selectAll(id)
+                Log.d(TAG, "getNotes: abcde")
             }catch (e: Exception){
+                Log.d(TAG, "getNotes: $e")
                 _notes.value = arrayListOf()
+            }
+            Log.d(TAG, "getNotes: ${_notes.value}")
+        }
+    }
+
+    private val _completedOrder = MutableLiveData<List<LatestOrderResponse>>()
+    val completedOrder : LiveData<List<LatestOrderResponse>>
+        get() = _completedOrder
+
+    fun setCompletedOrder(){
+        viewModelScope.launch {
+            try{
+                _completedOrder.value = CommonUtils.makeLatestOrderList(RetrofitUtil.orderService.getAllOrdersByResults("Y"))
+            }catch (e: Exception){
+                _completedOrder.value = arrayListOf()
             }
         }
     }
@@ -103,6 +120,7 @@ class MainActivityViewModel : ViewModel() {
             }catch(e: Exception){
                 _waitingOrders.value = arrayListOf()
             }
+            Log.d(TAG, "getNewOrder: $_waitingOrders")
         }
     }
 

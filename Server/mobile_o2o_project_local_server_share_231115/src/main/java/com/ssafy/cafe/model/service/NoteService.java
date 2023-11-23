@@ -11,7 +11,7 @@ public interface NoteService {
     
     void delete(Integer id);
     
-    List<Note> selectAll(Integer id);
+    List<Note> selectAll(String id);
     
     void readNote(Integer id);
     

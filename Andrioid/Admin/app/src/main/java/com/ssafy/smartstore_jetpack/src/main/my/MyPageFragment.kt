@@ -118,22 +118,28 @@ class MyPageFragment : BaseFragment<FragmentMypageBinding>(FragmentMypageBinding
                 Log.d(TAG, "onViewCreated: $userLastOrderData")
             }
         }else{
-            lifecycleScope.launch{
-                val completedOrderData = RetrofitUtil.orderService.getAllOrdersByResults("Y")
-                completedOrderAdapter = CompletedListAdapter()
-                completedOrderAdapter.setItemClickListener(object : CompletedListAdapter.ItemClickListener{
+
+            activityViewModel.setCompletedOrder()
+            completedOrderAdapter = CompletedListAdapter().apply{
+                submitList(activityViewModel.completedOrder.value)
+                setItemClickListener(object : CompletedListAdapter.ItemClickListener{
                     override fun onClick(view: View, position: Int, orderid: Int) {
                         activityViewModel.setOrderId(orderid)
                         Navigation.findNavController(view).navigate(R.id.orderDetailFragment)
                     }
-
                 })
-                completedOrderAdapter.submitList(CommonUtils.makeLatestOrderList(completedOrderData))
-                binding.recyclerViewOrder.apply {
-                    layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
-                    adapter = completedOrderAdapter
-                }
             }
+
+            binding.recyclerViewOrder.apply {
+                layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+                adapter = completedOrderAdapter
+            }
+
+
+            activityViewModel.completedOrder.observe(viewLifecycleOwner){
+                completedOrderAdapter.submitList(it)
+            }
+
         }
         binding.userInfoUpdate.setOnClickListener {
             val dlg = AlertDialog.Builder(requireContext())

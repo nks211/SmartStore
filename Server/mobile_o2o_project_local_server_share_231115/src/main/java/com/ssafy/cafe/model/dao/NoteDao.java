@@ -12,7 +12,7 @@ public interface NoteDao {
 	
 	Note select(Integer id);
 	
-	List<Note> selectAll(Integer id);
+	List<Note> selectAll(String id);
 	
 	int readNote(Integer id);
 	

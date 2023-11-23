@@ -6,7 +6,7 @@ public class Note {
 	private Integer id;
 	private String title;
 	private String content;
-	private Date date;
+	private Date orderTime;
 	
 	public Note() {}
 	
@@ -58,11 +58,11 @@ public class Note {
 	public void setContent(String content) {
 		this.content = content;
 	}
-	public Date getDate() {
-		return date;
+	public Date getOrderTime() {
+		return orderTime;
 	}
-	public void setDate(Date date) {
-		this.date = date;
+	public void setOrderTime(Date orderTime) {
+		this.orderTime = orderTime;
 	}
 	
 }

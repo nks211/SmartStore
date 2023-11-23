@@ -3,12 +3,14 @@ package com.ssafy.smartstore_jetpack.src.main.home.adapter
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.ssafy.smartstore_jetpack.R
 import com.ssafy.smartstore_jetpack.databinding.ListItemNoticeBinding
 import com.ssafy.smartstore_jetpack.dto.Note
+import com.ssafy.smartstore_jetpack.src.main.MainActivityViewModel
 
 
 class NoticeAdapter:ListAdapter<Note, NoticeAdapter.NoticeHolder>(NoteComparator){
@@ -25,6 +27,9 @@ class NoticeAdapter:ListAdapter<Note, NoticeAdapter.NoticeHolder>(NoteComparator
 
     inner class NoticeHolder(val binding: ListItemNoticeBinding) : RecyclerView.ViewHolder(binding.root){
         fun bindInfo(data: Note){
+            if(data.title=="orderNote" || data.title == "ordernote"){
+
+            }
             binding.textNoticeContent.text = data.content
         }
     }
