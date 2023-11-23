@@ -150,4 +150,7 @@ create table t_note(
 
 alter table t_user add fcm_token varchar(255) not null;
 
+alter table t_note add sender_id varchar(100) not null;
+alter table t_note add receiver_id varchar(100) not null;
+
 commit;

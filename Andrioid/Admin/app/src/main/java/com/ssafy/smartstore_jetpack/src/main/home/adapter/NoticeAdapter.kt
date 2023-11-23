@@ -11,6 +11,7 @@ import com.ssafy.smartstore_jetpack.R
 import com.ssafy.smartstore_jetpack.databinding.ListItemNoticeBinding
 import com.ssafy.smartstore_jetpack.dto.Note
 import com.ssafy.smartstore_jetpack.src.main.MainActivityViewModel
+import com.ssafy.smartstore_jetpack.util.RetrofitUtil
 
 
 class NoticeAdapter:ListAdapter<Note, NoticeAdapter.NoticeHolder>(NoteComparator){
@@ -28,9 +29,11 @@ class NoticeAdapter:ListAdapter<Note, NoticeAdapter.NoticeHolder>(NoteComparator
     inner class NoticeHolder(val binding: ListItemNoticeBinding) : RecyclerView.ViewHolder(binding.root){
         fun bindInfo(data: Note){
             if(data.title=="orderNote" || data.title == "ordernote"){
-
+                binding.textNoticeContent.text = "${data.content}번 주문이 들어왔습니다."
             }
-            binding.textNoticeContent.text = data.content
+            binding.delete.setOnClickListener {
+                itemClickListener.onDeleteClick(data.id)
+            }
         }
     }
 
@@ -40,6 +43,16 @@ class NoticeAdapter:ListAdapter<Note, NoticeAdapter.NoticeHolder>(NoteComparator
     }
     override fun onBindViewHolder(holder: NoticeHolder, position: Int) {
         holder.bindInfo(getItem(position))
+    }
+
+    interface ItemClickListener{
+        fun onDeleteClick(id: Int)
+    }
+
+    private lateinit var itemClickListener: ItemClickListener
+
+    fun setItemClickListener(listener: ItemClickListener){
+        itemClickListener = listener
     }
 }
 

@@ -16,6 +16,7 @@
         style="@style/Text.Regular"/>
 
     <ImageView
+        android:id="@+id/delete"
         android:layout_width="20dp"
         android:layout_height="20dp"
         android:background="@drawable/button_regular"

@@ -29,10 +29,10 @@ public class Note {
 	public void setReceiverId(String receiverId) {
 		this.receiverId = receiverId;
 	}
-	public boolean isRead() {
+	public boolean getIsRead() {
 		return isRead;
 	}
-	public void setRead(boolean isRead) {
+	public void setIsRead(boolean isRead) {
 		this.isRead = isRead;
 	}
 	private String senderId;

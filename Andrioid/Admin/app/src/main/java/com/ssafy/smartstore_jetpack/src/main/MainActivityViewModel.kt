@@ -86,12 +86,9 @@ class MainActivityViewModel : ViewModel() {
         viewModelScope.launch {
             try{
                 _notes.value = RetrofitUtil.noteService.selectAll(id)
-                Log.d(TAG, "getNotes: abcde")
             }catch (e: Exception){
-                Log.d(TAG, "getNotes: $e")
                 _notes.value = arrayListOf()
             }
-            Log.d(TAG, "getNotes: ${_notes.value}")
         }
     }
 
@@ -120,7 +117,6 @@ class MainActivityViewModel : ViewModel() {
             }catch(e: Exception){
                 _waitingOrders.value = arrayListOf()
             }
-            Log.d(TAG, "getNewOrder: $_waitingOrders")
         }
     }
 
@@ -132,7 +128,6 @@ class MainActivityViewModel : ViewModel() {
         viewModelScope.launch {
             try{
                 _productReComments.value = RetrofitUtil.commentService.getReComment(p_id)
-                Log.d(TAG, "setProductReComment: abc")
             }catch (e: Exception){
                 _productReComments.value = arrayListOf()
             }
@@ -145,7 +140,6 @@ class MainActivityViewModel : ViewModel() {
             try{
                 RetrofitUtil.orderService.completeOrder(order)
             }catch (e: Exception){
-                Log.d(TAG, "completeOrder: $e")
             }
         }
     }

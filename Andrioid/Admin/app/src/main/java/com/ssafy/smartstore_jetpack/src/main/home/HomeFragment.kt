@@ -6,6 +6,7 @@ import android.util.Log
 import android.view.View
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavOptions
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -23,6 +24,9 @@ import com.ssafy.smartstore_jetpack.util.CommonUtils
 import com.ssafy.smartstore_jetpack.util.FirebaseMessagingService
 import com.ssafy.smartstore_jetpack.util.RetrofitUtil
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 // Home 탭
 private const val TAG = "HomeFragment_싸피"
@@ -71,6 +75,14 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::bind
     private fun initAdapter() {
         noticeAdapter = NoticeAdapter().apply {
             submitList(listOf())
+            setItemClickListener(object : NoticeAdapter.ItemClickListener{
+                override fun onDeleteClick(nId: Int) {
+                    lifecycleScope.launch{
+                        val bool = RetrofitUtil.noteService.delete(nId)
+                        if(bool) mainActivityViewModel.getNotes(id)
+                    }
+                }
+            })
         }
         binding.recyclerViewNoticeOrder.apply {
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
@@ -81,7 +93,6 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::bind
             submitList(CommonUtils.makeLatestOrderList(listOf()))
             setItemClickListener(object : LatestOrderAdapter.ItemClickListener{
                 override fun onClick(view: View, position: Int) {
-
                     val action = HomeFragmentDirections.actionHomeFragmentToOrderedListFragment(mainActivityViewModel.waitingOrders.value!![position].orderId)
                     Navigation.findNavController(view).navigate(action)
                 }
@@ -119,7 +130,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::bind
                 latestOrderAdapter.submitList(it)
             }
             mainActivityViewModel.notes.observe(viewLifecycleOwner){
-                noticeAdapter.submitList(it.sortedWith{  o1, o2 -> o1.orderTime.compareTo(o2.orderTime) })
+                noticeAdapter.submitList(it.sortedWith{  o1, o2 -> o2.orderTime.compareTo(o1.orderTime) })
             }
         }
 

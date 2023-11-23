@@ -40,10 +40,10 @@ public class FCMService {
 	}
 	
 //	public void sendMessageTo(String targetToken, String title, String body) throws IOException{
-	public void sendMessageTo(String title, String body) throws IOException{	
+	public void sendMessageTo(String title, String body, String token) throws IOException{	
 
 //		String message = makeMessage(targetToken, title, body);
-		String message = makeMessage(app_token, title, body);
+		String message = makeMessage(token, title, body);
 		OkHttpClient client = new OkHttpClient();
 		RequestBody requestBody = RequestBody.create(message, MediaType.get("application/json; charset=utf-8"));
 		Request request = new Request.Builder()
