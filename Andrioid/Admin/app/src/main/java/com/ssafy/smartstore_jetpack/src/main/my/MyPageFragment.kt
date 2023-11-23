@@ -5,10 +5,13 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.text.InputType
+import android.text.method.PasswordTransformationMethod
 import android.util.JsonReader
 import android.util.Log
 import android.view.View
 import android.widget.EditText
+import android.widget.TextView
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.Navigation
@@ -144,6 +147,7 @@ class MyPageFragment : BaseFragment<FragmentMypageBinding>(FragmentMypageBinding
         binding.userInfoUpdate.setOnClickListener {
             val dlg = AlertDialog.Builder(requireContext())
             val editText = EditText(requireContext())
+            editText.transformationMethod = PasswordTransformationMethod.getInstance()
             dlg.setTitle("비밀번호를 입력해주세요")
             dlg.setView(editText)
             dlg.setPositiveButton("확인") { _, _ ->

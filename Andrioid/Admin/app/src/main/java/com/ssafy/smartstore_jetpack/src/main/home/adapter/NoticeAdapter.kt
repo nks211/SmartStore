@@ -1,18 +1,12 @@
 package com.ssafy.smartstore_jetpack.src.main.home.adapter
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.ssafy.smartstore_jetpack.R
 import com.ssafy.smartstore_jetpack.databinding.ListItemNoticeBinding
 import com.ssafy.smartstore_jetpack.dto.Note
-import com.ssafy.smartstore_jetpack.src.main.MainActivityViewModel
-import com.ssafy.smartstore_jetpack.util.RetrofitUtil
-
 
 class NoticeAdapter:ListAdapter<Note, NoticeAdapter.NoticeHolder>(NoteComparator){
 
@@ -30,6 +24,11 @@ class NoticeAdapter:ListAdapter<Note, NoticeAdapter.NoticeHolder>(NoteComparator
         fun bindInfo(data: Note){
             if(data.title=="orderNote" || data.title == "ordernote"){
                 binding.textNoticeContent.text = "${data.content}번 주문이 들어왔습니다."
+            }else{
+                binding.textNoticeContent.text = data.title
+                binding.root.setOnClickListener {
+                    itemClickListener.onTitleClick(data)
+                }
             }
             binding.delete.setOnClickListener {
                 itemClickListener.onDeleteClick(data.id)
@@ -46,6 +45,7 @@ class NoticeAdapter:ListAdapter<Note, NoticeAdapter.NoticeHolder>(NoteComparator
     }
 
     interface ItemClickListener{
+        fun onTitleClick(data: Note)
         fun onDeleteClick(id: Int)
     }
 

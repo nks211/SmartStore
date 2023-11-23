@@ -22,6 +22,7 @@ class FirebaseMessagingService : FirebaseMessagingService() {
 
     interface OnMessageReceivedListener{
         fun onMessageReceived()
+        fun onNotiReceived()
     }
 
     companion object{
@@ -44,6 +45,7 @@ class FirebaseMessagingService : FirebaseMessagingService() {
             PendingIntent.FLAG_IMMUTABLE
         )
         val builder = NotificationCompat.Builder(this, channel_id)
+            .setSmallIcon(android.R.drawable.ic_dialog_info)
             .setContentTitle(title)
             .setContentText(content)
             .setAutoCancel(true)
@@ -60,6 +62,7 @@ class FirebaseMessagingService : FirebaseMessagingService() {
             val title = message.notification!!.title.toString()
             val content = message.notification!!.body.toString()
             makeNotification(title, content)
+            messageReceivedListener.onNotiReceived()
         }else{
             message.data.let {
                 val title = it["title"]

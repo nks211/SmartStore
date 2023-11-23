@@ -40,7 +40,7 @@ const TextStyle textOrder = TextStyle(
     fontFamily: 'eland_choice_b', fontSize: 20, color: coffeeDarkBrown);
 
 //http통신 주소값
-const BaseUrl = "http://192.168.0.11:9987/";
+const BaseUrl = "http://192.168.240.230:9987/";
 
 //서버 내 이미지 저장 경로값. (ex. C:\Temp\imgs\menu)
 const imagepath = "imgs/menu/";

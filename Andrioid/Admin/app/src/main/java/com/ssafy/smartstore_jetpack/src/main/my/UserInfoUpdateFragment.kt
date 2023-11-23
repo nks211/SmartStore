@@ -19,8 +19,6 @@ import com.ssafy.smartstore_jetpack.util.RetrofitUtil
 import kotlinx.coroutines.launch
 
 class UserInfoUpdateFragment: BaseFragment<FragmentUserInfoUpdateBinding>(FragmentUserInfoUpdateBinding::bind, R.layout.fragment_user_info_update) {
-    private val activityViewModel: MainActivityViewModel by activityViewModels()
-
     private lateinit var mainActivity: MainActivity
 
     override fun onAttach(context: Context) {
@@ -37,15 +35,16 @@ class UserInfoUpdateFragment: BaseFragment<FragmentUserInfoUpdateBinding>(Fragme
         super.onViewCreated(view, savedInstanceState)
 
         val id = ApplicationClass.sharedPreferencesUtil.getUser().id
-        binding.editTextJoinID.setText(id)
+        binding.editTextJoinID.text = id
         binding.editTextJoinName.setText(ApplicationClass.sharedPreferencesUtil.getUser().name)
 
 
         binding.btnJoin.setOnClickListener {
             val password = binding.editTextJoinPW.text.toString()
+            val repeat = binding.editTextJoinPWConfirm.text.toString()
             val nickname = binding.editTextJoinName.text.toString()
 
-            if (password != "" && nickname != "") {
+            if (password != "" && (repeat == password) && nickname != "" ) {
                 lifecycleScope.launch {
                     val user = User(id, password, nickname)
                     RetrofitUtil.userService.update(user)
@@ -59,8 +58,10 @@ class UserInfoUpdateFragment: BaseFragment<FragmentUserInfoUpdateBinding>(Fragme
             }
 
             else{
-                if (password != "") {
+                if (password == "") {
                     showToast("비밀번호를 입력하세요.")
+                }else if(password != repeat){
+                    showToast("확인용 비밀번호가 같지 않습니다")
                 }
                 if (nickname == "") {
                     showToast("닉네임을 입력하세요.")

@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:padding="20dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginBottom="10dp"
+                >
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="30sp"
+                    style="@style/Text.Regular"
+                    android:textStyle="bold"
+                    android:text="제목 "/>
+                <TextView
+                    android:id="@+id/note_title"
+                    android:layout_weight="1"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:textSize="27sp"
+                    style="@style/Text.Regular"
+                    tools:text="안녕하세요"
+                    />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginBottom="10dp"
+                >
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="20sp"
+                    style="@style/Text.Regular"
+                    android:text="보낸 사람 "
+                    android:textStyle="bold"
+                    />
+                <TextView
+                    android:id="@+id/note_sender"
+                    android:layout_weight="1"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:textSize="18sp"
+                    tools:text="00000000"
+                    />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginBottom="20dp"
+                >
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="20sp"
+                    style="@style/Text.Regular"
+                    android:text="보낸 시간 "
+                    android:textStyle="bold"
+                    />
+                <TextView
+                    android:id="@+id/note_date"
+                    android:layout_weight="1"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:textSize="18sp"
+                    tools:text="00000000"
+                    />
+            </LinearLayout>
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="25sp"
+                style="@style/Text.Regular"
+                android:text="내용"
+                android:textStyle="bold"
+                />
+            <TextView
+                android:id="@+id/note_content"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:textSize="23sp"
+                android:layout_weight="1"
+                tools:text="a\nb\nc\nd"
+                />
+
+          <LinearLayout
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content">
+              <Button
+                  android:id="@+id/confirm"
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:text="확인"
+                  android:layout_marginEnd="20dp"
+                  />
+              <Button
+                  android:id="@+id/delete"
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:text="삭제"
+                  />
+          </LinearLayout>
+
+
+</LinearLayout>

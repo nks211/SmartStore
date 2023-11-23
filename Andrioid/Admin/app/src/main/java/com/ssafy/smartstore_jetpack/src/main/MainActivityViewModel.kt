@@ -44,6 +44,14 @@ class MainActivityViewModel : ViewModel() {
         _productId.value = productId
     }
 
+    private val _selectedNote = MutableLiveData<Note>()
+    val selectedNote: LiveData<Note>
+        get() = _selectedNote
+
+    fun selectNote(note: Note){
+        _selectedNote.value = note
+    }
+
     private val _productSalable = MutableLiveData<Boolean>()
     val productSalable: LiveData<Boolean>
         get() = _productSalable

@@ -1,5 +1,6 @@
 package com.ssafy.smartstore_jetpack.src.main.home
 
+import android.app.AlertDialog
 import android.content.Context
 import android.os.Bundle
 import android.util.Log
@@ -76,6 +77,11 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::bind
         noticeAdapter = NoticeAdapter().apply {
             submitList(listOf())
             setItemClickListener(object : NoticeAdapter.ItemClickListener{
+                override fun onTitleClick(data: Note) {
+                    mainActivityViewModel.selectNote(data)
+                    Navigation.findNavController(requireView()).navigate(R.id.noteFragment)
+                }
+
                 override fun onDeleteClick(nId: Int) {
                     lifecycleScope.launch{
                         val bool = RetrofitUtil.noteService.delete(nId)
@@ -116,6 +122,9 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::bind
                     mainActivityViewModel.getNewOrder()
                     mainActivityViewModel.getNotes(id)
                 }
+            }
+            override fun onNotiReceived() {
+                mainActivityViewModel.getNotes(id)
             }
         }
 

@@ -41,12 +41,7 @@ class MenuFragment : BaseFragment<FragmentOrderBinding>(FragmentOrderBinding::bi
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        Log.d(TAG, "onViewCreated: aa")
-
         val items = resources.getStringArray(R.array.menu_state)
-
-//        val spinnerAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_dropdown_item, items)
 
         val spinnerAdapter = ArrayAdapter(requireContext(), R.layout.dropdown_item, items)
         binding.stateSelect.adapter = spinnerAdapter
@@ -94,7 +89,6 @@ class MenuFragment : BaseFragment<FragmentOrderBinding>(FragmentOrderBinding::bi
     private fun initData(){
         lifecycleScope.launch{
             RetrofitUtil.productService.getProductList().let {
-                Log.d(TAG, "onSuccess: ${it}")
                 activityViewModel.setMenus(it)
                 menuAdapter.submitList(it)
                 menuAdapter.setItemClickListener(object : MenuAdapter.ItemClickListener{
