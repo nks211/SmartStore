@@ -45,7 +45,7 @@ class LatestOrderAdapter: ListAdapter<LatestOrderResponse, LatestOrderAdapter.La
             }else{
                 binding.textMenuNames.text = data.productName
             }
-
+            binding.orderId.text = "${data.orderId}번 주문"
             binding.textMenuPrice.text = CommonUtils.makeComma(data.totalPrice)
             binding.textMenuDate.text = CommonUtils.getFormattedString(data.orderDate)
         }
