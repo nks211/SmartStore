@@ -3,6 +3,8 @@ package com.ssafy.cafe.controller.rest;
 import java.io.IOException;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -18,6 +20,8 @@ import com.ssafy.cafe.model.dto.Comment;
 import com.ssafy.cafe.model.dto.ReComment;
 import com.ssafy.cafe.model.service.CommentService;
 import com.ssafy.cafe.model.service.FCMService;
+import com.ssafy.cafe.model.service.FCMServiceClient;
+import com.ssafy.cafe.model.service.UserService;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -27,11 +31,18 @@ import io.swagger.annotations.ApiOperation;
 @CrossOrigin("*")
 public class CommentRestController {
 
+	
+	private static final Logger log = LoggerFactory.getLogger(CommentRestController.class);
+
+	
     @Autowired
     CommentService cService;
     
     @Autowired
-    private FCMService fService;
+    UserService uService;
+    
+    @Autowired
+    private FCMServiceClient fService;
     
     @PostMapping
     @Transactional
@@ -63,8 +74,10 @@ public class CommentRestController {
     @PostMapping("/reComment")
     @Transactional
     @ApiOperation(value="body의 comment_id에 해당하는 댓글에 답글을 추가한다", response = Boolean.class)
-    public Boolean insertReComment(@RequestBody ReComment recomment) {
+    public Boolean insertReComment(@RequestBody ReComment recomment) throws IOException {
     	cService.addRecomment(recomment);
+    	String fcmToken = cService.getFCMAddReComment(recomment);
+    	fService.sendMessageTo("SmartStore", "답글이 달렸습니다.", fcmToken);
     	return true;
     }
     

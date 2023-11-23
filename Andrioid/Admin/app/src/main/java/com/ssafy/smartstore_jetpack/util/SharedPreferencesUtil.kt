@@ -3,6 +3,9 @@ package com.ssafy.smartstore_jetpack.util
 import android.content.Context
 import android.content.SharedPreferences
 import com.ssafy.smartstore_jetpack.dto.User
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class SharedPreferencesUtil (context: Context) {
     val SHARED_PREFERENCES_NAME = "smartstore_preference"
@@ -32,10 +35,15 @@ class SharedPreferencesUtil (context: Context) {
     }
 
     fun deleteUser(){
-        //preference 지우기
-        val editor = preferences.edit()
-        editor.clear()
-        editor.apply()
+        CoroutineScope(Dispatchers.IO).launch {
+            val bool = RetrofitUtil.userService.logout(getUser())
+            if(bool){
+                //preference 지우기
+                val editor = preferences.edit()
+                editor.clear()
+                editor.apply()
+            }
+        }
     }
 
     fun addUserCookie(cookies: HashSet<String>) {

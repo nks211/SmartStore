@@ -46,5 +46,7 @@ public interface UserService {
      */
     public User selectUser(String id);
     
+    void updateFcmToken(User user);
+    
     
 }

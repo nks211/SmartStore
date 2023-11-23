@@ -62,5 +62,10 @@ public class UserServiceImpl implements UserService {
             return null;
         }
     }
+
+	@Override
+	public void updateFcmToken(User user) {
+		userDao.updateFcmToken(user);
+	}
     
 }

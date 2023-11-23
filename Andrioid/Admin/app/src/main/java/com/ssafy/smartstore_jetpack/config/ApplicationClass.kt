@@ -30,6 +30,8 @@ class ApplicationClass : Application() {
         lateinit var sharedPreferencesUtil: SharedPreferencesUtil
         lateinit var retrofit: Retrofit
 
+        var FCM_TOKEN = ""
+
         // 모든 퍼미션 관련 배열
         val requiredPermissions = arrayOf(
             Manifest.permission.ACCESS_FINE_LOCATION,
@@ -74,6 +76,7 @@ class ApplicationClass : Application() {
                 return@addOnCompleteListener
             }
             Log.d(TAG, "onCreate: 성공, ${it.result}")
+            FCM_TOKEN = it.result
         }
         createNotificationChannel(channel_id, "ssafy")
 

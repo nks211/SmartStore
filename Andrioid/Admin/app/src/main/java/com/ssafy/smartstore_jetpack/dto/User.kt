@@ -11,16 +11,17 @@ data class User (
     val pass: String,
     val stamps: Int,
     val stampList: ArrayList<Stamp> = ArrayList(),
-    var isAdmin: Boolean
+    var isAdmin: Boolean,
+    var fcmToken: String=""
 ){
 
-    constructor():this("", "","",0, isAdmin = false)
+    constructor():this(id="", pass="",name="", stamps = 0, isAdmin = false)
 
-    constructor(id:String, pass:String):this(id, "",pass, 0, isAdmin = true)
+    constructor(id:String, pass:String):this(id, "",pass, stamps=0, isAdmin = true)
 
-    constructor(id:String, pass:String, admin:Boolean):this(id, "",pass,0, isAdmin = admin)
+    constructor(id:String, pass:String, admin:Boolean):this(id, "",pass,stamps=0, isAdmin = admin)
 
-    constructor(id:String, pass: String, name: String):this(id, name, pass, 0, isAdmin = true)
+    constructor(id:String, pass: String, name: String):this(id, name, pass, stamps=0, isAdmin = true)
 
-    constructor(id:String, pass: String, name: String, admin: Boolean):this(id, name, pass, 0, isAdmin = admin)
+    constructor(id:String, pass: String, name: String, admin: Boolean):this(id, name, pass, stamps=0, isAdmin = admin)
 }

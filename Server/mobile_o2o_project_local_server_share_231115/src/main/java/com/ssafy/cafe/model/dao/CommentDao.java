@@ -25,4 +25,6 @@ public interface CommentDao {
     
     int deleteReComment(Integer recommentid);
     
+    String getFCMAddReComment(ReComment recomment);
+    
 }

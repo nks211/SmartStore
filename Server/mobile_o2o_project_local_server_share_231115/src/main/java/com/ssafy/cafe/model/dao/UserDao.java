@@ -36,5 +36,6 @@ public interface UserDao {
     
     int update(User user);
     
+    int updateFcmToken(User user);
     
 }

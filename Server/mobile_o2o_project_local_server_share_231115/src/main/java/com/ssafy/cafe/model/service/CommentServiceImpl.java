@@ -72,5 +72,10 @@ public class CommentServiceImpl implements CommentService {
 		cDao.deleteReComment(id);
 		
 	}
+	
+	@Override
+	public String getFCMAddReComment(ReComment recomment) {
+		return cDao.getFCMAddReComment(recomment);
+	}
 
 }

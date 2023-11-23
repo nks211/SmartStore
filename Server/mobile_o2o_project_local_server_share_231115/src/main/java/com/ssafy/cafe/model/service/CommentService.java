@@ -42,5 +42,7 @@ public interface CommentService {
     void updateReComment(ReComment recomment);
     void removeReComment(Integer id);
     
+    String getFCMAddReComment(ReComment recomment);
+    
     
 }

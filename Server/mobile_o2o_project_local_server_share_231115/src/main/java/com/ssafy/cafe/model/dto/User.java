@@ -10,6 +10,8 @@ public class User {
     private Integer stamps;
     private List<Stamp> stampList = new ArrayList<>();
     private boolean isAdmin;
+    
+    private String fcmToken;
 
     public boolean getIsAdmin() {
 		return isAdmin;
@@ -73,6 +75,14 @@ public class User {
 	public String toString() {
 		return "User [id=" + id + ", name=" + name + ", pass=" + pass + ", stamps=" + stamps + ", stampList="
 				+ stampList + ", isAdmin =" + isAdmin + " ]";
+	}
+
+	public String getFcmToken() {
+		return fcmToken;
+	}
+
+	public void setFcmToken(String fcmToken) {
+		this.fcmToken = fcmToken;
 	}
     
     

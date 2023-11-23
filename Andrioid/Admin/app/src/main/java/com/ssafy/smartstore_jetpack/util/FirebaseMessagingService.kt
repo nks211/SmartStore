@@ -32,9 +32,14 @@ class FirebaseMessagingService : FirebaseMessagingService() {
     }
 
     override fun onMessageReceived(message: RemoteMessage) {
-        message.data.let {
-            val title = it["title"]
-            Log.d(TAG, "onMessageReceived: $title")
+
+        if(message.notification!=null){
+
+
+        }else{
+            message.data.let {
+                val title = it["title"]
+                Log.d(TAG, "onMessageReceived: $title")
 //            val mainIntent = Intent(this, ApplicationClass::class.java).apply{
 //                flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_SINGLE_TOP
 //            }
@@ -45,15 +50,18 @@ class FirebaseMessagingService : FirebaseMessagingService() {
 //                PendingIntent.FLAG_IMMUTABLE
 //            )
 
-            if(title == "makeorder" || title == "makeOrder"){
-                if(messageReceivedListener!=null){
-                    Log.d(TAG, "onMessageReceived: here")
-                    messageReceivedListener.onMessageReceived()
-                }else{
-                    Log.d(TAG, "onMessageReceived: null")
+                if(title == "makeorder" || title == "makeOrder"){
+                    if(messageReceivedListener!=null){
+                        Log.d(TAG, "onMessageReceived: here")
+                        messageReceivedListener.onMessageReceived()
+                    }else{
+                        Log.d(TAG, "onMessageReceived: null")
+                    }
                 }
             }
         }
+
+
         super.onMessageReceived(message)
     }
 

@@ -40,7 +40,6 @@ public class UserRestController {
 
     private static final Logger logger = LoggerFactory.getLogger(UserRestController.class);
 
-
     @Autowired
     UserService uService;
 
@@ -75,13 +74,22 @@ public class UserRestController {
     @ApiOperation(value = "로그인 처리 후 성공적으로 로그인 되었다면 loginId라는 쿠키를 내려보낸다.", response = User.class)
     public User login(@RequestBody User user, HttpServletResponse response) throws UnsupportedEncodingException {
         User selected = uService.login(user.getId(), user.getPass());
-        logger.info(selected.toString());
+        uService.updateFcmToken(user);
+//        logger.info(selected.toString());
         if (selected != null) {
             Cookie cookie = new Cookie("loginId", URLEncoder.encode(selected.getId(), "utf-8"));
             cookie.setMaxAge(1000 * 1000);
             response.addCookie(cookie);
         }
         return selected;
+    }
+    
+    @PutMapping("/logout")
+    @ApiOperation(value = "로그아웃 된 아이디의 fcmToken을 지운다", response = Boolean.class)
+    public Boolean logout(@RequestBody User user) {
+    	user.setFcmToken("");
+    	uService.updateFcmToken(user);
+    	return true;
     }
 
 
