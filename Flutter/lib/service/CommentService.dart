@@ -1,6 +1,7 @@
 import 'dart:convert';
 
-import 'package:smart_store_flutter_starter/util/common.dart';
+import 'package:smart_store/dto/ReComment.dart';
+import 'package:smart_store/util/common.dart';
 import 'package:http/http.dart' as http;
 
 import '../dto/Comment.dart';
@@ -55,6 +56,17 @@ class CommentService {
     final String url = BaseUrl + 'rest/comment/' + id.toString();
     var response = await http.delete(Uri.parse(url));
     return response.body;
+  }
+
+  Future<List<ReComment>> getRecomments(int productid) async {
+    final String url = BaseUrl + 'rest/comment/reComment/' + productid.toString();
+    var response = await http.get(Uri.parse(url));
+    List<ReComment> result = [];
+    for (var data in jsonDecode(utf8.decode(response.bodyBytes))) {
+      ReComment recomment = ReComment.fromJson(data);
+      result.add(recomment);
+    }
+    return result;
   }
 
 }

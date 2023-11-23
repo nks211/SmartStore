@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-import 'package:smart_store_flutter_starter/util/common.dart';
+import 'package:smart_store/util/common.dart';
 
 import '../dto/User.dart';
 
@@ -34,7 +34,7 @@ class UserService {
         },
         body: jsonEncode(user.toJson()),
     );
-    return User.fromJson(jsonDecode(response.body));
+    return User.fromJson(jsonDecode(utf8.decode(response.bodyBytes)));
   }
 
   Future<Map<String, dynamic>> userInfo(User user) async {
@@ -45,7 +45,18 @@ class UserService {
         },
         body: jsonEncode(user.toJson()),
     );
-    return jsonDecode(response.body);
+    return jsonDecode(utf8.decode(response.bodyBytes));
+  }
+
+  Future<String> updateUser(User user) async {
+    final String url = BaseUrl + 'rest/user';
+    var response = await http.put(Uri.parse(url),
+      headers: {
+        "content-type": "application/json",
+      },
+      body: jsonEncode(user.toJson()),
+    );
+    return response.body;
   }
 
 }

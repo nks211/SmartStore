@@ -1,7 +1,6 @@
-import 'dart:convert';
-
-import 'package:smart_store_flutter_starter/dto/OrderDetail.dart';
-import 'package:smart_store_flutter_starter/dto/OrderDetailitem.dart';
+import 'package:intl/intl.dart';
+import 'package:smart_store/dto/OrderDetail.dart';
+import 'package:smart_store/dto/OrderDetailitem.dart';
 
 class Orderitem {
 
@@ -40,7 +39,8 @@ class Orderitem {
     this._id = jsondata['id'];
     this._userId = jsondata['userId'];
     this._orderTable = jsondata['orderTable'];
-    this._orderTime = jsondata['orderTime'];
+    this._orderTime = DateFormat('yyyy-MM-dd hh:mm:ss')
+        .format(DateTime.parse(jsondata['orderTime']).toLocal()); // 서버에서 받아온 시간 현지화
     this._completed = jsondata['completed'];
   }
 
@@ -48,6 +48,7 @@ class Orderitem {
     'completed' : _completed,
     'details' : _jsondetails,
     'orderTable' : _orderTable,
+    'orderTime' : _orderTime,
     'userId' : _userId
   };
 

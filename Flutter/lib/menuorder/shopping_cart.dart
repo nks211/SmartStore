@@ -3,29 +3,31 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:smart_store_flutter_starter/service/OrderService.dart';
-import 'package:smart_store_flutter_starter/util/common.dart';
+import 'package:smart_store/service/OrderService.dart';
+import 'package:smart_store/util/common.dart';
 
 import '../dto/OrderDetail.dart';
 import '../dto/OrderDetailitem.dart';
 import '../dto/Orderitem.dart';
 import '../start/page_router.dart';
+import '../util/notification.dart';
 
 //주문 옵션 토클 버튼
-Widget toggleBtn(String content, bool isSelected, Function onPressed1 ){
+Widget toggleBtn(String content, bool isSelected, Function onPressed1) {
   return Container(
     padding: const EdgeInsets.only(top: 10, bottom: 10),
     width: 100,
     child: ElevatedButton(
-      onPressed: (){ onPressed1(); },
+      onPressed: () {
+        onPressed1();
+      },
       style: ElevatedButton.styleFrom(
-          backgroundColor: isSelected ? coffeeBackground:Colors.white,
+          backgroundColor: isSelected ? coffeeBackground : Colors.white,
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(5),
-            side: const BorderSide(width: 1)
-          )
-      ),
-      child: Text(content, style: textStyle15Bold.apply(color: coffeeDarkBrown)),
+              borderRadius: BorderRadius.circular(5),
+              side: const BorderSide(width: 1))),
+      child:
+          Text(content, style: textStyle15Bold.apply(color: coffeeDarkBrown)),
     ),
   );
 }
@@ -37,19 +39,19 @@ Widget shoppinglist(List<OrderDetailitem> items, Function function) {
       padding: EdgeInsets.all(10),
       child: SizedBox(
           height: 150,
-          child : ListView.builder(
+          child: ListView.builder(
             itemCount: items.length,
-            itemBuilder: (BuildContext context, int position){
+            itemBuilder: (BuildContext context, int position) {
               return orderedItem(items[position], function, btnVisible: true);
             },
-          )
-      ),
+          )),
     ),
   );
 }
 
-class ShoppingCart extends StatefulWidget{
+class ShoppingCart extends StatefulWidget {
   List<OrderDetailitem> neworder;
+
   ShoppingCart({required this.neworder});
 
   @override
@@ -57,10 +59,9 @@ class ShoppingCart extends StatefulWidget{
 }
 
 class _ShoppingCart extends State<ShoppingCart> {
-
   var inShop = false;
 
-  void toggle(){
+  void toggle() {
     setState(() {
       inShop = !inShop;
     });
@@ -76,7 +77,6 @@ class _ShoppingCart extends State<ShoppingCart> {
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       body: SafeArea(
         child: Center(
@@ -85,11 +85,11 @@ class _ShoppingCart extends State<ShoppingCart> {
               Row(
                 children: [
                   Expanded(
-                    child: Padding(
-                      padding: const EdgeInsets.all(10),
-                      child: Text("장바구니", style: textStyle30.apply(color: coffeePointRed)),
-                    )
-                  ),
+                      child: Padding(
+                    padding: const EdgeInsets.all(10),
+                    child: Text("장바구니",
+                        style: textStyle30.apply(color: coffeePointRed)),
+                  )),
                   toggleBtn("매장", inShop, toggle),
                   toggleBtn("T-Out", !inShop, toggle),
                 ],
@@ -105,7 +105,6 @@ class _ShoppingCart extends State<ShoppingCart> {
                   ],
                 ),
               ),
-
               Padding(
                 padding: const EdgeInsets.only(bottom: 10),
                 child: Row(
@@ -113,47 +112,45 @@ class _ShoppingCart extends State<ShoppingCart> {
                     Expanded(
                         flex: 1,
                         child: OutlinedButton(
-                        onPressed: () {
-                          var completed = 'N';
-                          var ordertable = '웹주문';
-                          var ordertime = DateFormat('yyyy-MM-ddThh:mm:ss.000+00:00').format(DateTime.now());
-                          Future<SharedPreferences> preferences = SharedPreferences.getInstance();
-                          preferences.then((value) {
-                            if (value.getString('id') != null) {
-                              var userid = value.getString('id')!;
-                              Orderitem newitem = Orderitem(0, userid, ordertable, ordertime, completed);
-                              newitem.setDetails(widget.neworder);
-                              newitem.jsonDetails();
-                              print(jsonEncode(newitem.toJson()));
-                              orderservice.makeOrder(newitem).then((value) {
-                                if (value != '') {
-                                  showToast('주문이 완료되었습니다.');
-                                  Future<SharedPreferences> preferences = SharedPreferences.getInstance();
-                                  preferences.then((_) {
-                                    _.setString('orderid', value);
-                                    print(_.getString('orderid'));
-                                  });
-                                  Navigator.pop(context, 'OK');
-                                }
-                                else {
-                                  showToast('주문 오류');
-                                }
-                              });
-                            }
-                          });
-                        },
-                        style: OutlinedButton.styleFrom(
-                            backgroundColor: coffeePointRed,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(0),
-                            )
-                        ),
-                        child: Padding(
-                            padding: const EdgeInsets.all(10),
-                            child: Text("주문하기", style: textStyle20.apply(color: Colors.white))
-                        )
-                      )
-                    )
+                            onPressed: () {
+                              if (widget.neworder.length > 0) {
+                                var completed = 'N';
+                                var ordertable = '웹주문';
+                                var ordertime =
+                                DateFormat('yyyy-MM-ddThh:mm:ss.000Z')
+                                    .format(DateTime.now());
+                                Future<SharedPreferences> preferences =
+                                SharedPreferences.getInstance();
+                                preferences.then((value) {
+                                  if (value.getString('id') != null) {
+                                    var userid = value.getString('id')!;
+                                    Orderitem newitem = Orderitem(0, userid,
+                                        ordertable, ordertime, completed);
+                                    newitem.setDetails(widget.neworder);
+                                    newitem.jsonDetails();
+                                    orderservice.makeOrder(newitem).then((_) {
+                                      if (_ != '') {
+                                        value.setString('orderid', _);
+                                        showToast('주문이 완료되었습니다.');
+                                        Navigator.pop(context, 'OK');
+                                      } else {
+                                        showToast('주문 오류');
+                                      }
+                                    });
+                                  }
+                                });
+                              }
+                            },
+                            style: OutlinedButton.styleFrom(
+                                backgroundColor: coffeePointRed,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(0),
+                                )),
+                            child: Padding(
+                                padding: const EdgeInsets.all(10),
+                                child: Text("주문하기",
+                                    style: textStyle20.apply(
+                                        color: Colors.white)))))
                   ],
                 ),
               )
