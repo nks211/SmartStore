@@ -34,11 +34,18 @@ class _MenuDetailState extends State<MenuDetail> {
   List<bool> showrecomments = [];
   Widget commentlist = Container(height: 150,);
 
+
+  Future<bool> validmode(int position) async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    return comments[position].userId == preferences.getString('id');
+  }
+
   void allcomments() {
     commentservice.getproductcomments(widget.menuitem.id).then((value) {
       setState(() {
         comments = value;
         editmode = List.generate(comments.length, (index) => false);
+        showrecomments = List.generate(comments.length, (index) => false);
       });
       commentservice.getaveragerating(widget.menuitem.id).then((value) {
         setState(() {
@@ -56,43 +63,16 @@ class _MenuDetailState extends State<MenuDetail> {
     commentservice.getRecomments(productid).then((value) {
       setState(() {
         recomments = value;
-        showrecomments = List.generate(comments.length, (index) => false);
       });
     });
   }
 
-  Widget showreply(int index) {
-    ReComment reComment = ReComment(0, 0, 0, '');
-    for (var data in recomments) {
-      if (data.commentId == comments[index].id) {
-        reComment = data;
-      }
-    }
-
-    return Container(
-      alignment: Alignment.topLeft,
-      width: double.maxFinite,
-      color: Colors.grey,
-      margin: EdgeInsets.symmetric(vertical: 10),
-      padding: EdgeInsets.symmetric(
-          horizontal: 20, vertical: 10),
-      child: Text(reComment.comment, style: textStyle15,),
-    );
-  }
-
-  @override
-  void initState() {
-    allcomments();
-    allrecomments(widget.menuitem.id);
-  }
-
-  @override
-  Widget build(BuildContext context) {
-
+  // comment와 recomment 값을 토대로 위젯 생성
+  void commentload() {
     if (comments.length > 0) {
-      commentlist = SizedBox(
-        height: 150,
-        child: Expanded(
+      setState(() {
+        commentlist = SizedBox(
+          height: 150,
           child: ListView.builder(
             shrinkWrap: true,
             itemCount: comments.length,
@@ -114,6 +94,75 @@ class _MenuDetailState extends State<MenuDetail> {
                             mainAxisAlignment:
                             MainAxisAlignment.spaceBetween,
                             children: [
+                              FutureBuilder(future: validmode(position),
+                                  builder: (BuildContext context, AsyncSnapshot snapshot) {
+                                    if (snapshot.hasData == false) return Container();
+                                    else if (snapshot.hasError) return Container();
+                                    else return Visibility(
+                                        visible: snapshot.data,
+                                        child: CircleAvatar(
+                                          radius: 15,
+                                          backgroundColor: coffeeDarkBrown,
+                                          child: IconButton(
+                                            onPressed: () {
+                                              setState(() {
+                                                edited = !edited;
+                                                editmode[position] =
+                                                !editmode[position];
+                                              });
+                                              if (edited) {
+                                                setState(() {
+                                                  index = position;
+                                                });
+                                                focusmode.requestFocus();
+                                              } else {
+                                                index = -1;
+                                                focusmode.unfocus();
+                                              }
+                                            },
+                                            padding: EdgeInsets.zero,
+                                            icon: Icon(
+                                              editmode[position]
+                                                  ? Icons.undo
+                                                  : Icons.edit,
+                                              color: coffeeBrown,
+                                            ),
+                                          ),
+                                        ),
+                                      );
+                                  }),
+                              FutureBuilder(future: validmode(position),
+                                  builder: (BuildContext context, AsyncSnapshot snapshot) {
+                                    if (snapshot.hasData == false) return Container();
+                                    else if (snapshot.hasError) return Container();
+                                    else return Visibility(
+                                        visible: snapshot.data,
+                                        child: CircleAvatar(
+                                          radius: 15,
+                                          backgroundColor: coffeeDarkBrown,
+                                          child: IconButton(
+                                            onPressed: () {
+                                              setState(() {
+                                                commentservice
+                                                    .deleteComment(
+                                                    comments[position].id)
+                                                    .then((value) {
+                                                  allcomments();
+                                                  allrecomments(widget.menuitem.id);
+                                                  commentload();
+                                                });
+                                              });
+                                            },
+                                            padding: EdgeInsets.zero,
+                                            icon: Icon(
+                                              Icons.close,
+                                              color: coffeeBrown,
+                                            ),
+                                            color: coffeeBrown,
+                                          ),
+                                        ),
+                                      );
+                                  }),
                               CircleAvatar(
                                 radius: 15,
                                 backgroundColor: coffeeDarkBrown,
@@ -133,57 +182,6 @@ class _MenuDetailState extends State<MenuDetail> {
                                   ),
                                 ),
                               ),
-                              CircleAvatar(
-                                radius: 15,
-                                backgroundColor: coffeeDarkBrown,
-                                child: IconButton(
-                                  onPressed: () {
-                                    setState(() {
-                                      edited = !edited;
-                                      editmode[position] =
-                                      !editmode[position];
-                                    });
-                                    if (edited) {
-                                      setState(() {
-                                        index = position;
-                                      });
-                                      focusmode.requestFocus();
-                                    } else {
-                                      index = -1;
-                                      focusmode.unfocus();
-                                    }
-                                  },
-                                  padding: EdgeInsets.zero,
-                                  icon: Icon(
-                                    editmode[position]
-                                        ? Icons.undo
-                                        : Icons.edit,
-                                    color: coffeeBrown,
-                                  ),
-                                ),
-                              ),
-                              CircleAvatar(
-                                radius: 15,
-                                backgroundColor: coffeeDarkBrown,
-                                child: IconButton(
-                                  onPressed: () {
-                                    setState(() {
-                                      commentservice
-                                          .deleteComment(
-                                          comments[position].id)
-                                          .then((value) {
-                                        allcomments();
-                                      });
-                                    });
-                                  },
-                                  padding: EdgeInsets.zero,
-                                  icon: Icon(
-                                    Icons.close,
-                                    color: coffeeBrown,
-                                  ),
-                                  color: coffeeBrown,
-                                ),
-                              ),
                             ],
                           ),
                         ),
@@ -198,9 +196,46 @@ class _MenuDetailState extends State<MenuDetail> {
               );
             },
           ),
-        ),
-      );
+        );
+      });
     }
+    else {
+      setState(() {
+        commentlist = Container(height: 150,);
+      });
+    }
+  }
+
+  // 확장 버튼 클릭 시 답글 표시 토글 처리
+  Widget showreply(int index) {
+    ReComment reComment = ReComment(0, 0, 0, '');
+    for (var data in recomments) {
+      if (data.commentId == comments[index].id) {
+        reComment = data;
+      }
+    }
+
+    return Container(
+      alignment: Alignment.topLeft,
+      width: double.maxFinite,
+      color: Color(0x22999999),
+      margin: EdgeInsets.symmetric(vertical: 10),
+      padding: EdgeInsets.symmetric(
+          horizontal: 20, vertical: 10),
+      child: Text(reComment.comment, style: textStyle15,),
+    );
+  }
+
+  @override
+  void initState() {
+    allcomments();
+    allrecomments(widget.menuitem.id);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+
+    commentload();
 
     return Scaffold(
       body: ListView(
@@ -216,12 +251,27 @@ class _MenuDetailState extends State<MenuDetail> {
               width: double.maxFinite,
             ),
           ),
-          Container(
-              margin: EdgeInsets.all(20),
-              child: Text(
-                '${widget.menuitem.name}',
-                style: textStyle30,
-              )),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Container(
+                  margin: EdgeInsets.all(20),
+                  child: Text(
+                    '${widget.menuitem.name}',
+                    style: textStyle30,
+                  )),
+              Container(
+                margin: EdgeInsets.symmetric(horizontal: 20),
+                child: CircleAvatar(
+                  backgroundColor: coffeeDarkBrown,
+                  child: IconButton(onPressed: (){
+                    allcomments(); allrecomments(widget.menuitem.id); commentload(); },
+                      padding: EdgeInsets.zero,
+                      icon: Icon(Icons.refresh, color: coffeeBrown, size: 30,)),
+                ),
+              ),
+            ],
+          ),
           Container(
             height: 100,
             margin: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
@@ -411,6 +461,8 @@ class _MenuDetailState extends State<MenuDetail> {
                                     editmode[index] = false;
                                     index = -1;
                                     allcomments();
+                                    allrecomments(widget.menuitem.id);
+                                    commentload();
                                   });
                                 } else {
                                   showToast('error');
@@ -421,6 +473,8 @@ class _MenuDetailState extends State<MenuDetail> {
                                 if (result == 'true') {
                                   setState(() {
                                     allcomments();
+                                    allrecomments(widget.menuitem.id);
+                                    commentload();
                                   });
                                 } else {
                                   showToast('error');

@@ -22,7 +22,7 @@ class Product {
     this._type = jsondata['type'];
     this._price = jsondata['price'];
     this._img = jsondata['img'];
-    if (jsondata['isSalable'] == 'true') {
+    if (jsondata['isSalable']) {
       this._isSalable = true;
     }
   }

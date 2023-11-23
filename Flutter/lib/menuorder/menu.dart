@@ -36,16 +36,18 @@ class _MenuState extends State<Menu> {
   }
 
   @override
-  void initState() {
+  Widget build(BuildContext context) {
 
     // 서버에서 메뉴 정보 가져와서 다시 이미지 구성함
     productservice.getproductmenu().then((value) {
+      List<Product> search = [];
       for (var menu in value) {
-        if (!menu.isSalable) {
-          menulist.add(menu);
+        if (menu.isSalable) {
+          search.add(menu);
         }
       }
       setState(() {
+        menulist = search;
         board = GridView.count(
           crossAxisCount: 3,
           mainAxisSpacing: 10,
@@ -67,11 +69,6 @@ class _MenuState extends State<Menu> {
         List.generate(12, (int index) => roundImage("assets/logo.png")),
       );
     });
-    
-  }
-
-  @override
-  Widget build(BuildContext context) {
 
     return Scaffold(
       body: Container(
