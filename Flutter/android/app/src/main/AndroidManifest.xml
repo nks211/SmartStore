@@ -28,6 +28,10 @@
        <meta-data
            android:name="com.naver.sdk.clientName"
            android:value="@string/client_name" />
+       <meta-data
+           android:name="com.google.firebase.messaging.default_notification_channel_id"
+           android:value="high_importance_channel">
+       </meta-data>
         <activity
             android:name=".MainActivity"
             android:exported="true"
@@ -49,6 +53,10 @@
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+            <intent-filter>
+                <action android:name="FLUTTER_NOTIFICATION_CLICK" />
+                <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
        <receiver android:name="com.dexterous.flutterlocalnotifications.ScheduledNotificationReceiver" />

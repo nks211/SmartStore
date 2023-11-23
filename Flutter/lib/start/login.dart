@@ -77,6 +77,9 @@ class _Login extends State<Login> {
     //기존에 로그인된 정보가 있으면 자동으로 페이지 이동
     preferences.then((value) {
       if (value.getString('id') != null) {
+        if (value.getString('id')!.contains('.com')) {
+          platform = Platform.naver;
+        }
         passpage();
       }
     });
@@ -201,7 +204,7 @@ class _Login extends State<Login> {
                 padding: EdgeInsets.symmetric(horizontal: 40, vertical: 10),
                 child: InkWell(
                   onTap: ()  { NaverJoin(); },
-                  child: Image.asset('assets/btnG_완성형.png'),
+                  child: Image.asset('assets/naver.png'),
                 ),
               ),
             ],

@@ -93,6 +93,8 @@ class _PageRouterState extends State<PageRouter> {
   @override
   Widget build(BuildContext context) {
 
+    firebasemessage();
+
     return Scaffold(
       body: SafeArea(
         child: pages[_selected],

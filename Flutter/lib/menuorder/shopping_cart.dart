@@ -113,31 +113,33 @@ class _ShoppingCart extends State<ShoppingCart> {
                         flex: 1,
                         child: OutlinedButton(
                             onPressed: () {
-                              var completed = 'N';
-                              var ordertable = '웹주문';
-                              var ordertime =
-                                  DateFormat('yyyy-MM-ddThh:mm:ss.000+00:00')
-                                      .format(DateTime.now());
-                              Future<SharedPreferences> preferences =
-                                  SharedPreferences.getInstance();
-                              preferences.then((value) {
-                                if (value.getString('id') != null) {
-                                  var userid = value.getString('id')!;
-                                  Orderitem newitem = Orderitem(0, userid,
-                                      ordertable, ordertime, completed);
-                                  newitem.setDetails(widget.neworder);
-                                  newitem.jsonDetails();
-                                  orderservice.makeOrder(newitem).then((_) {
-                                    if (_ != '') {
-                                      value.setString('orderid', _);
-                                      showToast('주문이 완료되었습니다.');
-                                      Navigator.pop(context, 'OK');
-                                    } else {
-                                      showToast('주문 오류');
-                                    }
-                                  });
-                                }
-                              });
+                              if (widget.neworder.length > 0) {
+                                var completed = 'N';
+                                var ordertable = '웹주문';
+                                var ordertime =
+                                DateFormat('yyyy-MM-ddThh:mm:ss.000Z')
+                                    .format(DateTime.now());
+                                Future<SharedPreferences> preferences =
+                                SharedPreferences.getInstance();
+                                preferences.then((value) {
+                                  if (value.getString('id') != null) {
+                                    var userid = value.getString('id')!;
+                                    Orderitem newitem = Orderitem(0, userid,
+                                        ordertable, ordertime, completed);
+                                    newitem.setDetails(widget.neworder);
+                                    newitem.jsonDetails();
+                                    orderservice.makeOrder(newitem).then((_) {
+                                      if (_ != '') {
+                                        value.setString('orderid', _);
+                                        showToast('주문이 완료되었습니다.');
+                                        Navigator.pop(context, 'OK');
+                                      } else {
+                                        showToast('주문 오류');
+                                      }
+                                    });
+                                  }
+                                });
+                              }
                             },
                             style: OutlinedButton.styleFrom(
                                 backgroundColor: coffeePointRed,

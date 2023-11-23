@@ -131,6 +131,7 @@ class _MapState extends State<CafeMap> {
             onMapCreated: (GoogleMapController controller) {
               _completer.complete(controller);
             },
+            mapType: MapType.normal,
             markers: markers.toSet(),
           ),
           Container(

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:smart_store/dto/OrderDetailitem.dart';
+import 'package:smart_store/dto/ReComment.dart';
 import 'package:smart_store/service/CommentService.dart';
 import 'package:smart_store/util/common.dart';
 
@@ -18,6 +19,7 @@ class MenuDetail extends StatefulWidget {
 }
 
 class _MenuDetailState extends State<MenuDetail> {
+
   int count = 1;
   double rate = 3.0;
   double ratebar = 3.0;
@@ -27,13 +29,15 @@ class _MenuDetailState extends State<MenuDetail> {
   bool edited = false;
   var commentservice = CommentService();
   List<Comment> comments = [];
+  List<ReComment> recomments = [];
   List<bool> editmode = [];
+  List<bool> showrecomments = [];
+  Widget commentlist = Container(height: 150,);
 
   void allcomments() {
     commentservice.getproductcomments(widget.menuitem.id).then((value) {
       setState(() {
         comments = value;
-        print(comments);
         editmode = List.generate(comments.length, (index) => false);
       });
       commentservice.getaveragerating(widget.menuitem.id).then((value) {
@@ -41,16 +45,163 @@ class _MenuDetailState extends State<MenuDetail> {
           ratebar = value;
         });
       });
+    }).catchError((e) {
+      setState(() {
+        commentlist = Container(height: 150,);
+      });
     });
+  }
+
+  void allrecomments(int productid) {
+    commentservice.getRecomments(productid).then((value) {
+      setState(() {
+        recomments = value;
+        showrecomments = List.generate(comments.length, (index) => false);
+      });
+    });
+  }
+
+  Widget showreply(int index) {
+    ReComment reComment = ReComment(0, 0, 0, '');
+    for (var data in recomments) {
+      if (data.commentId == comments[index].id) {
+        reComment = data;
+      }
+    }
+
+    return Container(
+      alignment: Alignment.topLeft,
+      width: double.maxFinite,
+      color: Colors.grey,
+      margin: EdgeInsets.symmetric(vertical: 10),
+      padding: EdgeInsets.symmetric(
+          horizontal: 20, vertical: 10),
+      child: Text(reComment.comment, style: textStyle15,),
+    );
   }
 
   @override
   void initState() {
     allcomments();
+    allrecomments(widget.menuitem.id);
   }
 
   @override
   Widget build(BuildContext context) {
+
+    if (comments.length > 0) {
+      commentlist = SizedBox(
+        height: 150,
+        child: Expanded(
+          child: ListView.builder(
+            shrinkWrap: true,
+            itemCount: comments.length,
+            itemBuilder: (BuildContext context, int position) {
+              return Container(
+                margin: EdgeInsets.all(10),
+                child: Column(
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          comments[position].comment,
+                          style: textStyle15,
+                        ),
+                        Container(
+                          width: 100,
+                          child: Row(
+                            mainAxisAlignment:
+                            MainAxisAlignment.spaceBetween,
+                            children: [
+                              CircleAvatar(
+                                radius: 15,
+                                backgroundColor: coffeeDarkBrown,
+                                child: IconButton(
+                                  onPressed: () {
+                                    setState(() {
+                                      showrecomments[position] =
+                                      !showrecomments[position];
+                                    });
+                                  },
+                                  padding: EdgeInsets.zero,
+                                  icon: Icon(
+                                    showrecomments[position]
+                                        ? Icons.keyboard_arrow_up
+                                        : Icons.keyboard_arrow_down,
+                                    color: coffeeBrown,
+                                  ),
+                                ),
+                              ),
+                              CircleAvatar(
+                                radius: 15,
+                                backgroundColor: coffeeDarkBrown,
+                                child: IconButton(
+                                  onPressed: () {
+                                    setState(() {
+                                      edited = !edited;
+                                      editmode[position] =
+                                      !editmode[position];
+                                    });
+                                    if (edited) {
+                                      setState(() {
+                                        index = position;
+                                      });
+                                      focusmode.requestFocus();
+                                    } else {
+                                      index = -1;
+                                      focusmode.unfocus();
+                                    }
+                                  },
+                                  padding: EdgeInsets.zero,
+                                  icon: Icon(
+                                    editmode[position]
+                                        ? Icons.undo
+                                        : Icons.edit,
+                                    color: coffeeBrown,
+                                  ),
+                                ),
+                              ),
+                              CircleAvatar(
+                                radius: 15,
+                                backgroundColor: coffeeDarkBrown,
+                                child: IconButton(
+                                  onPressed: () {
+                                    setState(() {
+                                      commentservice
+                                          .deleteComment(
+                                          comments[position].id)
+                                          .then((value) {
+                                        allcomments();
+                                      });
+                                    });
+                                  },
+                                  padding: EdgeInsets.zero,
+                                  icon: Icon(
+                                    Icons.close,
+                                    color: coffeeBrown,
+                                  ),
+                                  color: coffeeBrown,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                    Visibility(
+                      visible: showrecomments[position],
+                      child: showreply(position),
+                    ),
+                  ],
+                ),
+              );
+            },
+          ),
+        ),
+      );
+    }
+
     return Scaffold(
       body: ListView(
         shrinkWrap: true,
@@ -240,10 +391,9 @@ class _MenuDetailState extends State<MenuDetail> {
                       var mention = controller.text;
                       if (mention == '') {
                         showToast('리뷰를 최소 10자 이상 입력해주세요.');
-                      }
-                      else {
+                      } else {
                         Future<SharedPreferences> preferences =
-                        SharedPreferences.getInstance();
+                            SharedPreferences.getInstance();
                         preferences.then((value) {
                           String? id = value.getString('id');
                           if (id != null) {
@@ -252,7 +402,9 @@ class _MenuDetailState extends State<MenuDetail> {
                                 mention, 0, widget.menuitem.id, rate, userid);
                             if (edited) {
                               review.setid(comments[index].id);
-                              commentservice.updateComment(review).then((result) {
+                              commentservice
+                                  .updateComment(review)
+                                  .then((result) {
                                 if (result == 'true') {
                                   setState(() {
                                     edited = false;
@@ -295,86 +447,7 @@ class _MenuDetailState extends State<MenuDetail> {
                   )),
             ],
           ),
-          SizedBox(
-            height: 150,
-            child: Expanded(
-              child: ListView.builder(
-                shrinkWrap: true,
-                itemCount: comments.length,
-                itemBuilder: (BuildContext context, int position) {
-                  return Container(
-                    margin: EdgeInsets.all(10),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          comments[position].comment,
-                          style: textStyle15,
-                        ),
-                        Container(
-                          width: 70,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              CircleAvatar(
-                                radius: 15,
-                                backgroundColor: coffeeDarkBrown,
-                                child: IconButton(
-                                  onPressed: () {
-                                    setState(() {
-                                      edited = !edited;
-                                      editmode[position] = !editmode[position];
-                                    });
-                                    if (edited) {
-                                      setState(() {
-                                        index = position;
-                                      });
-                                      focusmode.requestFocus();
-                                    } else {
-                                      index = -1;
-                                      focusmode.unfocus();
-                                    }
-                                  },
-                                  padding: EdgeInsets.zero,
-                                  icon: Icon(
-                                    editmode[position]
-                                        ? Icons.undo
-                                        : Icons.edit,
-                                    color: coffeeBrown,
-                                  ),
-                                ),
-                              ),
-                              CircleAvatar(
-                                radius: 15,
-                                backgroundColor: coffeeDarkBrown,
-                                child: IconButton(
-                                  onPressed: () {
-                                    setState(() {
-                                      commentservice
-                                          .deleteComment(comments[position].id)
-                                          .then((value) {
-                                        allcomments();
-                                      });
-                                    });
-                                  },
-                                  padding: EdgeInsets.zero,
-                                  icon: Icon(
-                                    Icons.close,
-                                    color: coffeeBrown,
-                                  ),
-                                  color: coffeeBrown,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  );
-                },
-              ),
-            ),
-          ),
+          commentlist,
           ElevatedButton(
               onPressed: () {
                 showToast("상품이 장바구니에 담겼습니다.");

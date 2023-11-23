@@ -20,7 +20,6 @@ class Menu extends StatefulWidget {
 
 class _MenuState extends State<Menu> {
 
-  double distance = 350;
   List<Product> menulist = [];
   var productservice = ProductService();
 
@@ -68,6 +67,7 @@ class _MenuState extends State<Menu> {
         List.generate(12, (int index) => roundImage("assets/logo.png")),
       );
     });
+    
   }
 
   @override

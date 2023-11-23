@@ -63,8 +63,8 @@ class _UserInfo extends State<UserInfo> {
   @override
   Widget build(BuildContext context) {
 
-    var path = platform == Platform.naver? BaseUrl + imagepath + 'naver.png'
-        : BaseUrl + imagepath + 'user.png';
+    var path = platform == Platform.naver? 'assets/naverlogo.png'
+        : 'assets/user.png';
 
     // 주문 id별 상세내역 추가한 후 리스트로 반환
     for (var order in widget.orderdata) {
@@ -138,7 +138,7 @@ class _UserInfo extends State<UserInfo> {
                         },
                         child: SizedBox(
                           height: 60,
-                          child: Image.network(path),
+                          child: Image.asset(path),
                         ),
                       ),
                       Expanded(

@@ -1,8 +1,7 @@
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:geolocator/geolocator.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:location/location.dart';
 import '../dto/OrderDetailitem.dart';
 import '../dto/Orderitem.dart';
 import '../dto/Product.dart';
@@ -41,7 +40,7 @@ const TextStyle textOrder = TextStyle(
     fontFamily: 'eland_choice_b', fontSize: 20, color: coffeeDarkBrown);
 
 //http통신 주소값
-const BaseUrl = "http://192.168.33.119:9987/";
+const BaseUrl = "http://192.168.33.120:9987/";
 
 //서버 내 이미지 저장 경로값. (ex. C:\Temp\imgs\menu)
 const imagepath = "imgs/menu/";
@@ -57,20 +56,10 @@ enum Platform {
 
 Platform platform = Platform.none;
 
+int distance = 350;
 
-
-Future<bool> GeoPermission() async {
-  bool service = await Geolocator.isLocationServiceEnabled();
-  if (!service) return Future.value(false);
-  LocationPermission permission = await Geolocator.checkPermission();
-  if (permission == LocationPermission.denied) {
-    permission = await Geolocator.requestPermission();
-    if (permission == LocationPermission.denied) return Future.value(false);
-  }
-  if (permission == LocationPermission.deniedForever) return Future.value(false);
-
-  return Future.value(true);
-}
+//fcm 메시지 전달 위한 고유 토큰값
+String token = 'fbP2TvrRQYCMKV4gziMXB5:APA91bFhdWEFA0qFtlMagAtbOcE3EMgOJBSXUCHTrnVaI0Q3LKBFEQBFaSGqygjAHGWACtnPuTdP4Z4Eg1Y3WWfxtvo-fN11lz7vEx80IZNEQyblGqY7eqWABpy-Vj4xg1J-Qj4CKwnJ';
 
 // toast message
 void showToast(String msg) {
@@ -103,6 +92,28 @@ Widget noticeScroll(List<String> notices, Function function) {
       return notice(notices[position], function);
     },
   );
+}
+
+// fcm 메시지 수신하여 알림창 띄우는 함수
+void firebasemessage() async {
+  FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
+    RemoteNotification? notification = message.notification;
+
+    if (notification != null) {
+      FlutterLocalNotificationsPlugin().show(
+        notification.hashCode,
+        notification.title,
+        notification.body,
+        const NotificationDetails(
+          android: AndroidNotificationDetails(
+            'high_importance_channel',
+            'high_importance_notification',
+            importance: Importance.max,
+          ),
+        ),
+      );
+    }
+  });
 }
 
 //이미지 위젯
