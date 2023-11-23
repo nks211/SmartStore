@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.ssafy.smartstore_jetpack.dto.Note
 import com.ssafy.smartstore_jetpack.dto.Order
 import com.ssafy.smartstore_jetpack.dto.OrderDetail
 import com.ssafy.smartstore_jetpack.dto.Product
@@ -75,6 +76,20 @@ class MainActivityViewModel : ViewModel() {
             }
         }
         return true
+    }
+
+    private val _notes = MutableLiveData<List<Note>>()
+    val notes: LiveData<List<Note>>
+        get() = _notes
+
+    fun getNotes(id: String){
+        viewModelScope.launch {
+            try{
+                _notes.value = RetrofitUtil.noteService.selectAll(id)
+            }catch (e: Exception){
+                _notes.value = arrayListOf()
+            }
+        }
     }
 
     private val _waitingOrders = MutableLiveData<List<LatestOrderResponse>>()

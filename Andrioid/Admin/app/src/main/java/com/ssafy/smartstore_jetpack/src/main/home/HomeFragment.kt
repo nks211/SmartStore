@@ -48,6 +48,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::bind
             viewModel.getListOrderData(id)
         }else{
             mainActivityViewModel.getNewOrder()
+            mainActivityViewModel.getNewOrder()
         }
 
         registerObserver()
@@ -78,6 +79,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::bind
                     viewModel.getListOrderData(id)
                 else{
                     mainActivityViewModel.getNewOrder()
+                    mainActivityViewModel.getNotes(id)
                 }
             }
         }
@@ -106,6 +108,10 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::bind
             mainActivityViewModel.waitingOrders.observe(viewLifecycleOwner){
                 binding.orderCnt.text = "${it.size}건"
                 latestOrderAdapter.submitList(it)
+            }
+            mainActivityViewModel.notes.observe(viewLifecycleOwner){
+                noticeAdapter.submitList(it)
+
             }
         }
 

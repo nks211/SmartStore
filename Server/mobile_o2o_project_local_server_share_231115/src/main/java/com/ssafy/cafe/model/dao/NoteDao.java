@@ -12,6 +12,10 @@ public interface NoteDao {
 	
 	Note select(Integer id);
 	
-	List<Note> selectAll();
+	List<Note> selectAll(Integer id);
+	
+	int readNote(Integer id);
+	
+	String getFCMAddNote(String receiverId);
 
 }

@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.ssafy.cafe.model.dao.NoteDao;
 import com.ssafy.cafe.model.dto.Note;
+import com.ssafy.cafe.model.dto.ReComment;
 
 @Service
 public class NoteServiceImpl implements NoteService {
@@ -30,9 +31,18 @@ public class NoteServiceImpl implements NoteService {
 	}
 
 	@Override
-	public List<Note> selectAll() {
-		return nDao.selectAll();
+	public List<Note> selectAll(Integer id) {
+		return nDao.selectAll(id);
+	}
+
+	@Override
+	public void readNote(Integer id) {
+		nDao.readNote(id);
+	}
+	
+	@Override
+	public String getFCMAddNote(String receiverId) {
+		return nDao.getFCMAddNote(receiverId);
 	}
   
-    
 }

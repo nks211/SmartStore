@@ -100,12 +100,8 @@ class MenuFragment : BaseFragment<FragmentOrderBinding>(FragmentOrderBinding::bi
                 menuAdapter.setItemClickListener(object : MenuAdapter.ItemClickListener{
                     override fun onClick(view: View, position: Int, productId:Int) {
                         activityViewModel.setProductId(productId)
-                        val salable = if(it[position].isSalable) 1 else 0
                         activityViewModel.setProductSalable(it[position].isSalable)
-//                        val action = MenuFragmentDirections.actionMenuFragmentToMenuDetailFragment(it[position].isSalable)
-//                        Navigation.findNavController(requireView()).navigate(action)
                         Navigation.findNavController(requireView()).navigate(R.id.menuDetailFragment)
-//                        mainActivity.openFragment(3, "", salable)
                     }
                 })
             }

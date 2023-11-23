@@ -15,6 +15,7 @@ import org.apache.http.HttpHeaders;
 import com.ssafy.cafe.FcmMessage;
 import com.ssafy.cafe.FcmMessage.Message;
 import com.ssafy.cafe.FcmMessage.Notification;
+import com.ssafy.cafe.model.dto.Note;
 
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;

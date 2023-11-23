@@ -8,6 +8,38 @@ public class Note {
 	private String content;
 	private Date date;
 	
+	public Note() {}
+	
+	public Note(String title, String content, String senderId, String receiverId) {
+		this.title = title;
+		this.content = content;
+		this.senderId = senderId;
+		this.receiverId = receiverId;
+	}
+	
+	public String getSenderId() {
+		return senderId;
+	}
+	public void setSenderId(String senderId) {
+		this.senderId = senderId;
+	}
+	public String getReceiverId() {
+		return receiverId;
+	}
+	public void setReceiverId(String receiverId) {
+		this.receiverId = receiverId;
+	}
+	public boolean isRead() {
+		return isRead;
+	}
+	public void setRead(boolean isRead) {
+		this.isRead = isRead;
+	}
+	private String senderId;
+	private String receiverId;
+	private boolean isRead;
+	
+	
 	public Integer getId() {
 		return id;
 	}

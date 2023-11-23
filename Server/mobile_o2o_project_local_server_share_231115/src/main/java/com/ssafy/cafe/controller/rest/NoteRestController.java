@@ -19,6 +19,7 @@ import com.ssafy.cafe.model.dto.Note;
 import com.ssafy.cafe.model.dto.ReComment;
 import com.ssafy.cafe.model.service.CommentService;
 import com.ssafy.cafe.model.service.FCMService;
+import com.ssafy.cafe.model.service.FCMServiceClient;
 import com.ssafy.cafe.model.service.NoteService;
 
 import io.swagger.annotations.Api;
@@ -33,14 +34,24 @@ public class NoteRestController {
     NoteService nService;
     
     @Autowired
-    private FCMService fService;
+    private FCMServiceClient fService;
     
     @PostMapping
     @Transactional
     @ApiOperation(value="note 객체를 추가한다. 성공하면 true를 리턴한다. ", response = Boolean.class)
-    public Boolean insert(@RequestBody Note note  ) throws IOException {
+    public Boolean insert(@RequestBody Note note) throws IOException {
         nService.insert(note);
+        String fcmToken = nService.getFCMAddNote(note.getReceiverId());
+    	fService.sendMessageTo("SmartStore", "쪽지가 도착했습니다", fcmToken);
         return true;
+    }
+    
+    @PutMapping("/{id}")
+    @Transactional
+    @ApiOperation(value="note를 읽음 표시한다. 성공하면 true를 리턴한다. ", response = Boolean.class)
+    public Boolean readNote(@PathVariable Integer id) {
+    	nService.readNote(id);
+    	return true;
     }
 
     @DeleteMapping("/{id}")
@@ -50,5 +61,12 @@ public class NoteRestController {
         nService.delete(id);
         return true;
     }   
+    
+    @GetMapping
+    @Transactional
+    @ApiOperation(value="{id}를 receiver로 갖는 노트를을 불러온다", response = List.class)
+    public List<Note> selectAll(@PathVariable Integer id) {
+        return nService.selectAll(id);
+    } 
 
 }

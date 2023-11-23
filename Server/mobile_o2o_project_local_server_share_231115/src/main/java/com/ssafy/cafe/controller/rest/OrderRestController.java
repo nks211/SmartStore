@@ -13,8 +13,11 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.ssafy.cafe.model.dto.Note;
 import com.ssafy.cafe.model.dto.Order;
 import com.ssafy.cafe.model.service.FCMService;
+import com.ssafy.cafe.model.service.NoteService;
 import com.ssafy.cafe.model.service.OrderService;
 import io.swagger.annotations.ApiOperation;
 
@@ -24,6 +27,9 @@ import io.swagger.annotations.ApiOperation;
 public class OrderRestController {
     @Autowired
     private OrderService oService;
+    
+    @Autowired
+    private NoteService nService;
     
     @Autowired
     private FCMService fService;
@@ -46,9 +52,7 @@ public class OrderRestController {
     				+ "</pre>", response = Integer.class )
     public Integer makeOrder(@RequestBody Order order) throws IOException {
         oService.makeOrder(order);
-//        String token = "fv2kNDQxQ6CagVDq3_jeLG:APA91bGtwSFP4XLnb_kzQsYY1Uld8Y2wTk_zD-n2Hxu7XQyNXFgcx_1HeLkcJGjyz-2ePrLfISvCMMJ9lYOZ0zdIVde-cTcHx-KMzylwbd5pu7stAnXk_cY1RjF08XbkeRrbMRejQyUA";
-//        String token = "d7lriZ0fRVyR2hvSqYK-XV:APA91bH-auF2EhcIaiGEZaAcx9X4SPN-vjMeFpO33qs-QiwSJnb8OSvRdseaPtIlL2F3J7bO8I9zC_9QdSw9RGQGDhjBKyQwA-7ZJm1vZwLutzpL06Dwja5M3AGkH2QJwU87i7E7J-Au";
-//        fService.sendMessageTo(token, "makeOrder", "body");
+        nService.insert(new Note("orderNote", order.getId().toString(), order.getUserId(), "id 01"));
         fService.sendMessageTo("makeOrder", "body");
         return order.getId();
     }

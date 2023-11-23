@@ -11,6 +11,10 @@ public interface NoteService {
     
     void delete(Integer id);
     
-    List<Note> selectAll();
+    List<Note> selectAll(Integer id);
+    
+    void readNote(Integer id);
+    
+    String getFCMAddNote(String receiverId);
     
 }
