@@ -141,4 +141,13 @@ create table t_re_comment(
 alter table t_re_comment add product_id integer not null;
 alter table t_re_comment add constraint fk_product_id foreign key(product_id) references t_product(id) on delete cascade;
 
+create table t_note(
+	id integer auto_increment primary key,
+    title varchar(50),
+    content varchar(200),
+    order_time timestamp default CURRENT_TIMESTAMP
+);
+
+alter table t_user add fcm_token varchar(255) not null;
+
 commit;

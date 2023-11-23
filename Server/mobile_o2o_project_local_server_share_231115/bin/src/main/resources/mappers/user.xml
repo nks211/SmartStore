@@ -32,6 +32,12 @@ SET
 WHERE id = #{id}
 	</update>
 	
+	<update id="updateFcmToken" parameterType="User">
+		update t_user
+		set fcm_token = #{fcmToken}
+		where id = #{id}
+	</update>
+	
 	
 	<delete id="delete" parameterType="string">
 		DELETE FROM t_user

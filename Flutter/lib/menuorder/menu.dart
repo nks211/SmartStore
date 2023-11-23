@@ -42,7 +42,7 @@ class _MenuState extends State<Menu> {
     productservice.getproductmenu().then((value) {
       List<Product> search = [];
       for (var menu in value) {
-        if (menu.isSalable) {
+        if (!menu.isSalable) {
           search.add(menu);
         }
       }

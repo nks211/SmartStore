@@ -39,7 +39,7 @@ class Orderitem {
     this._id = jsondata['id'];
     this._userId = jsondata['userId'];
     this._orderTable = jsondata['orderTable'];
-    this._orderTime = DateFormat('yyyy-MM-dd hh:mm:ss')
+    this._orderTime = DateFormat('yyyy-MM-dd aa hh:mm:ss')
         .format(DateTime.parse(jsondata['orderTime']).toLocal()); // 서버에서 받아온 시간 현지화
     this._completed = jsondata['completed'];
   }

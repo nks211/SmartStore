@@ -43,7 +43,7 @@ class User {
     'pass' : _pass,
     'stampList' : _stampList,
     'stamps' : _stamps,
-    'fcmToken' : _fcmToken,
+    'fcmToken' : token,
   };
 
   @override

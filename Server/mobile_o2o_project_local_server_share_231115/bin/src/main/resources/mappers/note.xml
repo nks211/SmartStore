@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- name space는 BookRepo의 fully qualified name으로 설정한다. -->
+<mapper namespace="com.ssafy.cafe.model.dao.NoteDao">
+	<insert id="insert" parameterType="Note">
+		INSERT INTO t_note (title, content, sender_id, receiver_id)
+		VALUES (#{title}, #{content}, #{senderId}, #{receiverId})
+	</insert>
+	
+	<update id="readNote" parameterType="int">
+		UPDATE t_note SET
+		is_read = true
+		WHERE id = #{id}
+	</update>
+	
+	<delete id="delete" parameterType="int">
+		DELETE FROM t_note
+		WHERE id = #{id}
+	</delete>
+	
+	<select id="select" parameterType="int" resultType="Note">
+		SELECT * FROM t_note
+		WHERE id = #{id}
+	</select>
+	
+	<select id="selectAll" parameterType="string" resultType="Note">
+		SELECT * FROM t_note
+		where receiver_id = #{id}
+	</select>
+	
+	<select id="getFCMAddNote" parameterType="string" resultType="string">
+		select fcm_token from t_user
+		where id = #{id}
+	</select>
+	
+</mapper>

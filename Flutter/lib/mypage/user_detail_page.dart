@@ -16,8 +16,8 @@ class UserDetailPage extends StatefulWidget {
 }
 
 class _UserDetailPageState extends State<UserDetailPage> {
-  String path = platform == Platform.naver? BaseUrl + imagepath + 'naver.png'
-      : BaseUrl + imagepath + 'user.png';
+  String path = platform == Platform.naver? 'assets/naverlogo.png'
+      : 'assets/user.png';
   String id = '';
   String pass = '';
   String newpass = '';
@@ -110,7 +110,7 @@ class _UserDetailPageState extends State<UserDetailPage> {
                     color: Colors.grey,
                     borderRadius: BorderRadius.all(Radius.circular(20)),
                   ),
-                  child: Image.network(
+                  child: Image.asset(
                     path,
                     width: 150,
                   ),
