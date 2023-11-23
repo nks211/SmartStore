@@ -55,5 +55,11 @@
 		WHERE id = #{id}
 	</delete>
 	
+	<select id="getFCMAddReComment" parameterType="ReComment" resultType="string">
+		select u.fcm_token
+		from t_user u left join t_comment c on u.id = c.user_id 
+		where  c.id = #{commentId};
+	</select>
+	
 	
 </mapper>

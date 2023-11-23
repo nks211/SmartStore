@@ -58,7 +58,7 @@ class _MapState extends State<CafeMap> {
             ),
             contentPadding: EdgeInsets.all(20),
             content: Container(
-              height: 350,
+              height: 400,
               child: Column(
                 children: [
                   Container(
