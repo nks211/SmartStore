@@ -14,7 +14,8 @@ import 'package:smart_store/util/common.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  token = (await FirebaseMessaging.instance.getToken())!; // 앱 실행 시마다 fcm 토큰 발급
+  token = (await FirebaseMessaging.instance.getToken())!;
+  print('token : $token');// 앱 실행 시마다 fcm 토큰 발급
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
   runApp(const MyApp());
 }
