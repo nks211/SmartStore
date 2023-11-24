@@ -10,6 +10,9 @@ import android.os.FileUtils
 import android.provider.MediaStore
 import android.util.Log
 import android.view.View
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
+import android.widget.SpinnerAdapter
 import androidx.activity.result.ActivityResultCallback
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.activityViewModels
@@ -48,6 +51,8 @@ class MenuAddFragment : BaseFragment<FragmentMenuAddBinding>(FragmentMenuAddBind
 
     private var id = -1
 
+    private var type = ""
+
     override fun onAttach(context: Context) {
         super.onAttach(context)
         mainActivity = context as MainActivity
@@ -55,6 +60,25 @@ class MenuAddFragment : BaseFragment<FragmentMenuAddBinding>(FragmentMenuAddBind
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        val items = resources.getStringArray(R.array.product_type)
+        val spinnerAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_dropdown_item, items)
+        binding.productType.adapter = spinnerAdapter
+        binding.productType.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
+            override fun onItemSelected(
+                parent: AdapterView<*>?,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
+                type = items[position]
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+
+            }
+
+        }
 
         id = activityViewModel.productId.value!!
 
@@ -67,7 +91,8 @@ class MenuAddFragment : BaseFragment<FragmentMenuAddBinding>(FragmentMenuAddBind
 
             binding.productName.setText(curItem.productName)
             binding.productPrice.setText("${curItem.productPrice}")
-            binding.productType.setText(curItem.type)
+            binding.productType.setSelection(items.indexOf(curItem.type))
+            type = curItem.type
             binding.isSalable.isChecked = activityViewModel.productSalable.value!!
             updateImg = false
         }
@@ -87,7 +112,8 @@ class MenuAddFragment : BaseFragment<FragmentMenuAddBinding>(FragmentMenuAddBind
                 productMap["name"] =
                     binding.productName.text.toString().toRequestBody("text/plain".toMediaTypeOrNull())
                 productMap["type"] =
-                    binding.productType.text.toString().toRequestBody("text/plain".toMediaTypeOrNull())
+                        type.toRequestBody("text/plain".toMediaTypeOrNull())
+//                    binding.productType.text.toString().toRequestBody("text/plain".toMediaTypeOrNull())
                 productMap["price"] =
                     binding.productPrice.text.toString().toRequestBody("text/plain".toMediaTypeOrNull())
                 if(id!=-1){
@@ -115,7 +141,7 @@ class MenuAddFragment : BaseFragment<FragmentMenuAddBinding>(FragmentMenuAddBind
                         Product(
                             id = activityViewModel.productId.value!!,
                             name = binding.productName.text.toString(),
-                            type = binding.productType.text.toString(),
+                            type = type,
                             price = binding.productPrice.text.toString().toInt(),
                             img = imgName
                         ).apply {

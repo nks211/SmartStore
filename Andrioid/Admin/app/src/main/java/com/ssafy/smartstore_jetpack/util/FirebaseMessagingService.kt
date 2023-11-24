@@ -67,8 +67,6 @@ class FirebaseMessagingService : FirebaseMessagingService() {
             message.data.let {
                 val title = it["title"]
                 Log.d(TAG, "onMessageReceived: $title")
-
-
                 if(title == "makeorder" || title == "makeOrder"){
                     if(messageReceivedListener!=null){
                         Log.d(TAG, "onMessageReceived: here")
@@ -81,8 +79,6 @@ class FirebaseMessagingService : FirebaseMessagingService() {
                 }
             }
         }
-
-
         super.onMessageReceived(message)
     }
 

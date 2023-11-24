@@ -6,4 +6,10 @@
         <item>중단 상품</item>
     </string-array>
 
+    <string-array name="product_type">
+        <item>음료</item>
+        <item>쿠키</item>
+        <item>기타</item>
+    </string-array>
+
 </resources>

@@ -78,17 +78,5 @@ object CommonUtils {
         }
         return list
     }
-//
-//    fun makeNoteDetail(lst: List<Note>): List<Note>{
-//        val list = arrayListOf<Note>()
-//        lst.forEach{
-//            if()
-//
-//            list.add(Note(
-//                it.id, it.title, it.content, it.orderTime, it.senderId, it.receiverId, it.isRead
-//            ))
-//        }
-//        return list
-//    }
-//
+
 }
