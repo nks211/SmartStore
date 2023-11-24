@@ -102,7 +102,7 @@ class OrderedListFragment : BaseFragment<FragmentShoppingListBinding>(
         viewModel.completeOrder(
             Order().apply {
                 id = orderId
-                userId = ApplicationClass.sharedPreferencesUtil.getUser().id
+                userId = viewModel.waitingOrders.value!!.filter{it.orderId == orderId}[0].userId
                 details.addAll(ArrayList(viewModel.shoppingList.value!!))
                 completed = "Y"
                 topImg = viewModel.shoppingList.value!![0].img

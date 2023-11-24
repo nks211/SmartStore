@@ -92,8 +92,10 @@ public class CommentRestController {
     @PutMapping("/reComment")
     @Transactional
     @ApiOperation(value="reComment 객체를 수정한다. 성공하면 true를 리턴한다. ", response = Boolean.class)
-    public Boolean updateReComment(@RequestBody ReComment recomment ) {
+    public Boolean updateReComment(@RequestBody ReComment recomment ) throws IOException {
         cService.updateReComment(recomment);
+        String fcmToken = cService.getFCMAddReComment(recomment);
+    	fService.sendMessageTo("SmartStore", "답글이 수정되었습니다.", fcmToken);
         return true;
     }
     

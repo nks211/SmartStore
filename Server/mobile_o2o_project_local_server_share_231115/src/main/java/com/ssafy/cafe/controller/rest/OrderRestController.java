@@ -3,6 +3,9 @@ package com.ssafy.cafe.controller.rest;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -17,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.ssafy.cafe.model.dto.Note;
 import com.ssafy.cafe.model.dto.Order;
 import com.ssafy.cafe.model.service.FCMService;
+import com.ssafy.cafe.model.service.FCMServiceClient;
 import com.ssafy.cafe.model.service.NoteService;
 import com.ssafy.cafe.model.service.OrderService;
 import io.swagger.annotations.ApiOperation;
@@ -33,6 +37,13 @@ public class OrderRestController {
     
     @Autowired
     private FCMService fService;
+    
+    @Autowired
+    private FCMServiceClient fcService;
+    
+    
+	private static final Logger log = LoggerFactory.getLogger(OrderRestController.class);
+
     
     @PostMapping
     @ApiOperation(value="order 객체를 저장하고 추가된 Order의 id를 반환한다.", 
@@ -93,10 +104,11 @@ public class OrderRestController {
     public Boolean completeOrder(@RequestBody Order order) throws IOException {
     	oService.updateOrder(order);
     	String fcmToken = nService.getFCMAddNote("id 01");
-//    	String token = "fv2kNDQxQ6CagVDq3_jeLG:APA91bGtwSFP4XLnb_kzQsYY1Uld8Y2wTk_zD-n2Hxu7XQyNXFgcx_1HeLkcJGjyz-2ePrLfISvCMMJ9lYOZ0zdIVde-cTcHx-KMzylwbd5pu7stAnXk_cY1RjF08XbkeRrbMRejQyUA";
-//    	String token = "d7lriZ0fRVyR2hvSqYK-XV:APA91bH-auF2EhcIaiGEZaAcx9X4SPN-vjMeFpO33qs-QiwSJnb8OSvRdseaPtIlL2F3J7bO8I9zC_9QdSw9RGQGDhjBKyQwA-7ZJm1vZwLutzpL06Dwja5M3AGkH2QJwU87i7E7J-Au";
-//      fService.sendMessageTo(token, "makeOrder", "body");
-        fService.sendMessageTo("makeOrder", "body", fcmToken);
+    	String fcmToken2 = nService.getFCMAddNote(order.getUserId());
+    	log.info(order.getUserId());
+    	fService.sendMessageTo("makeOrder", "body", fcmToken);
+    	fcService.sendMessageTo("SmartStore", "주문하신 상품이 나왔습니다", fcmToken2);
+    	
     	return true;
     }
 }
